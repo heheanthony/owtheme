@@ -1,0 +1,173 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-09-16 12:49+0200\n"
+"PO-Revision-Date: 2016-09-24 04:34+0200\n"
+"Language-Team: Martin Šturcel <martin@sturcel.sk>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.9\n"
+"Last-Translator: Martin Šturcel <martin@sturcel.sk>\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"Language: sk\n"
+
+#: resmushit.admin.php:37 resmushit.admin.php:64
+msgid "Disable of reSmush.it"
+msgstr "Vypnúť reSmush.it"
+
+#: resmushit.admin.php:38 resmushit.admin.php:71
+msgid "reSmush.it status"
+msgstr "Stav reSmush.it"
+
+#: classes/resmushitUI.class.php:90
+msgid "Settings"
+msgstr "Nastavenia"
+
+#: classes/resmushitUI.class.php:97
+msgid "Image quality"
+msgstr "Kvalita obrázkov"
+
+#: classes/resmushitUI.class.php:97
+msgid ""
+"Default value is 92. The quality factor must be between 0 (very weak) and "
+"100 (best quality)"
+msgstr ""
+"Prednastavená hodnota je 92. Hodnota kvality musí byť v rozmedzí od 0 "
+"(veľmi slabá) a 100 (najlepšia kvalita)"
+
+#: classes/resmushitUI.class.php:98
+msgid "Optimize on upload"
+msgstr "Optimalizovať pri nahrávaní"
+
+#: classes/resmushitUI.class.php:98
+msgid "All future images uploaded will be automatically optimized"
+msgstr "Všetky vaše novo pridané obrázky budú automaticky optimalizované!"
+
+#: classes/resmushitUI.class.php:99
+msgid "Enable statistics"
+msgstr "Zapnúť štatistiku"
+
+#: classes/resmushitUI.class.php:99
+msgid "Generates statistics about optimized pictures"
+msgstr "Generuje štatistiky o optimalizovaných súboroch"
+
+#: classes/resmushitUI.class.php:100
+msgid "Enable logs"
+msgstr "Zapnúť logovanie"
+
+#: classes/resmushitUI.class.php:100
+msgid "Enable file logging (for developers)"
+msgstr "Zapnúť logovanie do súboru (pre vývojárov)"
+
+#: classes/resmushitUI.class.php:119
+msgid "Optimize unsmushed pictures"
+msgstr "Optimalizácia obrázkov\t"
+
+#: classes/resmushitUI.class.php:124
+msgid "There is currently"
+msgstr "V súčastnosti"
+
+#: classes/resmushitUI.class.php:124
+msgid "non optimized pictures"
+msgstr "neoptimalizovaných obrázkov"
+
+#: classes/resmushitUI.class.php:125
+msgid ""
+"This action will resmush all pictures which have not been optimized to the "
+"good Image Quality Rate."
+msgstr ""
+"Týmto tlačidlom budú spracované všetky obrázky, ktoré neboli ešte "
+"optimalizované nastavenej kvalite."
+
+#: classes/resmushitUI.class.php:127
+msgid "Optimize all pictures"
+msgstr "Optimalizovať všetky obrázky"
+
+#: classes/resmushitUI.class.php:133
+msgid "Congrats ! All your pictures are correctly optimized"
+msgstr ""
+"Blahoželáme! Všetky vaše obrázky sú optimalizované podľa aktuáneho "
+"nastavenia kvality."
+
+#: classes/resmushitUI.class.php:152
+msgid "Statistics"
+msgstr "Štatistika"
+
+#: classes/resmushitUI.class.php:159
+msgid "Space saved :"
+msgstr "Ušetrené miesto:"
+
+#: classes/resmushitUI.class.php:160
+msgid "Total reduction :"
+msgstr "Celkovo ušetrené: "
+
+#: classes/resmushitUI.class.php:161
+msgid "Attachments optimized :"
+msgstr "Optimalizované prílohy:"
+
+#: classes/resmushitUI.class.php:162
+msgid "Image optimized (including thumbnails) :"
+msgstr "Optimalizované obrázky (vrátane náhľadov):"
+
+#: classes/resmushitUI.class.php:163
+msgid "Total images optimized :"
+msgstr "Celkom optimalizvaných obrázkov: "
+
+#: classes/resmushitUI.class.php:165
+msgid ""
+"No picture has been optimized yet ! Add pictures to your Wordpress Media "
+"Library."
+msgstr ""
+"Žiadne obrázky zatiaľ neboli optimalizované. Pridajte obrázky do "
+"multimediálnej knižnice alebo optimalizujte obrázky."
+
+#: classes/resmushitUI.class.php:186
+msgid "News"
+msgstr "Novinky"
+
+#: classes/resmushitUI.class.php:215
+msgid "Maecia Agency - Paris France"
+msgstr "Maecia Agency - Paris France"
+
+#: classes/resmushitUI.class.php:218
+msgid "Visit resmush.it for more informations"
+msgstr "Navštívte resmush.it pre viac informácii"
+
+#: classes/resmushitUI.class.php:221
+msgid "Follow reSmush.it on Twitter"
+msgstr "Sledovať reSmush.it na Twitteri"
+
+#: classes/resmushitUI.class.php:305
+msgid "Optimize"
+msgstr "Optimalizovať"
+
+#: classes/resmushitUI.class.php:308
+msgid "Reduced by"
+msgstr "Znížená veľkosť o"
+
+#: classes/resmushitUI.class.php:308
+msgid "saved"
+msgstr "ušetrené"
+
+#: classes/resmushitUI.class.php:155
+msgid "Files non optimized"
+msgstr "Súbory ktoré neboli optimalizované"
+
+#: classes/resmushitUI.class.php:162
+msgid "pictures are too big (> 5MB) for the optimizer"
+msgstr "obrázky sú príliš veľké pre optimalizáciu, majú viac ako 5MB"
+
+#: classes/resmushitUI.class.php:164
+msgid "picture is too big (> 5MB) for the optimizer"
+msgstr "obrázok je príliš veľký pre optimalizáciu, má viac ako 5MB"
+
+#: classes/resmushitUI.class.php:168
+msgid "List of files above 5MB"
+msgstr "Zoznam súborov väčších ako 5MB"

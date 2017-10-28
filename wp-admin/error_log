@@ -1,0 +1,11 @@
+[08-Sep-2017 08:50:37 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function get_supercache_dir() in /home/ravipan1/public_html/wp-content/plugins/wp-super-cache/wp-cache.php:2922
+Stack trace:
+#0 /home/ravipan1/public_html/wp-content/plugins/wp-super-cache/wp-cache.php(2645): wp_cache_clean_cache('wp-cache-')
+#1 /home/ravipan1/public_html/wp-content/plugins/wp-super-cache/wp-cache.php(908): wp_cache_files()
+#2 /home/ravipan1/public_html/wp-includes/class-wp-hook.php(298): wp_cache_manager('')
+#3 /home/ravipan1/public_html/wp-includes/class-wp-hook.php(323): WP_Hook->apply_filters('', Array)
+#4 /home/ravipan1/public_html/wp-includes/plugin.php(453): WP_Hook->do_action(Array)
+#5 /home/ravipan1/public_html/wp-admin/admin.php(222): do_action('settings_page_w...')
+#6 /home/ravipan1/public_html/wp-admin/options-general.php(10): require_once('/home/ravipan1/...')
+#7 {main}
+  thrown in /home/ravipan1/public_html/wp-content/plugins/wp-super-cache/wp-cache.php on line 2922
