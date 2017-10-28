@@ -1,8 +1,8 @@
 === CDN Enabler - WordPress CDN Plugin ===
 Contributors: keycdn
 Tags: cdn, content delivery network, content distribution network
-Requires at least: 3.8
-Tested up to: 4.7
+Requires at least: 4.6
+Tested up to: 4.8
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -31,8 +31,13 @@ The CDN Enabler plugin has been developed to link your content to the CDN URLs.
 
 
 = System Requirements =
-* PHP >=5.3
-* WordPress >=3.8
+* PHP >=5.4
+* WordPress >=4.6
+
+
+= Contribute =
+* Anyone is welcome to contribute to the plugin on [GitHub](https://github.com/keycdn/cdn-enabler).
+* Please merge (squash) all your changes into a single commit before you open a pull request.
 
 
 = Author =
@@ -41,6 +46,12 @@ The CDN Enabler plugin has been developed to link your content to the CDN URLs.
 
 
 == Changelog ==
+
+= 1.0.5 =
+* Multiprotocol CDN rewriting
+* Add purging through KeyCDN API
+* Don't rewrite if in admin preview mode
+* Rewrite to HTTPS if enabled and client connects through HTTP
 
 = 1.0.4 =
 * Removed unused code
