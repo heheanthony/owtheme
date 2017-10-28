@@ -4,7 +4,7 @@ Donate link: http://petersplugins.com/make-a-donation/
 Tags: page, 404, error, error page, 404 page, page not found, page not found error, 404 error page, missing, broken link, template, 404 link, seo, custom 404, custom 404 page, custom 404 error, custom 404 error page, customize 404, customize 404 page, customize 404 error page
 Requires at least: 3.0
 Tested up to: 4.8
-Stable tag: 3.1
+Stable tag: 3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -115,6 +115,9 @@ The 404page plugin adds a CSS class `error404` to the `<body>` tag which can be 
 
 == Changelog ==
 
+= 3.2 (2017-10-05) =
+* new feature to send an HTTP 410 error for deleted objects
+
 = 3.1 (2017-07-24) =
 * bugfix for Polylang ([See Topic](https://wordpress.org/support/topic/3-0-breaks-polylang-support/))
 * bugfix for CLI ([See Topic](https://wordpress.org/support/topic/uninstall-php-from-cli-failed/))
@@ -195,6 +198,9 @@ The 404page plugin adds a CSS class `error404` to the `<body>` tag which can be 
 * Initial Release
 
 == Upgrade Notice ==
+
+= 3.2 =
+new feature to send an HTTP 410 error for deleted objects
 
 = 3.1 =
 fixed two bugs, plus further enhancements

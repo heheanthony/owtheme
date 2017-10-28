@@ -44,7 +44,7 @@ if ( !class_exists( 'PP_404Page' ) ) {
       $this->_file = $file;
       $this->plugin_name = '404page';
       $this->plugin_slug = '404page';
-      $this->version = '3.1';
+      $this->version = '3.2';
       $this->get_settings();
       $this->load();
     } 
@@ -62,6 +62,7 @@ if ( !class_exists( 'PP_404Page' ) ) {
       $this->settings['404page_fire_error'] = $this->get_404page_fire_error();
       $this->settings['404page_force_error'] = $this->get_404page_force_error();
       $this->settings['404page_no_url_guessing'] = $this->get_404page_no_url_guessing();
+      $this->settings['404page_http410_if_trashed'] = $this->get_404page_http410_if_trashed();
       $this->settings['404page_native'] = false;
     }
     
@@ -145,12 +146,21 @@ if ( !class_exists( 'PP_404Page' ) ) {
       if ( defined( 'CUSTOMIZR_VER' ) ) {
         
         // Customizr Compatibility Mode 
-       
+
         // @since 3.1
         add_filter( 'body_class', array( $this, 'add_404_body_class_customizr_mode' ) );
+        
         add_filter( 'tc_404_header_content', array( $this, 'show404title_customizr_mode' ), 999 );
         add_filter( 'tc_404_content', array( $this, 'show404_customizr_mode' ), 999 );
         add_filter( 'tc_404_selectors', array( $this, 'show404articleselectors_customizr_mode' ), 999 );
+        
+        // send http 410 instead of http 404 if requested resource is in trash
+        // @since 3.2
+        if ( $this->settings['404page_http410_if_trashed'] ) {
+          
+          add_action( 'template_redirect', array( $this, 'maybe_send_410' ) 	);
+          
+        }
         
       } elseif ( $this->settings['404page_method'] != 'STD' ) {
           
@@ -165,8 +175,19 @@ if ( !class_exists( 'PP_404Page' ) ) {
           
         // Standard Mode
         add_filter( '404_template', array( $this, 'show404_standard_mode' ), 999 );
+        
         if ( $this->settings['404page_fire_error'] ) {
+          
           add_action( 'template_redirect', array( $this, 'do_404_header_standard_mode' ) );
+          
+        }
+        
+        // send http 410 instead of http 404 if requested resource is in trash
+        // @since 3.2
+        if ( $this->settings['404page_http410_if_trashed'] ) {
+          
+          add_action( 'template_redirect', array( $this, 'maybe_send_410' ) 	);
+          
         }
           
       }
@@ -319,7 +340,19 @@ if ( !class_exists( 'PP_404Page' ) ) {
     function do_404_header() {
       // remove the action so we handle only the first query - no custom queries
       remove_action( 'wp', array( $this, 'do_404_header' ) );
-      status_header( 404 );
+      
+      // send http 410 instead of http 404 if requested resource is in trash
+      // @since 3.2
+      
+      if ( $this->settings['404page_http410_if_trashed'] && $this->is_url_in_trash( rawurldecode ( ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) ) ) {
+          
+        status_header( 410 );
+          
+      } else {
+      
+        status_header( 404 );
+        
+      }
       nocache_headers();
     }
     
@@ -455,6 +488,25 @@ if ( !class_exists( 'PP_404Page' ) ) {
     
     
     /**
+     * send http 410 instead of http 404 in case the requested URL can be found in trash
+     * @since 3.2
+     */
+    function maybe_send_410() {
+            
+      // we don't do anything if there is no 404
+      if ( is_404() ) {
+        
+        if ( $this->is_url_in_trash( rawurldecode ( ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) ) ) {
+          
+          status_header( 410 );
+          
+        }
+      }
+      
+    }
+    
+    
+    /**
      * init admin 
      */
     function admin_init() {
@@ -470,11 +522,13 @@ if ( !class_exists( 'PP_404Page' ) ) {
       register_setting( '404page_settings', '404page_fire_error' );
       register_setting( '404page_settings', '404page_force_error' );
       register_setting( '404page_settings', '404page_no_url_guessing' );
+      register_setting( '404page_settings', '404page_http410_if_trashed' );
       add_settings_field( '404page_settings_404page', __( 'Page to be displayed as 404 page', '404page' ) . '&nbsp;<a class="dashicons dashicons-editor-help" href="' . $this->dc_url . '/#settings_select_page"></a>' , array( $this, 'admin_404page' ), '404page_settings_section', '404page-settings', array( 'label_for' => '404page_page_id' ) );
       add_settings_field( '404page_settings_hide', '' , array( $this, 'admin_hide' ), '404page_settings_section_advanced', '404page-settings', array( 'label_for' => '404page_hide' ) );
       add_settings_field( '404page_settings_fire', '' , array( $this, 'admin_fire404' ), '404page_settings_section_advanced', '404page-settings', array( 'label_for' => '404page_fire_error' ) );
       add_settings_field( '404page_settings_force', '' , array( $this, 'admin_force404' ), '404page_settings_section_advanced', '404page-settings', array( 'label_for' => '404page_force_error' ) );
       add_settings_field( '404page_settings_noguess', '' , array( $this, 'admin_noguess' ), '404page_settings_section_advanced', '404page-settings', array( 'label_for' => '404page_no_url_guessing' ) );
+      add_settings_field( '404page_settings_http410', '' , array( $this, 'admin_http410' ), '404page_settings_section_advanced', '404page-settings', array( 'label_for' => '404page_http410_if_trashed' ) );
       add_settings_field( '404page_settings_method', '', array( $this, 'admin_method' ), '404page_settings_section_advanced', '404page-settings', array( 'label_for' => '404page_method' ) );
     }
     
@@ -573,6 +627,19 @@ if ( !class_exists( 'PP_404Page' ) ) {
       echo '<p><input type="checkbox" id="404page_no_url_guessing" name="404page_no_url_guessing" value="1"' . checked( true, $this->settings['404page_no_url_guessing'], false ) . '/>';
       echo '<label for="404page_no_url_guessing" class="check warning"></label>' . __( 'Disable URL autocorrection guessing', '404page' ) . '&nbsp;<a class="dashicons dashicons-editor-help" href="' . $this->dc_url . '/#settings_stop_guessing"></a><br />';
       echo '<span class="dashicons dashicons-warning"></span>&nbsp;' . __( 'This stops WordPress from URL autocorrection guessing. Only activate, if you are sure about the consequences.', '404page' ) . '</p><div class="clear"></div>';
+    
+    }
+    
+    
+    /**
+     * handle the settings field to send an http 410 error in case the object is trashed
+     * @since 3.2
+     */
+    function admin_http410() {
+      
+      echo '<p><input type="checkbox" id="404page_http410_if_trashed" name="404page_http410_if_trashed" value="1"' . checked( true, $this->settings['404page_http410_if_trashed'], false ) . '/>';
+      echo '<label for="404page_http410_if_trashed" class="check"></label>' . __( 'Send an HTTP 410 error instead of HTTP 404 in case the requested object is in trash', '404page' ) . '&nbsp;<a class="dashicons dashicons-editor-help" href="' . $this->dc_url . '/#settings_maybe_send_http410"></a><br />';
+      echo '<span class="dashicons dashicons-info"></span>&nbsp;' . __( 'Check this if you want to inform search engines that the resource requested is no longer available and will not be available again so it can be removed from the search index immediately.', '404page' );
     
     }
     
@@ -702,6 +769,199 @@ if ( !class_exists( 'PP_404Page' ) ) {
       
       return array_values( $pages );
       
+    }
+    
+    
+    /**
+     * check if the requested url is found in trash
+     * @since 3.2
+     * based on WP core function url_to_postid()
+     */
+    function is_url_in_trash( $url ) {
+	
+      global $wp_rewrite;
+      global $wp;
+	
+      // First, check to see if there is a 'p=N' or 'page_id=N' to match against
+      if ( preg_match( '#[?&](p|page_id|attachment_id)=(\d+)#', $url, $values ) ) {
+        
+        $id = absint( $values[2] );
+        
+        if ( $id ) {
+          
+          if ( 'trash' == get_post_status( $id ) ) {
+            
+            return true;
+          
+          } else {
+            
+            return false;
+          
+          }
+          
+        }
+        
+      }
+      
+      // Check to see if we are using rewrite rules
+      $rewrite = $wp_rewrite->wp_rewrite_rules();
+      
+      // Not using rewrite rules, and 'p=N' and 'page_id=N' methods failed, so we're out of options
+      if ( empty( $rewrite ) ) {
+        
+        return false;
+        
+      }
+          
+      // Get rid of the #anchor
+      $url_split = explode('#', $url);
+      $url = $url_split[0];
+      
+      // Get rid of URL ?query=string
+      $url_split = explode('?', $url);
+      $url = $url_split[0];
+      
+      // Add 'www.' if it is absent and should be there
+      if ( false !== strpos( home_url(), '://www.' ) && false === strpos( $url, '://www.' ) ) {
+      
+        $url = str_replace('://', '://www.', $url);
+      
+      }
+      
+      // Strip 'www.' if it is present and shouldn't be
+      if ( false === strpos( home_url(), '://www.' ) ) {
+		
+        $url = str_replace('://www.', '://', $url);
+        
+      }
+	
+      // Strip 'index.php/' if we're not using path info permalinks
+      if ( !$wp_rewrite->using_index_permalinks() ) {
+		
+        $url = str_replace( $wp_rewrite->index . '/', '', $url );
+        
+      }
+	
+  
+      if ( false !== strpos( trailingslashit( $url ), home_url( '/' ) ) ) {
+		
+        // Chop off http://domain.com/[path]
+        $url = str_replace(home_url(), '', $url);
+      
+      } else {
+		
+        // Chop off /path/to/blog
+        $home_path = parse_url( home_url( '/' ) );
+        $home_path = isset( $home_path['path'] ) ? $home_path['path'] : '' ;
+        $url = preg_replace( sprintf( '#^%s#', preg_quote( $home_path ) ), '', trailingslashit( $url ) );
+      
+      }
+	
+      // Trim leading and lagging slashes
+      $url = trim($url, '/');
+	
+      $request = $url;
+      $post_type_query_vars = array();
+      
+      foreach ( get_post_types( array() , 'objects' ) as $post_type => $t ) {
+        
+        if ( ! empty( $t->query_var ) ) {
+          
+          $post_type_query_vars[ $t->query_var ] = $post_type;
+          
+        }
+      }
+	
+      // Look for matches.
+      $request_match = $request;
+      foreach ( (array)$rewrite as $match => $query) {
+		
+        // If the requesting file is the anchor of the match, prepend it
+        // to the path info.
+        if ( !empty( $url ) && ( $url != $request ) && ( strpos( $match, $url ) === 0 ) ) {
+			
+          $request_match = $url . '/' . $request;
+          
+        }
+		
+        if ( preg_match( "#^$match#", $request_match, $matches ) ) {
+			
+          if ( $wp_rewrite->use_verbose_page_rules && preg_match( '/pagename=\$matches\[([0-9]+)\]/', $query, $varmatch ) ) {
+				
+            // This is a verbose page match, let's check to be sure about it.
+            if ( ! get_page_by_path( $matches[ $varmatch[1] ] ) ) {
+					
+              continue;
+              
+            }
+          }
+
+          // Got a match.
+			
+          // Trim the query of everything up to the '?'.
+          $query = preg_replace( "!^.+\?!", '', $query );
+			
+          // Substitute the substring matches into the query.
+          $query = addslashes( WP_MatchesMapRegex::apply( $query, $matches ) );
+			
+          // Filter out non-public query vars
+          parse_str( $query, $query_vars );
+          $query = array();
+          
+          foreach ( (array) $query_vars as $key => $value ) {
+          
+            if ( in_array( $key, $wp->public_query_vars ) ) {
+					
+              $query[$key] = $value;
+					
+              if ( isset( $post_type_query_vars[$key] ) ) {
+						
+                $query['post_type'] = $post_type_query_vars[$key];
+                $query['name'] = $value;
+					
+              }
+              
+            }
+            
+          }
+          
+          // Magic
+          if ( isset( $query['pagename'] ) ) {
+           
+            $query['pagename'] .= '__trashed' ;
+            
+          }
+          
+          if ( isset( $query['name'] ) ) {
+
+            $query['name'] .= '__trashed' ;
+            
+          }
+          
+          $query['post_status'] = array( 'trash' );
+          
+          // Resolve conflicts between posts with numeric slugs and date archive queries.
+          $query = wp_resolve_numeric_slug_conflicts( $query );
+          
+          // Do the query
+          $query = new WP_Query( $query );
+          
+          if ( $query->found_posts == 1 ) {
+				
+            return true;
+            
+          } else {
+				
+            return false;
+            
+          }
+        
+        }
+      
+      }
+	
+      return false;
+
     }
     
     
@@ -903,6 +1163,17 @@ if ( !class_exists( 'PP_404Page' ) ) {
     private function get_404page_no_url_guessing() {
       
       return (bool)get_option( '404page_no_url_guessing', false );
+      
+    }
+    
+    
+    /**
+     * do we have to send an http 410 error in case the object is in trash?
+     * @since 3.2
+     */
+    private function get_404page_http410_if_trashed() {
+      
+      return (bool)get_option( '404page_http410_if_trashed', false );
       
     }
     
