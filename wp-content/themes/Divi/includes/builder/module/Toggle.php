@@ -51,8 +51,11 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 				'title' => array(
 					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
-						'main' => "{$this->main_css_element} h5",
+						'main' => "{$this->main_css_element} h5, {$this->main_css_element} h1.et_pb_toggle_title, {$this->main_css_element} h2.et_pb_toggle_title, {$this->main_css_element} h3.et_pb_toggle_title, {$this->main_css_element} h4.et_pb_toggle_title, {$this->main_css_element} h6.et_pb_toggle_title",
 						'important' => 'plugin_only',
+					),
+					'header_level' => array(
+						'default' => 'h5',
 					),
 				),
 				'body'   => array(
@@ -61,6 +64,7 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 						'main'        => "{$this->main_css_element}",
 						'plugin_main' => "{$this->main_css_element}, {$this->main_css_element} p",
 						'line_height' => "{$this->main_css_element} p",
+						'text_shadow' => "{$this->main_css_element} .et_pb_toggle_content",
 					),
 				),
 			),
@@ -211,6 +215,7 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 		$icon_color                     = $this->shortcode_atts['icon_color'];
 		$closed_toggle_text_color       = $this->shortcode_atts['closed_toggle_text_color'];
 		$open_toggle_text_color         = $this->shortcode_atts['open_toggle_text_color'];
+		$header_level                   = $this->shortcode_atts['title_level'];
 
 		$module_class = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
 
@@ -266,11 +271,13 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 		}
 
 		if ( 'et_pb_accordion_item' === $function_name ) {
-			global $et_pb_accordion_item_number;
+			global $et_pb_accordion_item_number, $et_pb_accordion_header_level;
 
 			$open = 1 === $et_pb_accordion_item_number ? 'on' : 'off';
 
 			$et_pb_accordion_item_number++;
+
+			$header_level = $et_pb_accordion_header_level;
 		}
 
 		// Adding "_item" class for toggle module for customizer targetting. There's no proper selector
@@ -282,16 +289,18 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 		$video_background = $this->video_background();
 		$parallax_image_background = $this->get_parallax_image_background();
 
+		$heading = sprintf( '<%1$s class="et_pb_toggle_title">%2$s</%1$s>', et_pb_process_header_level( $header_level, 'h5' ), esc_html( $title ) );
+
 		$output = sprintf(
 			'<div%4$s class="et_pb_module et_pb_toggle %2$s%5$s%6$s%8$s%10$s">
 				%9$s
 				%7$s
-				<h5 class="et_pb_toggle_title">%1$s</h5>
+				%1$s
 				<div class="et_pb_toggle_content clearfix">
 					%3$s
 				</div> <!-- .et_pb_toggle_content -->
 			</div> <!-- .et_pb_toggle -->',
-			esc_html( $title ),
+			$heading,
 			( 'on' === $open ? 'et_pb_toggle_open' : 'et_pb_toggle_close' ),
 			$this->shortcode_content,
 			( '' !== $module_id ? sprintf( ' id="%1$s"', esc_attr( $module_id ) ) : '' ),
@@ -304,6 +313,14 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 		);
 
 		return $output;
+	}
+
+	public function process_box_shadow( $function_name ) {
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+		self::set_style( $function_name, array(
+			'selector' => '%%order_class%%',
+			'declaration' => $boxShadow->get_value( $this->shortcode_atts, array( 'important' => true ) )
+		) );
 	}
 }
 

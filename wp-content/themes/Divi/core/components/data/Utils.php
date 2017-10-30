@@ -127,14 +127,10 @@ class ET_Core_Data_Utils {
 			return false;
 		}
 
-		$directory_contents = glob( trailingslashit( $path ) . '*{,.}*', GLOB_BRACE );
 		$empty              = true;
+		$directory_contents = glob( untrailingslashit( $path ) . '/*' );
 
-		if ( false === $directory_contents ) {
-			return false;
-		}
-
-		foreach ( $directory_contents as $item ) {
+		foreach ( (array) $directory_contents as $item ) {
 			if ( ! $this->_remove_empty_directories( $item ) ) {
 				$empty = false;
 			}

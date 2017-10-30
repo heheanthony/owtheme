@@ -52,6 +52,15 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 				),
 			),
 			'fonts' => array(
+				'header' => array(
+					'label'          => esc_html__( 'Title', 'et_builder' ),
+					'css'            => array(
+						'main' => "{$this->main_css_element} h1.page_title, {$this->main_css_element} h2.page_title, {$this->main_css_element} h3.page_title, {$this->main_css_element} h4.page_title, {$this->main_css_element} h5.page_title, {$this->main_css_element} h6.page_title",
+					),
+					'header_level' => array(
+						'default' => 'h1',
+					),
+				),
 				'body' => array(
 					'label'          => esc_html__( 'Comment', 'et_builder' ),
 					'css'            => array(
@@ -124,7 +133,11 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 			),
 			'background' => array(),
 			'max_width'  => array(),
-			'text'       => array(),
+			'text'       => array(
+				'css' => array(
+					'text_shadow' => '%%order_class%% p, %%order_class%% .comment_postinfo, %%order_class%% .page_title, %%order_class%% .comment-reply-title',
+				),
+			),
 		);
 
 		$this->custom_css_options = array(
@@ -284,11 +297,14 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 	 *
 	 * @return string of comment section markup
 	 */
-	static function get_comments() {
-		global $et_pb_comments_print;
+	static function get_comments( $header_level ) {
+		global $et_pb_comments_print, $et_comments_header_level;
 
 		// Globally flag that comment module is being printed
 		$et_pb_comments_print = true;
+
+		// set custom header level for comments form
+		$et_comments_header_level = $header_level;
 
 		// remove filters to make sure comments module rendered correctly if the below filters were applied earlier.
 		remove_filter( 'get_comments_number', '__return_zero' );
@@ -302,12 +318,13 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 
 		// Globally flag that comment module has been printed
 		$et_pb_comments_print = false;
+		$et_comments_header_level = '';
 
 		return $comments_content;
 	}
 
 	function et_pb_comments_template() {
-		return dirname(__FILE__) . '/comments_template.php';
+		return realpath( dirname(__FILE__) . '/..' ) . '/comments_template.php';
 	}
 
 	function et_pb_comments_submit_button( $submit_button ) {
@@ -336,6 +353,7 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 		$show_reply            = $this->shortcode_atts['show_reply'];
 		$show_count            = $this->shortcode_atts['show_count'];
 		$background_layout     = $this->shortcode_atts['background_layout'];
+		$header_level          = $this->shortcode_atts['header_level'];
 
 		$module_class              = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
 		$video_background          = $this->video_background();
@@ -379,7 +397,7 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 		// Modify submit button to be advanced button style ready
 		add_filter( 'comment_form_submit_button', array( $this, 'et_pb_comments_submit_button' ) );
 
-		$comments_content = self::get_comments();
+		$comments_content = self::get_comments( et_pb_process_header_level( $header_level, 'h1' ) );
 
 		// remove all the actions and filters to not break the default comments section from theme
 		remove_filter( 'comments_template', array( $this, 'et_pb_comments_template' ) );

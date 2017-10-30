@@ -71,13 +71,16 @@ class ET_Builder_Module_Slider extends ET_Builder_Module {
 		$this->advanced_options = array(
 			'fonts' => array(
 				'header' => array(
-					'label'    => esc_html__( 'Header', 'et_builder' ),
+					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
 						'main' => "{$this->main_css_element} .et_pb_slide_description .et_pb_slide_title",
 						'plugin_main' => "{$this->main_css_element} .et_pb_slide_description .et_pb_slide_title, {$this->main_css_element} .et_pb_slide_description .et_pb_slide_title a",
 						'font_size_tablet' => "{$this->main_css_element} .et_pb_slides .et_pb_slide_description .et_pb_slide_title",
 						'font_size_phone'  => "{$this->main_css_element} .et_pb_slides .et_pb_slide_description .et_pb_slide_title",
 						'important' => array( 'size', 'font-size', 'plugin_all' ),
+					),
+					'header_level' => array(
+						'default' => 'h2',
 					),
 				),
 				'body'   => array(
@@ -119,6 +122,7 @@ class ET_Builder_Module_Slider extends ET_Builder_Module {
 			'text'      => array(
 				'css'   => array(
 					'text_orientation' => '%%order_class%% .et_pb_slide .et_pb_slide_description',
+					'text_shadow'      => '%%order_class%% .et_pb_slide .et_pb_slide_description',
 				),
 			),
 		);
@@ -315,6 +319,7 @@ class ET_Builder_Module_Slider extends ET_Builder_Module {
 			'background_video_webm'                      => $this->shortcode_atts['background_video_webm'],
 			'background_video_width'                     => $this->shortcode_atts['background_video_width'],
 			'background_video_height'                    => $this->shortcode_atts['background_video_height'],
+			'header_level'                               => $this->shortcode_atts['header_level'],
 		);
 	}
 
@@ -399,6 +404,17 @@ class ET_Builder_Module_Slider extends ET_Builder_Module {
 		$et_pb_slider = array();
 
 		return $output;
+	}
+
+	public function process_box_shadow( $function_name ) {
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+		$selector  = '.' . self::get_module_order_class( $function_name );
+		self::set_style( $function_name, array(
+			'selector'    => $selector . ' .et_pb_button',
+			'declaration' => $boxShadow->get_value( $this->shortcode_atts, array( 'suffix' => '_button' ) )
+		) );
+
+		self::set_style( $function_name, $boxShadow->get_style( $selector, $this->shortcode_atts ) );
 	}
 }
 

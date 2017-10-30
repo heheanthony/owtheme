@@ -22,6 +22,13 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 			'focus_text_color',
 			'use_focus_border_color',
 			'focus_border_color',
+			'box_shadow_style_fields',
+			'box_shadow_horizontal_fields',
+			'box_shadow_vertical_fields',
+			'box_shadow_blur_fields',
+			'box_shadow_spread_fields',
+			'box_shadow_color_fields',
+			'box_shadow_position_fields',
 		);
 
 		$this->fields_defaults = array(
@@ -57,17 +64,21 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 		$this->advanced_options = array(
 			'fonts' => array(
 				'header' => array(
-					'label'    => esc_html__( 'Header', 'et_builder' ),
+					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
-						'main' => "{$this->main_css_element} h2",
+						'main' => "{$this->main_css_element} h2, {$this->main_css_element} h1.et_pb_module_header, {$this->main_css_element} h3.et_pb_module_header, {$this->main_css_element} h4.et_pb_module_header, {$this->main_css_element} h5.et_pb_module_header, {$this->main_css_element} h6.et_pb_module_header",
 						'important' => 'all',
+					),
+					'header_level' => array(
+						'default' => 'h2',
 					),
 				),
 				'body'   => array(
 					'label'    => esc_html__( 'Body', 'et_builder' ),
 					'css'      => array(
 						'line_height' => "{$this->main_css_element} p",
-						'font' => "{$this->main_css_element}, {$this->main_css_element} .et_pb_newsletter_description_content, {$this->main_css_element} p, {$this->main_css_element} span",
+						'font'        => "{$this->main_css_element}, {$this->main_css_element} .et_pb_newsletter_description_content, {$this->main_css_element} p, {$this->main_css_element} span",
+						'text_shadow' => "{$this->main_css_element}, {$this->main_css_element} .et_pb_newsletter_description_content, {$this->main_css_element} p, {$this->main_css_element} span",
 					),
 				),
 			),
@@ -91,6 +102,11 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 			),
 			'max_width' => array(),
 			'text'      => array(),
+			'fields'    => array(
+				'css' => array(
+					'text_shadow' => "{$this->main_css_element} input",
+				),
+			)
 		);
 		$this->custom_css_options = array(
 			'newsletter_description' => array(
@@ -261,7 +277,40 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 			),
 		);
 
+		$fields = array_merge(
+			$fields,
+			ET_Builder_Module_Fields_Factory::get( 'BoxShadow' )->get_fields( array(
+				'suffix'          => '_fields',
+				'label'           => esc_html__( 'Fields Box Shadow', 'et_builder' ),
+				'option_category' => 'layout',
+				'tab_slug'        => 'advanced',
+				'toggle_slug'     => 'fields',
+			) )
+		);
+
 		return $fields;
+	}
+
+	/**
+	 * Add additional Text Shadow fields to this module
+	 *
+	 * @return array
+	 */
+	protected function _add_additional_text_shadow_fields() {
+		// Add to Text (done in the parent)
+		parent::_add_additional_text_shadow_fields();
+
+		// Add to Fields
+		$this->_additional_fields_options = array_merge(
+			$this->_additional_fields_options,
+			$this->text_shadow->get_fields(array(
+				'label'           => esc_html__( 'Fields', 'et_builder' ),
+				'prefix'          => 'fields',
+				'option_category' => 'layout',
+				'tab_slug'        => 'advanced',
+				'toggle_slug'     => 'fields',
+			))
+		);
 	}
 
 	function shortcode_callback( $atts, $content = null, $function_name ) {
@@ -280,6 +329,7 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 		$focus_border_color          = $this->shortcode_atts['focus_border_color'];
 		$button_custom               = $this->shortcode_atts['custom_button'];
 		$custom_icon                 = $this->shortcode_atts['button_icon'];
+		$header_level                = $this->shortcode_atts['header_level'];
 		$content                     = $this->shortcode_content;
 
 		$module_class = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
@@ -441,7 +491,7 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 				</div>
 				%3$s
 			</div>',
-			( '' !== $title ? '<h2>' . esc_html( $title ) . '</h2>' : '' ),
+			( '' !== $title ? sprintf( '<%1$s class="et_pb_module_header">%2$s</%1$s>', et_pb_process_header_level( $header_level, 'h2' ), esc_html( $title ) ) : '' ),
 			( '' !== $content ? '<div class="et_pb_newsletter_description_content">' . $content . '</div>' : '' ),
 			$form,
 			esc_attr( $class ),
@@ -459,6 +509,26 @@ class ET_Builder_Module_Login extends ET_Builder_Module {
 		);
 
 		return $output;
+	}
+
+	public function process_box_shadow( $function_name ) {
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+		$selector  = sprintf( '.%1$s .et_pb_button', self::get_module_order_class( $function_name ) );
+
+		if ( isset( $this->shortcode_atts['custom_button'] ) && $this->shortcode_atts['custom_button'] == 'on' ) {
+			self::set_style( $function_name, array(
+				'selector'    => $selector,
+				'declaration' => $boxShadow->get_value( $this->shortcode_atts, array( 'suffix' => '_button' ) )
+			) );
+		}
+
+		self::set_style( $function_name, array(
+				'selector'    => '%%order_class%% .et_pb_newsletter_form .input',
+				'declaration' => $boxShadow->get_value( $this->shortcode_atts, array( 'suffix' => '_fields' ) )
+			)
+		);
+
+		parent::process_box_shadow( $function_name );
 	}
 }
 

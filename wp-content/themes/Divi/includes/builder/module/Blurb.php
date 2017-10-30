@@ -40,6 +40,13 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 			'icon_font_size_tablet',
 			'icon_font_size_phone',
 			'icon_font_size_last_edited',
+			'box_shadow_style_image',
+			'box_shadow_horizontal_image',
+			'box_shadow_vertical_image',
+			'box_shadow_blur_image',
+			'box_shadow_spread_image',
+			'box_shadow_color_image',
+			'box_shadow_position_image',
 		);
 
 		$et_accent_color = et_builder_accent_color();
@@ -93,16 +100,20 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 		$this->advanced_options = array(
 			'fonts' => array(
 				'header' => array(
-					'label'    => esc_html__( 'Header', 'et_builder' ),
+					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
-						'main' => "{$this->main_css_element} h4, {$this->main_css_element} h4 a",
+						'main' => "{$this->main_css_element} h4, {$this->main_css_element} h4 a, {$this->main_css_element} h1.et_pb_module_header, {$this->main_css_element} h1.et_pb_module_header a, {$this->main_css_element} h2.et_pb_module_header, {$this->main_css_element} h2.et_pb_module_header a, {$this->main_css_element} h3.et_pb_module_header, {$this->main_css_element} h3.et_pb_module_header a, {$this->main_css_element} h5.et_pb_module_header, {$this->main_css_element} h5.et_pb_module_header a, {$this->main_css_element} h6.et_pb_module_header, {$this->main_css_element} h6.et_pb_module_header a",
+					),
+					'header_level' => array(
+						'default' => 'h4',
 					),
 				),
 				'body'   => array(
 					'label'    => esc_html__( 'Body', 'et_builder' ),
 					'css'      => array(
 						'line_height' => "{$this->main_css_element} p",
-						'text_align' => "{$this->main_css_element} .et_pb_blurb_description",
+						'text_align'  => "{$this->main_css_element} .et_pb_blurb_description",
+						'text_shadow' => "{$this->main_css_element} .et_pb_blurb_description",
 					),
 				),
 			),
@@ -123,7 +134,11 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 					'module_alignment' => '%%order_class%%.et_pb_blurb.et_pb_module',
 				),
 			),
-			'text' => array(),
+			'text' => array(
+				'css'              => array(
+					'text_shadow' => "{$this->main_css_element} .et_pb_blurb_container",
+				),
+			),
 		);
 		$this->custom_css_options = array(
 			'blurb_image' => array(
@@ -190,6 +205,7 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 				),
 				'toggle_slug'     => 'image',
 				'affects'         => array(
+					'box_shadow_style_image',
 					'font_icon',
 					'image_max_width',
 					'use_icon_font_size',
@@ -461,6 +477,15 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 			),
 		);
 
+		$fields = array_merge( $fields, ET_Builder_Module_Fields_Factory::get( 'BoxShadow' )->get_fields( array(
+			'suffix'              => '_image',
+			'label'               => esc_html__( 'Image Box Shadow', 'et_builder' ),
+			'option_category'     => 'layout',
+			'tab_slug'            => 'advanced',
+			'toggle_slug'         => 'icon_settings',
+			'depends_show_if'     => 'off',
+		) ) );
+
 		return $fields;
 	}
 
@@ -486,6 +511,7 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 		$icon_font_size        = $this->shortcode_atts['icon_font_size'];
 		$icon_font_size_tablet = $this->shortcode_atts['icon_font_size_tablet'];
 		$icon_font_size_phone  = $this->shortcode_atts['icon_font_size_phone'];
+		$header_level          = $this->shortcode_atts['header_level'];
 		$icon_font_size_last_edited  = $this->shortcode_atts['icon_font_size_last_edited'];
 		$image_max_width             = $this->shortcode_atts['image_max_width'];
 		$image_max_width_tablet      = $this->shortcode_atts['image_max_width_tablet'];
@@ -496,7 +522,9 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 		$content_max_width_phone       = $this->shortcode_atts['content_max_width_phone'];
 		$content_max_width_last_edited = $this->shortcode_atts['content_max_width_last_edited'];
 
-		$module_class = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
+		$module_class   = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
+		$image_pathinfo = pathinfo( $image );
+		$is_image_svg   = isset( $image_pathinfo['extension'] ) ? 'svg' === $image_pathinfo['extension'] : false;
 
 		if ( 'off' !== $use_icon_font_size ) {
 			$font_size_responsive_active = et_pb_get_responsive_status( $icon_font_size_last_edited );
@@ -510,7 +538,15 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 			et_pb_generate_responsive_css( $font_size_values, '%%order_class%% .et-pb-icon', 'font-size', $function_name );
 		}
 
-		if ( '' !== $image_max_width_tablet || '' !== $image_max_width_phone || '' !== $image_max_width ) {
+		if ( '' !== $image_max_width_tablet || '' !== $image_max_width_phone || '' !== $image_max_width || $is_image_svg ) {
+			// SVG image overwrite. SVG image needs its value to be explicit
+			if ( '' === $image_max_width && $is_image_svg ) {
+				$image_max_width = '100%';
+			}
+
+			$image_max_width_selector = $is_image_svg ? '%%order_class%% .et_pb_main_blurb_image' : '%%order_class%% .et_pb_main_blurb_image img';
+			$image_max_width_property = $is_image_svg ? 'width' : 'max-width';
+
 			$image_max_width_responsive_active = et_pb_get_responsive_status( $image_max_width_last_edited );
 
 			$image_max_width_values = array(
@@ -519,7 +555,7 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 				'phone'   => $image_max_width_responsive_active ? $image_max_width_phone : '',
 			);
 
-			et_pb_generate_responsive_css( $image_max_width_values, '%%order_class%% .et_pb_main_blurb_image img', 'max-width', $function_name );
+			et_pb_generate_responsive_css( $image_max_width_values, $image_max_width_selector, $image_max_width_property, $function_name );
 		}
 
 		if ( '' !== $content_max_width_tablet || '' !== $content_max_width_phone || '' !== $content_max_width ) {
@@ -547,7 +583,7 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 		}
 
 		if ( '' !== $title ) {
-			$title = "<h4>{$title}</h4>";
+			$title = sprintf( '<%1$s class="et_pb_module_header">%2$s</%1$s>', et_pb_process_header_level( $header_level, 'h4' ), $title );
 		}
 
 		// Added for backward compatibility
@@ -629,6 +665,25 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 		);
 
 		return $output;
+	}
+
+	public function process_box_shadow( $function_name ) {
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+		$selector = sprintf( '.%1$s', self::get_module_order_class( $function_name ) );
+
+		if (
+			isset( $this->shortcode_atts['use_icon'] )
+			&&
+			$this->shortcode_atts['use_icon'] !== 'on'
+		) {
+			self::set_style( $function_name, $boxShadow->get_style(
+				$selector . ' .et_pb_main_blurb_image',
+				$this->shortcode_atts,
+				array( 'suffix' => '_image' )
+			) );
+		}
+
+		parent::process_box_shadow( $function_name );
 	}
 }
 
