@@ -1113,7 +1113,7 @@ class WP_REST_Comments_Controller extends WP_REST_Controller {
 		} elseif ( ! empty( $_SERVER['REMOTE_ADDR'] ) && rest_is_ip_address( $_SERVER['REMOTE_ADDR'] ) ) {
 			$prepared_comment['comment_author_IP'] = $_SERVER['REMOTE_ADDR'];
 		} else {
-			$prepared_comment['comment_author_IP'] = '10.169.0.153';
+			$prepared_comment['comment_author_IP'] = '127.0.0.1';
 		}
 
 		if ( ! empty( $request['author_user_agent'] ) ) {

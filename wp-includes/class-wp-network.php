@@ -272,7 +272,7 @@ class WP_Network {
 
 		/*
 		 * It's possible one domain to search is 'com', but it might as well
-		 * be '10.169.0.153' or some other locally mapped domain.
+		 * be 'localhost' or some other locally mapped domain.
 		 */
 		while ( array_shift( $pieces ) ) {
 			if ( ! empty( $pieces ) ) {

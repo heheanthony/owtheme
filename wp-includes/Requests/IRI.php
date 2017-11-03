@@ -127,7 +127,7 @@ class Requests_IRI {
 			'port' => 2628
 		),
 		'file' => array(
-			'ihost' => '10.169.0.153'
+			'ihost' => 'localhost'
 		),
 		'http' => array(
 			'port' => 80,

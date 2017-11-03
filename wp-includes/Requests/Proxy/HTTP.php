@@ -20,7 +20,7 @@ class Requests_Proxy_HTTP implements Requests_Proxy {
 	/**
 	 * Proxy host and port
 	 *
-	 * Notation: "host:port" (eg 10.169.0.153:8080 or someproxy.com:3128)
+	 * Notation: "host:port" (eg 127.0.0.1:8080 or someproxy.com:3128)
 	 *
 	 * @var string
 	 */
