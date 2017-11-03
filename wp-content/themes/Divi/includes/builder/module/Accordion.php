@@ -45,8 +45,11 @@ class ET_Builder_Module_Accordion extends ET_Builder_Module {
 				'toggle' => array(
 					'label'    => esc_html__( 'Toggle', 'et_builder' ),
 					'css'      => array(
-						'main'      => "{$this->main_css_element} h5.et_pb_toggle_title",
+						'main'      => "{$this->main_css_element} h5.et_pb_toggle_title, {$this->main_css_element} h1.et_pb_toggle_title, {$this->main_css_element} h2.et_pb_toggle_title, {$this->main_css_element} h3.et_pb_toggle_title, {$this->main_css_element} h4.et_pb_toggle_title, {$this->main_css_element} h6.et_pb_toggle_title",
 						'important' => 'plugin_only',
+					),
+					'header_level' => array(
+						'default' => 'h5',
 					),
 				),
 			),
@@ -168,10 +171,10 @@ class ET_Builder_Module_Accordion extends ET_Builder_Module {
 	}
 
 	function pre_shortcode_content() {
-		global $et_pb_accordion_item_number;
+		global $et_pb_accordion_item_number, $et_pb_accordion_header_level;
 
 		$et_pb_accordion_item_number = 1;
-
+		$et_pb_accordion_header_level = $this->shortcode_atts['toggle_level'];
 	}
 
 	function shortcode_callback( $atts, $content = null, $function_name ) {
@@ -257,6 +260,15 @@ class ET_Builder_Module_Accordion extends ET_Builder_Module {
 		);
 
 		return $output;
+	}
+
+	public function process_box_shadow( $function_name ) {
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+		$selector = sprintf( '.%1$s .et_pb_toggle', self::get_module_order_class( $function_name ) );
+		self::set_style( $function_name, array(
+			'selector'    => $selector,
+			'declaration' => $boxShadow->get_value( $this->shortcode_atts )
+		) );
 	}
 }
 

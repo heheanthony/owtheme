@@ -103,13 +103,16 @@ class ET_Builder_Module_Pricing_Tables extends ET_Builder_Module {
 		$this->advanced_options = array(
 			'fonts' => array(
 				'header' => array(
-					'label'    => esc_html__( 'Header', 'et_builder' ),
+					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
-						'main' => "{$this->main_css_element} .et_pb_pricing_heading h2",
+						'main' => "{$this->main_css_element} .et_pb_pricing_heading h2, {$this->main_css_element} .et_pb_pricing_heading h1.et_pb_pricing_title, {$this->main_css_element} .et_pb_pricing_heading h3.et_pb_pricing_title, {$this->main_css_element} .et_pb_pricing_heading h4.et_pb_pricing_title, {$this->main_css_element} .et_pb_pricing_heading h5.et_pb_pricing_title, {$this->main_css_element} .et_pb_pricing_heading h6.et_pb_pricing_title",
 						'important' => 'all',
 					),
 					'letter_spacing' => array(
 						'default' => '0px',
+					),
+					'header_level' => array(
+						'default' => 'h2',
 					),
 				),
 				'body'   => array(
@@ -205,6 +208,7 @@ class ET_Builder_Module_Pricing_Tables extends ET_Builder_Module {
 			'text'      => array(
 				'css' => array(
 					'text_orientation' => '%%order_class%% .et_pb_pricing_table, %%order_class%% .et_pb_pricing_content',
+					'text_shadow'      => '%%order_class%% .et_pb_pricing_heading, %%order_class%% .et_pb_pricing_content_top, %%order_class%% .et_pb_pricing_content',
 				),
 			),
 		);
@@ -360,7 +364,7 @@ class ET_Builder_Module_Pricing_Tables extends ET_Builder_Module {
 	}
 
 	function pre_shortcode_content() {
-		global $et_pb_pricing_tables_num, $et_pb_pricing_tables_icon, $et_pb_pricing_tab, $et_pb_pricing_tables_button_rel;
+		global $et_pb_pricing_tables_num, $et_pb_pricing_tables_icon, $et_pb_pricing_tab, $et_pb_pricing_tables_button_rel, $et_pb_pricing_tables_header_level;
 
 		$button_custom = $this->shortcode_atts['custom_button'];
 		$custom_icon   = $this->shortcode_atts['button_icon'];
@@ -370,6 +374,7 @@ class ET_Builder_Module_Pricing_Tables extends ET_Builder_Module {
 		$et_pb_pricing_tables_icon = 'on' === $button_custom ? $custom_icon : '';
 
 		$et_pb_pricing_tables_button_rel = $this->shortcode_atts['button_rel'];
+		$et_pb_pricing_tables_header_level = 'h2' === $this->shortcode_atts['header_level'] ? '' : $this->shortcode_atts['header_level'];
 	}
 
 	function shortcode_callback( $atts, $content = null, $function_name ) {
@@ -537,6 +542,24 @@ class ET_Builder_Module_Pricing_Tables extends ET_Builder_Module {
 			( 'on' !== $attributes['available'] ? ' class="et_pb_not_available"' : '' )
 		);
 		return $output;
+	}
+
+	function process_box_shadow( $function_name ) {
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+
+		if (
+			isset( $this->shortcode_atts['custom_button'] )
+			&&
+			$this->shortcode_atts['custom_button'] === 'on'
+		) {
+			self::set_style( $function_name, array(
+					'selector'    => '%%order_class%% .et_pb_button',
+					'declaration' => $boxShadow->get_value( $this->shortcode_atts, array( 'suffix' => '_button' ) )
+				)
+			);
+		}
+
+		parent::process_box_shadow( $function_name );
 	}
 }
 

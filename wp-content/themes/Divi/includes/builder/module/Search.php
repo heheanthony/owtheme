@@ -56,9 +56,9 @@ class ET_Builder_Module_Search extends ET_Builder_Module {
 				'input' => array(
 					'label'    => esc_html__( 'Input', 'et_builder' ),
 					'css'      => array(
-						'main' => "{$this->main_css_element} input.et_pb_s",
+						'main'        => "{$this->main_css_element} input.et_pb_s",
 						'placeholder' => true,
-						'important' => array( 'line-height' ),
+						'important'   => array( 'line-height', 'text-shadow' ),
 					),
 					'line_height'    => array(
 						'default' => '1em',
@@ -73,8 +73,8 @@ class ET_Builder_Module_Search extends ET_Builder_Module {
 				'button' => array(
 					'label'          => esc_html__( 'Button', 'et_builder' ),
 					'css'            => array(
-						'main' => "{$this->main_css_element} input.et_pb_searchsubmit",
-						'important' => array( 'line-height' ),
+						'main'      => "{$this->main_css_element} input.et_pb_searchsubmit",
+						'important' => array( 'line-height', 'text-shadow' ),
 					),
 					'line_height'    => array(
 						'default' => '1em',
@@ -101,6 +101,9 @@ class ET_Builder_Module_Search extends ET_Builder_Module {
 			),
 			'max_width'  => array(),
 			'text'       => array(
+				'css'              => array(
+					'text_shadow' => "{$this->main_css_element} input.et_pb_searchsubmit, {$this->main_css_element} input.et_pb_s",
+				),
 				'text_orientation' => array(
 					'exclude_options' => array( 'justified' ),
 				),

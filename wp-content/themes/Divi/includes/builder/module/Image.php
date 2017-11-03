@@ -323,6 +323,10 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 		$video_background          = $this->video_background();
 		$parallax_image_background = $this->get_parallax_image_background();
 
+		// Handle svg image behaviour
+		$src_pathinfo = pathinfo( $src );
+		$is_src_svg = isset( $src_pathinfo['extension'] ) ? 'svg' === $src_pathinfo['extension'] : false;
+
 		if ( 'on' === $always_center_on_mobile ) {
 			$module_class .= ' et_always_center_on_mobile';
 		}
@@ -337,7 +341,7 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 			) );
 
 			ET_Builder_Element::set_style( $function_name, array(
-				'selector'    => '%%order_class%% img',
+				'selector'    => '%%order_class%% .et_pb_image_wrap, %%order_class%% img',
 				'declaration' => 'width: 100%;',
 			) );
 		}
@@ -397,8 +401,16 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 			);
 		}
 
+		// Set display block for svg image to avoid disappearing svg image
+		if ( $is_src_svg ) {
+			ET_Builder_Element::set_style( $function_name, array(
+				'selector'    => '%%order_class%% .et_pb_image_wrap',
+				'declaration' => 'display: block;',
+			) );
+		}
+
 		$output = sprintf(
-			'<img src="%1$s" alt="%2$s"%3$s />
+			'<span class="et_pb_image_wrap"><img src="%1$s" alt="%2$s"%3$s /></span>
 			%4$s',
 			esc_url( $src ),
 			esc_attr( $alt ),
@@ -439,6 +451,15 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 		);
 
 		return $output;
+	}
+
+	public function process_box_shadow( $function_name ) {
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+
+		self::set_style( $function_name, $boxShadow->get_style(
+			sprintf( '.%1$s .et_pb_image_wrap', self::get_module_order_class( $function_name ) ),
+			$this->shortcode_atts
+		) );
 	}
 }
 

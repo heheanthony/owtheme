@@ -78,7 +78,7 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 		$this->advanced_options = array(
 			'fonts' => array(
 				'header' => array(
-					'label'    => esc_html__( 'Header', 'et_builder' ),
+					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
 						'main' => ".et_pb_slider {$this->main_css_element}.et_pb_slide .et_pb_slide_description .et_pb_slide_title",
 						'plugin_main' => ".et_pb_slider {$this->main_css_element}.et_pb_slide .et_pb_slide_description .et_pb_slide_title, .et_pb_slider {$this->main_css_element}.et_pb_slide .et_pb_slide_description .et_pb_slide_title a",
@@ -90,6 +90,9 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 							'max'  => '100',
 							'step' => '0.1',
 						),
+					),
+					'header_level' => array(
+						'default' => 'h2',
 					),
 				),
 				'body'   => array(
@@ -134,6 +137,7 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 			'text' => array(
 				'css' => array(
 					'text_orientation' => '.et_pb_slides %%order_class%%.et_pb_slide .et_pb_slide_description',
+					'text_shadow'      => '.et_pb_slides %%order_class%%.et_pb_slide .et_pb_slide_description',
 				),
 			),
 		);
@@ -433,6 +437,7 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 		$use_text_overlay     = $this->shortcode_atts['use_text_overlay'];
 		$text_overlay_color   = $this->shortcode_atts['text_overlay_color'];
 		$text_border_radius   = $this->shortcode_atts['text_border_radius'];
+		$header_level         = $this->shortcode_atts['header_level'];
 		$video_background          = $this->video_background();
 		$parallax_image_background = $this->get_parallax_image_background();
 
@@ -454,7 +459,7 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 				);
 			}
 
-			$heading = '<h2 class="et_pb_slide_title">' . $heading . '</h2>';
+			$heading = sprintf( '<%1$s class="et_pb_slide_title">%2$s</%1$s>', et_pb_process_header_level( $header_level, 'h2' ), $heading );
 		}
 
 		// Overwrite button rel with pricin tables' button_rel if needed
@@ -607,6 +612,22 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 		);
 
 		return $output;
+	}
+
+	public function _add_additional_shadow_fields() {
+
+	}
+
+	public function process_box_shadow( $function_name ) {
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+		$selector  = sprintf( '.%1$s .et_pb_button', self::get_module_order_class( $function_name ) );;
+		self::set_style( $function_name, array(
+			'selector'    => $selector,
+			'declaration' => $boxShadow->get_value( $this->shortcode_atts, array(
+				'suffix'    => '_button',
+				'important' => true,
+			) )
+		) );
 	}
 }
 

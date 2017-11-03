@@ -104,7 +104,7 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 				'title' => array(
 					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
-						'main' => "%%order_class%%.et_pb_fullwidth_header .header-content h1",
+						'main' => "%%order_class%%.et_pb_fullwidth_header .header-content h1, %%order_class%%.et_pb_fullwidth_header .header-content h2.et_pb_module_header, %%order_class%%.et_pb_fullwidth_header .header-content h3.et_pb_module_header, %%order_class%%.et_pb_fullwidth_header .header-content h4.et_pb_module_header, %%order_class%%.et_pb_fullwidth_header .header-content h5.et_pb_module_header, %%order_class%%.et_pb_fullwidth_header .header-content h6.et_pb_module_header",
 					),
 					'font_size' => array(
 						'default'      => '30px',
@@ -115,7 +115,9 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 					'letter_spacing' => array(
 						'default' => '0px',
 					),
-					'hide_text_color'     => true,
+					'header_level' => array(
+						'default' => 'h1',
+					),
 				),
 				'content' => array(
 					'label'    => esc_html__( 'Content', 'et_builder' ),
@@ -131,7 +133,6 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 					'letter_spacing' => array(
 						'default' => '0px',
 					),
-					'hide_text_color'     => true,
 				),
 				'subhead' => array(
 					'label'    => esc_html__( 'Subhead', 'et_builder' ),
@@ -144,7 +145,6 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 					'letter_spacing' => array(
 						'default' => '0px',
 					),
-					'hide_text_color'     => true,
 				),
 			),
 			'button' => array(
@@ -170,6 +170,12 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 			'max_width' => array(
 				'css' => array(
 					'important' => 'all',
+				),
+			),
+			'text' => array(
+				'use_text_orientation' => false,
+				'css' => array(
+					'text_shadow' => '%%order_class%% .header-content',
 				),
 			),
 		);
@@ -320,27 +326,6 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 				'tab_slug'    => 'advanced',
 				'toggle_slug' => 'scroll_down',
 			),
-			'title_font_color' => array(
-				'label'             => esc_html__( 'Title Font Color', 'et_builder' ),
-				'type'              => 'color-alpha',
-				'custom_color'      => true,
-				'tab_slug'          => 'advanced',
-				'toggle_slug'       => 'title',
-			),
-			'subhead_font_color' => array(
-				'label'             => esc_html__( 'Subhead Font Color', 'et_builder' ),
-				'type'              => 'color-alpha',
-				'custom_color'      => true,
-				'tab_slug'          => 'advanced',
-				'toggle_slug'       => 'subhead',
-			),
-			'content_font_color' => array(
-				'label'             => esc_html__( 'Content Font Color', 'et_builder' ),
-				'type'              => 'color-alpha',
-				'custom_color'      => true,
-				'tab_slug'          => 'advanced',
-				'toggle_slug'       => 'content',
-			),
 			'button_one_text' => array(
 				'label'           => sprintf( esc_html__( 'Button %1$s Text', 'et_builder' ), '#1' ),
 				'type'            => 'text',
@@ -473,6 +458,15 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 					'step' => '1',
 				),
 			),
+			'title_font_color' => array(
+ 				'type' => 'hidden',
+ 			),
+ 			'subhead_font_color' => array(
+ 				'type' => 'hidden',
+ 			),
+ 			'content_font_color' => array(
+ 				'type' => 'hidden',
+ 			),
 			'content_max_width_tablet' => array (
 				'type'        => 'skip',
 				'tab_slug'    => 'advanced',
@@ -536,9 +530,6 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 		$subhead                      = $this->shortcode_atts['subhead'];
 		$background_layout            = $this->shortcode_atts['background_layout'];
 		$text_orientation             = $this->shortcode_atts['text_orientation'];
-		$title_font_color             = $this->shortcode_atts['title_font_color'];
-		$subhead_font_color           = $this->shortcode_atts['subhead_font_color'];
-		$content_font_color           = $this->shortcode_atts['content_font_color'];
 		$button_one_text              = $this->shortcode_atts['button_one_text'];
 		$button_one_url               = $this->shortcode_atts['button_one_url'];
 		$button_one_rel               = $this->shortcode_atts['button_one_rel'];
@@ -567,6 +558,7 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 		$button_custom_2              = $this->shortcode_atts['custom_button_two'];
 		$logo_title                   = $this->shortcode_atts['logo_title'];
 		$logo_alt_text                = $this->shortcode_atts['logo_alt_text'];
+		$header_level                 = $this->shortcode_atts['title_level'];
 		$content_max_width             = $this->shortcode_atts['content_max_width'];
 		$content_max_width_tablet      = $this->shortcode_atts['content_max_width_tablet'];
 		$content_max_width_phone       = $this->shortcode_atts['content_max_width_phone'];
@@ -577,36 +569,6 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 		}
 
 		$module_class = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
-
-		if ( '' !== $title_font_color ) {
-			ET_Builder_Element::set_style( $function_name, array(
-				'selector'    => '%%order_class%%.et_pb_fullwidth_header .header-content h1',
-				'declaration' => sprintf(
-					'color: %1$s !important;',
-					esc_html( $title_font_color )
-				),
-			) );
-		}
-
-		if ( '' !== $subhead_font_color ) {
-			ET_Builder_Element::set_style( $function_name, array(
-				'selector'    => '%%order_class%%.et_pb_fullwidth_header .et_pb_fullwidth_header_subhead',
-				'declaration' => sprintf(
-					'color: %1$s !important;',
-					esc_html( $subhead_font_color )
-				),
-			) );
-		}
-
-		if ( '' !== $content_font_color ) {
-			ET_Builder_Element::set_style( $function_name, array(
-				'selector'    => '%%order_class%%.et_pb_fullwidth_header .et_pb_header_content_wrapper',
-				'declaration' => sprintf(
-					'color: %1$s !important;',
-					esc_html( $content_font_color )
-				),
-			) );
-		}
 
 		if ( '' !== $scroll_down_icon_color ) {
 			ET_Builder_Element::set_style( $function_name, array(
@@ -706,7 +668,7 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 						%5$s
 					</div>
 				</div>',
-				( $title ? sprintf( '<h1>%1$s</h1>', $title ) : '' ),
+				( $title ? sprintf( '<%1$s class="et_pb_module_header">%2$s</%1$s>', et_pb_process_header_level( $header_level, 'h1' ), $title ) : '' ),
 				( $subhead ? sprintf( '<span class="et_pb_fullwidth_header_subhead">%1$s</span>', $subhead ) : '' ),
 				$logo_image,
 				sprintf( '<div class="et_pb_header_content_wrapper">%1$s</div>', $this->shortcode_content ),
@@ -772,6 +734,28 @@ class ET_Builder_Module_Fullwidth_Header extends ET_Builder_Module {
 		);
 
 		return $output;
+	}
+
+	public function process_box_shadow( $function_name ) {
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+		$button_1  = sprintf( '.%1$s .et_pb_button_one', self::get_module_order_class( $function_name ) );
+		$button_2  = sprintf( '.%1$s .et_pb_button_two', self::get_module_order_class( $function_name ) );
+
+		if ( isset( $this->shortcode_atts['custom_button_one'] ) && $this->shortcode_atts['custom_button_one'] == 'on' ) {
+			self::set_style( $function_name, array(
+				'selector'    => $button_1,
+				'declaration' => $boxShadow->get_value( $this->shortcode_atts, array( 'suffix' => '_button_one' ) )
+			) );
+		}
+
+		if ( isset( $this->shortcode_atts['custom_button_two'] ) && $this->shortcode_atts['custom_button_two'] == 'on' ) {
+			self::set_style( $function_name, array(
+				'selector'    => $button_2,
+				'declaration' => $boxShadow->get_value( $this->shortcode_atts, array( 'suffix' => '_button_two' ) )
+			) );
+		}
+
+		parent::process_box_shadow( $function_name );
 	}
 }
 

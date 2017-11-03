@@ -157,6 +157,10 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 		return $fields;
 	}
 
+	protected function _add_additional_text_shadow_fields() {
+		// Text Shadow settings are already included its Custom Style, no need to add them to Text toggle too.
+	}
+
 	function shortcode_callback( $atts, $content = null, $function_name ) {
 		$module_id         = $this->shortcode_atts['module_id'];
 		$module_class      = $this->shortcode_atts['module_class'];
@@ -198,6 +202,10 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 		);
 
 		return $output;
+	}
+
+	protected function _add_button_box_shadow_fields( $fields, $option_name, $tab_slug, $toggle_slug ) {
+		return $fields;
 	}
 }
 

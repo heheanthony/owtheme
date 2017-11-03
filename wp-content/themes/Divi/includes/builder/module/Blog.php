@@ -1,6 +1,6 @@
 <?php
 
-class ET_Builder_Module_Blog extends ET_Builder_Module {
+class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 	function init() {
 		$this->name       = esc_html__( 'Blog', 'et_builder' );
 		$this->slug       = 'et_pb_blog';
@@ -75,12 +75,18 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 		$this->advanced_options = array(
 			'fonts' => array(
 				'header' => array(
-					'label'    => esc_html__( 'Header', 'et_builder' ),
+					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
 						'main' => "{$this->main_css_element} .entry-title",
 						'color' => "{$this->main_css_element} .entry-title a",
 						'plugin_main' => "{$this->main_css_element} .entry-title, {$this->main_css_element} .entry-title a",
 						'important' => 'all',
+					),
+					'header_level' => array(
+						'default' => 'h2',
+						'computed_affects' => array(
+							'__posts',
+						),
 					),
 				),
 				'body'   => array(
@@ -107,9 +113,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 						'text_align' => '%%order_class%% .wp-pagenavi',
 					),
 					'hide_text_align' => ! function_exists( 'wp_pagenavi' ),
-				),
-				'options' => array(
-					'pagination_text_align' => array(
+					'text_align' => array(
 						'options' => et_builder_get_text_orientation_options( array( 'justified' ), array() ),
 					),
 				),
@@ -131,7 +135,11 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 				),
 			),
 			'max_width' => array(),
-			'text'      => array(),
+			'text'      => array(
+				'css' => array(
+					'text_shadow' => '%%order_class%%',
+				),
+			),
 		);
 		$this->custom_css_options = array(
 			'title' => array(
@@ -484,6 +492,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 					'offset_number',
 					'use_overlay',
 					'hover_icon',
+					'header_level',
 					'__page',
 				),
 				'computed_minimum' => array(
@@ -535,6 +544,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 			'hover_overlay_color'           => '',
 			'hover_icon'                    => '',
 			'use_overlay'                   => '',
+			'header_level'                  => 'h2',
 		);
 
 		// WordPress' native conditional tag is only available during page load. It'll fail during component update because
@@ -553,6 +563,8 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 		remove_all_filters( 'wp_audio_shortcode_class');
 
 		$args = wp_parse_args( $args, $defaults );
+
+		$processed_header_level = et_pb_process_header_level( $args['header_level'], 'h2' );
 
 		$overlay_output = '';
 		$hover_icon = '';
@@ -698,7 +710,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 
 						<?php if ( 'off' === $args['fullwidth'] || ! in_array( $post_format, array( 'link', 'audio', 'quote' ) ) ) { ?>
 							<?php if ( ! in_array( $post_format, array( 'link', 'audio' ) ) ) { ?>
-								<h2 class="entry-title"><a href="<?php esc_url( the_permalink() ); ?>"><?php the_title(); ?></a></h2>
+								<<?php echo $processed_header_level; ?> class="entry-title"><a href="<?php esc_url( the_permalink() ); ?>"><?php the_title(); ?></a></<?php echo $processed_header_level; ?>>
 							<?php } ?>
 
 							<?php
@@ -835,12 +847,6 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 			}
 
 			wp_reset_query();
-		} else {
-			if ( $et_is_builder_plugin_active ) {
-				include( ET_BUILDER_PLUGIN_DIR . 'includes/no-results.php' );
-			} else {
-				get_template_part( 'includes/no-results', 'index' );
-			}
 		}
 
 		wp_reset_postdata();
@@ -848,9 +854,9 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 		// Reset $wp_query to its origin
 		$wp_query = $wp_query_page;
 
-		$posts = ob_get_contents();
-
-		ob_end_clean();
+		if ( ! $posts = ob_get_clean() ) {
+			$posts = self::get_no_results_template();
+		}
 
 		return $posts;
 	}
@@ -886,6 +892,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 		$hover_overlay_color = $this->shortcode_atts['hover_overlay_color'];
 		$hover_icon          = $this->shortcode_atts['hover_icon'];
 		$use_overlay         = $this->shortcode_atts['use_overlay'];
+		$header_level        = $this->shortcode_atts['header_level'];
 
 		global $paged;
 
@@ -894,6 +901,8 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 		$parallax_image_background = $this->get_parallax_image_background();
 
 		$container_is_closed = false;
+
+		$processed_header_level = et_pb_process_header_level( $header_level, 'h2' );
 
 		// some themes do not include these styles/scripts so we need to enqueue them in this module to support audio post format
 		wp_enqueue_style( 'wp-mediaelement' );
@@ -1068,7 +1077,7 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 
 			<?php if ( 'off' === $fullwidth || ! in_array( $post_format, array( 'link', 'audio', 'quote' ) ) ) { ?>
 				<?php if ( ! in_array( $post_format, array( 'link', 'audio' ) ) ) { ?>
-					<h2 class="entry-title"><a href="<?php esc_url( the_permalink() ); ?>"><?php the_title(); ?></a></h2>
+					<<?php echo $processed_header_level; ?> class="entry-title"><a href="<?php esc_url( the_permalink() ); ?>"><?php the_title(); ?></a></<?php echo $processed_header_level; ?>>
 				<?php } ?>
 
 				<?php
@@ -1218,6 +1227,20 @@ class ET_Builder_Module_Blog extends ET_Builder_Module {
 		unset($wp_filter_cache);
 
 		return $output;
+	}
+
+	public function process_box_shadow( $function_name ) {
+		/**
+		 * @var ET_Builder_Module_Field_BoxShadow $boxShadow
+		 */
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+		$selector = '.' . self::get_module_order_class( $function_name );
+
+		if ( isset( $this->shortcode_atts['fullwidth'] ) && $this->shortcode_atts['fullwidth'] === 'off' ) {
+			$selector .= ' article.et_pb_post';
+		}
+
+		self::set_style( $function_name, $boxShadow->get_style( $selector, $this->shortcode_atts ) );
 	}
 }
 

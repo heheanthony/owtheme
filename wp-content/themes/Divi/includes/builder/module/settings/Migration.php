@@ -17,12 +17,13 @@ abstract class ET_Builder_Module_Settings_Migration {
 	public static $last_hook_checked;
 	public static $last_hook_check_decision;
 
-	public static $max_version = '3.0.74';
+	public static $max_version = '3.0.84';
 	public static $migrated    = array();
 	public static $migrations  = array(
 		'3.0.48' => 'BackgroundUI',
 		'3.0.72' => 'Animation',
 		'3.0.74' => 'OptionsHarmony',
+		'3.0.84' => 'FullwidthHeader',
 	);
 
 	public static $migrations_by_version = array();
@@ -132,6 +133,7 @@ abstract class ET_Builder_Module_Settings_Migration {
 	public static function init() {
 		$class = 'ET_Builder_Module_Settings_Migration';
 
+		add_filter( 'et_pb_module_whitelisted_fields', array( $class, 'maybe_override_whitelisted_fields' ), 10, 2 );
 		add_filter( 'et_pb_module_processed_fields', array( $class, 'maybe_override_processed_fields' ), 10, 2 );
 		add_filter( 'et_pb_module_shortcode_attributes', array( $class, 'maybe_override_shortcode_attributes' ), 10, 4 );
 	}
@@ -165,26 +167,16 @@ abstract class ET_Builder_Module_Settings_Migration {
 			$unprocessed_attrs = array();
 		}
 
-		$migrations      = self::get_migrations( $attrs['_builder_version'] );
-		$migration_count = count( $migrations );
-		$migration_index = 0;
+		$migrations = self::get_migrations( $attrs['_builder_version'] );
 
 		foreach ( $migrations as $migration ) {
-			$migration_index++;
-
 			if ( ! in_array( $module_slug, $migration->modules ) ) {
 				continue;
 			}
 
-			// If current module/field is affected by multiple migrations, all migration that takes place before the last one
-			// needs to have its whitelisted attributes ($attrs) merged with any attributes that exist in shortcode ($unprocessed_attrs)
-			// to avoid migration being blocked with past migration that has similar module/field migrations
-			if ( $migration_index < $migration_count ) {
-				$attrs = array_merge( $attrs, $unprocessed_attrs );
-			}
-
 			foreach ( $migration->fields as $field_name => $field_info ) {
 				foreach ( $field_info['affected_fields'] as $affected_field => $affected_modules ) {
+
 					if ( ! isset( $attrs[ $affected_field ] ) || ! in_array( $module_slug, $affected_modules ) ) {
 						continue;
 					}
@@ -210,7 +202,39 @@ abstract class ET_Builder_Module_Settings_Migration {
 		return $attrs;
 	}
 
+	public static function maybe_override_whitelisted_fields( $fields, $module_slug ) {
+		if ( ! self::_should_handle_shortcode_callback( $module_slug ) ) {
+			return $fields;
+		}
+
+		$migrations = self::get_migrations( 'all' );
+
+		foreach ( $migrations as $migration ) {
+			if ( in_array( $module_slug, $migration->modules ) ) {
+				$fields = $migration->override_whitelisted_fields( $fields, $module_slug );
+			}
+		}
+
+		return $fields;
+	}
+
 	abstract public function migrate( $field_name, $current_value, $module_slug, $saved_value, $saved_field_name, $attrs );
+
+	public function override_whitelisted_fields( $fields, $module_slug ) {
+		foreach ( $this->fields as $field_name => $field_info ) {
+			foreach ( $field_info['affected_fields'] as $affected_field => $affected_modules ) {
+				if ( ! in_array( $module_slug, $affected_modules ) ) {
+					continue;
+				}
+
+				if ( in_array( $field_name, $fields ) && ! in_array( $affected_field, $fields ) ) {
+					$fields[] = $affected_field;
+				}
+			}
+		}
+
+		return $fields;
+	}
 
 	public static function _should_handle_shortcode_callback( $slug ) {
 		if ( false === strpos( $slug, 'et_pb' ) ) {

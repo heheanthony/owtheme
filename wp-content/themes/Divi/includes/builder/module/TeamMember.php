@@ -22,6 +22,13 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 			'module_class',
 			'icon_color',
 			'icon_hover_color',
+			'box_shadow_style_image',
+			'box_shadow_horizontal_image',
+			'box_shadow_vertical_image',
+			'box_shadow_blur_image',
+			'box_shadow_spread_image',
+			'box_shadow_color_image',
+			'box_shadow_position_image',
 		);
 
 		$this->fields_defaults = array(
@@ -40,8 +47,9 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 			),
 			'advanced' => array(
 				'toggles' => array(
-					'icon'       => esc_html__( 'Icon', 'et_builder' ),
-					'text'       => array(
+					'icon'  => esc_html__( 'Icon', 'et_builder' ),
+					'image' => esc_html__( 'Image', 'et_builder' ),
+					'text'  => array(
 						'title'    => esc_html__( 'Text', 'et_builder' ),
 						'priority' => 49,
 					),
@@ -60,10 +68,13 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 		$this->advanced_options = array(
 			'fonts' => array(
 				'header' => array(
-					'label'    => esc_html__( 'Header', 'et_builder' ),
+					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
-						'main'      => "{$this->main_css_element} h4",
+						'main'      => "{$this->main_css_element} h4, {$this->main_css_element} h1.et_pb_module_header, {$this->main_css_element} h2.et_pb_module_header, {$this->main_css_element} h3.et_pb_module_header, {$this->main_css_element} h5.et_pb_module_header, {$this->main_css_element} h6.et_pb_module_header",
 						'important' => 'plugin_only',
+					),
+					'header_level' => array(
+						'default' => 'h4',
 					),
 				),
 				'body'   => array(
@@ -239,6 +250,15 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 				'option_class'    => 'et_pb_custom_css_regular',
 			),
 		);
+
+		$fields = array_merge( $fields, ET_Builder_Module_Fields_Factory::get( 'BoxShadow' )->get_fields( array(
+			'suffix'          => '_image',
+			'label'           => esc_html__( 'Image Box Shadow', 'et_builder' ),
+			'option_category' => 'layout',
+			'tab_slug'        => 'advanced',
+			'toggle_slug'     => 'image',
+		) ) );
+
 		return $fields;
 	}
 
@@ -256,6 +276,7 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 		$background_layout = $this->shortcode_atts['background_layout'];
 		$icon_color        = $this->shortcode_atts['icon_color'];
 		$icon_hover_color  = $this->shortcode_atts['icon_hover_color'];
+		$header_level      = $this->shortcode_atts['header_level'];
 
 		$module_class = ET_Builder_Element::add_module_order_class( $module_class, $function_name );
 
@@ -352,7 +373,7 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 			( '' !== $image ? $image : '' ),
 			( '' !== $module_id ? sprintf( ' id="%1$s"', esc_attr( $module_id ) ) : '' ),
 			( '' !== $module_class ? sprintf( ' %1$s', esc_attr( $module_class ) ) : '' ),
-			( '' !== $name ? sprintf( '<h4>%1$s</h4>', esc_html( $name ) ) : '' ),
+			( '' !== $name ? sprintf( '<%1$s class="et_pb_module_header">%2$s</%1$s>', et_pb_process_header_level( $header_level, 'h4' ), esc_html( $name ) ) : '' ),
 			( '' !== $position ? sprintf( '<p class="et_pb_member_position">%1$s</p>', esc_html( $position ) ) : '' ),
 			$social_links,
 			$background_layout,
@@ -365,6 +386,19 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 		);
 
 		return $output;
+	}
+
+	public function process_box_shadow( $function_name ) {
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+		$selector = sprintf( '.%1$s .et_pb_team_member_image', self::get_module_order_class( $function_name ) );
+
+		self::set_style( $function_name, $boxShadow->get_style(
+			$selector,
+			$this->shortcode_atts,
+			array( 'suffix' => '_image' )
+		) );
+
+		parent::process_box_shadow( $function_name );
 	}
 }
 

@@ -314,6 +314,9 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 		return $fields;
 	}
 
+	// Don't add text-shadow fields since they already are via font-options
+	protected function _add_additional_text_shadow_fields() {}
+
 	function shortcode_callback( $atts, $content = null, $function_name ) {
 		$field_title                = $this->shortcode_atts['field_title'];
 		$field_type                 = $this->shortcode_atts['field_type'];
@@ -711,6 +714,22 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 		);
 
 		return $output;
+	}
+
+	public function process_box_shadow( $function_name ) {
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+
+		$selectors = array(
+			'%%order_class%% input',
+			'%%order_class%% select',
+			'%%order_class%% textarea',
+			'%%order_class%% .et_pb_contact_field_options_list label > i',
+		);
+		self::set_style( $function_name, array(
+				'selector'    => implode( ', ', $selectors ),
+				'declaration' => $boxShadow->get_value( $this->shortcode_atts, array( 'important' => true ) )
+			)
+		);
 	}
 }
 

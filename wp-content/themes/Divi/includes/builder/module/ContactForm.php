@@ -22,6 +22,13 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 			'use_redirect',
 			'redirect_url',
 			'success_message',
+			'box_shadow_style_submit',
+			'box_shadow_horizontal_submit',
+			'box_shadow_vertical_submit',
+			'box_shadow_blur_submit',
+			'box_shadow_spread_submit',
+			'box_shadow_color_submit',
+			'box_shadow_position_submit',
 		);
 
 		$this->fields_defaults = array(
@@ -48,7 +55,10 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 				'title' => array(
 					'label'    => esc_html__( 'Title', 'et_builder' ),
 					'css'      => array(
-						'main' => "{$this->main_css_element} h1",
+						'main' => "{$this->main_css_element} h1, {$this->main_css_element} h2.et_pb_contact_main_title, {$this->main_css_element} h3.et_pb_contact_main_title, {$this->main_css_element} h4.et_pb_contact_main_title, {$this->main_css_element} h5.et_pb_contact_main_title, {$this->main_css_element} h6.et_pb_contact_main_title",
+					),
+					'header_level' => array(
+						'default' => 'h1',
 					),
 				),
 				'form_field'   => array(
@@ -103,6 +113,7 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 			'text'      => array(
 				'css' => array(
 					'text_orientation' => '%%order_class%% input, %%order_class%% textarea, %%order_class%% label',
+					'text_shadow'      => '%%order_class%%, %%order_class%% input, %%order_class%% textarea, %%order_class%% label, %%order_class%% select',
 				),
 			),
 		);
@@ -266,6 +277,7 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 				'option_class'    => 'et_pb_custom_css_regular',
 			),
 		);
+
 		return $fields;
 	}
 
@@ -296,6 +308,7 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 		$use_redirect          = $this->shortcode_atts['use_redirect'];
 		$redirect_url          = $this->shortcode_atts['redirect_url'];
 		$success_message       = $this->shortcode_atts['success_message'];
+		$header_level          = $this->shortcode_atts['title_level'];
 
 		global $et_pb_contact_form_num;
 
@@ -545,7 +558,7 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 				%3$s
 			</div> <!-- .et_pb_contact_form_container -->
 			',
-			( '' !== $title ? sprintf( '<h1 class="et_pb_contact_main_title">%1$s</h1>', esc_html( $title ) ) : '' ),
+			( '' !== $title ? sprintf( '<%2$s class="et_pb_contact_main_title">%1$s</%2$s>', esc_html( $title ), et_pb_process_header_level( $header_level, 'h1' ) ) : '' ),
 			'' !== $et_error_message ? $et_error_message : '',
 			$form,
 			( '' !== $module_id
@@ -563,6 +576,35 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 		);
 
 		return $output;
+	}
+
+	public function process_box_shadow( $function_name ) {
+		$boxShadow = ET_Builder_Module_Fields_Factory::get( 'BoxShadow' );
+
+		$selectors = array(
+			'%%order_class%% .et_pb_contact_field input',
+			'%%order_class%% .et_pb_contact_field select',
+			'%%order_class%% .et_pb_contact_field textarea',
+			'%%order_class%% .et_pb_contact_field .et_pb_contact_field_options_list label > i',
+			'%%order_class%% input.et_pb_contact_captcha',
+		);
+		self::set_style( $function_name, array(
+				'selector' => implode( ', ', $selectors ),
+				'declaration' => $boxShadow->get_value( $this->shortcode_atts )
+			)
+		);
+
+		if (
+			isset( $this->shortcode_atts['custom_button'] )
+			&&
+			$this->shortcode_atts['custom_button'] === 'on'
+		) {
+			self::set_style( $function_name, array(
+					'selector'    => '%%order_class%% .et_pb_contact_submit',
+					'declaration' => $boxShadow->get_value( $this->shortcode_atts, array( 'suffix' => '_button' ) )
+				)
+			);
+		}
 	}
 }
 
