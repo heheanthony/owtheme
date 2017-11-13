@@ -73,6 +73,24 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 		);
 
 		$this->advanced_options = array(
+			'border' => array(
+				'css' => array(
+					'main' => array(
+						'border_radii'  => "%%order_class%%.et_pb_blog_grid .et_pb_post",
+						'border_styles' => "%%order_class%%.et_pb_blog_grid .et_pb_post",
+					),
+				),
+				'depends_to'      => array( 'fullwidth' ),
+				'depends_show_if' => 'off',
+				'defaults' => array(
+					'border_radii'  => 'on|0px|0px|0px|0px',
+					'border_styles' => array(
+						'width' => '1px',
+						'color' => '#d8d8d8',
+						'style' => 'solid',
+					),
+				),
+			),
 			'fonts' => array(
 				'header' => array(
 					'label'    => esc_html__( 'Title', 'et_builder' ),
@@ -116,12 +134,6 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 					'text_align' => array(
 						'options' => et_builder_get_text_orientation_options( array( 'justified' ), array() ),
 					),
-				),
-			),
-			'border' => array(
-				'css'      => array(
-					'main' => "%%order_class%%.et_pb_module .et_pb_post",
-					'important' => 'plugin_only',
 				),
 			),
 			'background' => array(
@@ -179,6 +191,10 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 					'background_layout',
 					'use_dropshadow',
 					'masonry_tile_background_color',
+					'border_radii_fullwidth',
+					'border_styles_fullwidth',
+					'border_radii',
+					'border_styles',
 				),
 				'description'        => esc_html__( 'Toggle between the various blog layout types.', 'et_builder' ),
 				'computed_affects'   => array(
@@ -1241,6 +1257,63 @@ class ET_Builder_Module_Blog extends ET_Builder_Module_Type_PostBased {
 		}
 
 		self::set_style( $function_name, $boxShadow->get_style( $selector, $this->shortcode_atts ) );
+	}
+
+	protected function _add_additional_border_fields() {
+		parent::_add_additional_border_fields();
+
+		$suffix = 'fullwidth';
+
+		$this->_additional_fields_options = array_merge(
+			$this->_additional_fields_options,
+			ET_Builder_Module_Fields_Factory::get( 'Border' )->get_fields( array(
+				'suffix'          => "_{$suffix}",
+				'depends_to'      => array( 'fullwidth' ),
+				'depends_show_if' => 'on',
+				'defaults'        => array(
+					'border_radii'  => 'on||||',
+					'border_styles' => array(
+						'width' => '0px',
+						'color' => '#333333',
+						'style' => 'solid',
+					),
+				),
+			) )
+		);
+
+		$this->advanced_options["border_{$suffix}"]["border_styles_{$suffix}"] = $this->_additional_fields_options["border_styles_{$suffix}"];
+		$this->advanced_options["border_{$suffix}"]["border_radii_{$suffix}"] = $this->_additional_fields_options["border_radii_{$suffix}"];
+
+		$this->advanced_options["border_{$suffix}"]['css'] = array(
+			'main' => array(
+				'border_radii'  => "%%order_class%%:not(.et_pb_blog_grid) .et_pb_post",
+				'border_styles' => "%%order_class%%:not(.et_pb_blog_grid) .et_pb_post",
+			),
+		);
+	}
+
+	function process_advanced_border_options( $function_name ) {
+		parent::process_advanced_border_options( $function_name );
+
+		$suffix = 'fullwidth';
+		/**
+		 * @var ET_Builder_Module_Field_Border $border_field
+		 */
+		$border_field = ET_Builder_Module_Fields_Factory::get( 'Border' );
+
+		$css_selector = ! empty( $this->advanced_options["border_{$suffix}"]['css']['main']['border_radii'] ) ? $this->advanced_options["border_{$suffix}"]['css']['main']['border_radii'] : $this->main_css_element;
+		self::set_style( $function_name, array(
+			'selector'    => $css_selector,
+			'declaration' => $border_field->get_radii_style( $this->shortcode_atts, $this->advanced_options, "_{$suffix}" ),
+			'priority'    => $this->_style_priority,
+		) );
+
+		$css_selector = ! empty( $this->advanced_options["border_{$suffix}"]['css']['main']['border_styles'] ) ? $this->advanced_options["border_{$suffix}"]['css']['main']['border_styles'] : $this->main_css_element;
+		self::set_style( $function_name, array(
+			'selector'    => $css_selector,
+			'declaration' => $border_field->get_borders_style( $this->shortcode_atts, $this->advanced_options, "_{$suffix}" ),
+			'priority'    => $this->_style_priority,
+		) );
 	}
 }
 

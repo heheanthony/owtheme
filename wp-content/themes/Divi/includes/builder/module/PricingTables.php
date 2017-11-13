@@ -101,6 +101,27 @@ class ET_Builder_Module_Pricing_Tables extends ET_Builder_Module {
 		);
 
 		$this->advanced_options = array(
+			'border' => array(
+				'additional_elements' => array(
+					array(
+						"{$this->main_css_element} .et_pb_pricing_content_top" => array( 'bottom' ),
+					),
+				),
+				'css'                 => array(
+					'main' => array(
+						'border_radii'  => "{$this->main_css_element} .et_pb_pricing_table",
+						'border_styles' => "{$this->main_css_element} .et_pb_pricing_table",
+					),
+				),
+				'defaults' => array(
+					'border_radii'  => 'on|0px|0px|0px|0px',
+					'border_styles' => array(
+						'width' => '1px',
+						'color' => '#bebebe',
+						'style' => 'solid',
+					),
+				),
+			),
 			'fonts' => array(
 				'header' => array(
 					'label'    => esc_html__( 'Title', 'et_builder' ),
@@ -175,14 +196,6 @@ class ET_Builder_Module_Pricing_Tables extends ET_Builder_Module {
 				),
 				'settings' => array(
 					'color' => 'alpha',
-				),
-			),
-			'border' => array(
-				'css' => array(
-					'main' => "{$this->main_css_element} .et_pb_pricing_table",
-				),
-				'additional_elements' => array(
-					"{$this->main_css_element} .et_pb_pricing_content_top" => array( 'bottom' ),
 				),
 			),
 			'button' => array(

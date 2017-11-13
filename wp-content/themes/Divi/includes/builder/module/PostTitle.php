@@ -64,9 +64,12 @@ class ET_Builder_Module_Post_Title extends ET_Builder_Module {
 		);
 
 		$this->advanced_options = array(
-			'border'                => array(
+			'border' => array(
 				'css' => array(
-					'main' => "{$this->main_css_element}.et_pb_featured_bg, {$this->main_css_element}",
+					'main' => array(
+						'border_radii'  => "{$this->main_css_element}.et_pb_featured_bg, {$this->main_css_element}",
+						'border_styles' => "{$this->main_css_element}.et_pb_featured_bg, {$this->main_css_element}",
+					),
 				),
 			),
 			'custom_margin_padding' => array(
@@ -413,6 +416,17 @@ class ET_Builder_Module_Post_Title extends ET_Builder_Module {
 		);
 
 		return $output;
+	}
+
+	protected function _add_additional_border_fields() {
+		parent::_add_additional_border_fields();
+
+		$this->advanced_options['border']['css'] = array(
+			'main' => array(
+				'border_radii'  => "{$this->main_css_element}.et_pb_featured_bg, {$this->main_css_element}",
+				'border_styles' => "{$this->main_css_element}.et_pb_featured_bg, {$this->main_css_element}",
+			)
+		);
 	}
 }
 

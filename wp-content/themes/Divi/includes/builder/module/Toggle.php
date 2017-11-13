@@ -47,6 +47,22 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 		);
 
 		$this->advanced_options = array(
+			'border' => array(
+				'css'      => array(
+					'main' => array(
+						'border_radii'  => ".et_pb_module{$this->main_css_element}",
+						'border_styles' => ".et_pb_module{$this->main_css_element}",
+					)
+				),
+				'defaults' => array(
+					'border_radii' => 'on|0px|0px|0px|0px',
+					'border_styles' => array(
+						'width' => '1px',
+						'color' => '#d9d9d9',
+						'style' => 'solid',
+					),
+				)
+			),
 			'fonts' => array(
 				'title' => array(
 					'label'    => esc_html__( 'Title', 'et_builder' ),
@@ -73,7 +89,6 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 					'color' => 'alpha',
 				),
 			),
-			'border' => array(),
 			'custom_margin_padding' => array(
 				'css' => array(
 					'important' => 'all',
@@ -278,6 +293,8 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 			$et_pb_accordion_item_number++;
 
 			$header_level = $et_pb_accordion_header_level;
+
+			$module_class .= ' et_pb_accordion_item';
 		}
 
 		// Adding "_item" class for toggle module for customizer targetting. There's no proper selector

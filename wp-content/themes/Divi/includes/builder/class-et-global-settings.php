@@ -37,6 +37,7 @@ class ET_Global_Settings {
 			'direction_radial' => 'center',
 			'start_position'   => '0%',
 			'end_position'     => '100%',
+			'overlays_image'   => 'off',
 		);
 
 		$background_image_defaults = array(
@@ -62,6 +63,7 @@ class ET_Global_Settings {
 			'all_background_gradient_direction_radial'        => $background_gradient_defaults['direction_radial'],
 			'all_background_gradient_start_position'          => $background_gradient_defaults['start_position'],
 			'all_background_gradient_end_position'            => $background_gradient_defaults['end_position'],
+			'all_background_gradient_overlays_image'          => $background_gradient_defaults['overlays_image'],
 
 			'et_pb_accordion-toggle_font_size'                => '16',
 			'et_pb_accordion-toggle_font_style'               => '',

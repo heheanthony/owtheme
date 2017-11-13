@@ -2700,36 +2700,40 @@ msgstr ""
 msgid "You currently don't have any projects assigned to a category."
 msgstr ""
 
-#: functions.php:1248
+#: functions.php:1353
 msgid "Solid"
 msgstr ""
 
-#: functions.php:1249
-msgid "Dotted"
-msgstr ""
-
-#: functions.php:1250
+#: functions.php:1354
 msgid "Dashed"
 msgstr ""
 
-#: functions.php:1251
+#: functions.php:1355
+msgid "Dotted"
+msgstr ""
+
+#: functions.php:1356
 msgid "Double"
 msgstr ""
 
-#: functions.php:1252
+#: functions.php:1357
 msgid "Groove"
 msgstr ""
 
-#: functions.php:1253
+#: functions.php:1358
 msgid "Ridge"
 msgstr ""
 
-#: functions.php:1254
+#: functions.php:1359
 msgid "Inset"
 msgstr ""
 
-#: functions.php:1255
+#: functions.php:1360
 msgid "Outset"
+msgstr ""
+
+#: functions.php:1361
+msgid "None"
 msgstr ""
 
 #: functions.php:1597

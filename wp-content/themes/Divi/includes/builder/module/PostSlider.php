@@ -175,6 +175,13 @@ class ET_Builder_Module_Post_Slider extends ET_Builder_Module_Type_PostBased {
 					'text_shadow'      => '%%order_class%% .et_pb_slide .et_pb_slide_description',
 				),
 			),
+			'border' => array(
+				'css' => array(
+					'main' => array(
+						'border_radii'  => "%%order_class%%, %%order_class%% .et_pb_slide, %%order_class%% .et_pb_slide_overlay_container",
+					),
+				),
+			),
 		);
 
 		$this->custom_css_options = array(

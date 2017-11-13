@@ -48,6 +48,22 @@ class ET_Builder_Module_Pricing_Tables_Item extends ET_Builder_Module {
 		);
 
 		$this->advanced_options = array(
+			'border' => array(
+				'css'                 => array(
+					'main' => array(
+						'border_radii'  => ".et_pb_pricing .et_pb_pricing_table%%order_class%%",
+						'border_styles' => ".et_pb_pricing .et_pb_pricing_table%%order_class%%",
+					),
+				),
+				'defaults' => array(
+					'border_radii'  => 'on|0px|0px|0px|0px',
+					'border_styles' => array(
+						'width' => '1px',
+						'color' => '#bebebe',
+						'style' => 'solid',
+					),
+				),
+			),
 			'fonts' => array(
 				'header' => array(
 					'label'    => esc_html__( 'Title', 'et_builder' ),

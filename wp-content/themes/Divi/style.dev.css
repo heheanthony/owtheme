@@ -1,7 +1,7 @@
 /*!
 Theme Name: Divi
 Theme URI: http://www.elegantthemes.com/gallery/divi/
-Version: 3.0.85
+Version: 3.0.87
 Description: Smart. Flexible. Beautiful. Divi is the most powerful theme in our collection.
 Author: Elegant Themes
 Author URI: http://www.elegantthemes.com
@@ -718,26 +718,26 @@ blockquote {
 }
 
 .et_button_left .et_pb_button:hover:after,
-.et_button_icon_visible.woocommerce a.button.alt:hover:after,
-.et_button_icon_visible.woocommerce-page a.button.alt:hover:after,
-.et_button_icon_visible.woocommerce button.button.alt:hover:after,
-.et_button_icon_visible.woocommerce-page button.button.alt:hover:after,
-.et_button_icon_visible.woocommerce input.button.alt:hover:after,
-.et_button_icon_visible.woocommerce-page input.button.alt:hover:after,
-.et_button_icon_visible.woocommerce #respond input#submit.alt:hover:after,
-.et_button_icon_visible.woocommerce-page #respond input#submit.alt:hover:after,
-.et_button_icon_visible.woocommerce #content input.button.alt:hover:after,
-.et_button_icon_visible.woocommerce-page #content input.button.alt:hover:after,
-.et_button_icon_visible.woocommerce a.button:hover:after,
-.et_button_icon_visible.woocommerce-page a.button:hover:after,
-.et_button_icon_visible.woocommerce button.button:hover:after,
-.et_button_icon_visible.woocommerce-page button.button:hover:after,
-.et_button_icon_visible.woocommerce input.button:hover:after,
-.et_button_icon_visible.woocommerce-page input.button:hover:after,
-.et_button_icon_visible.woocommerce #respond input#submit:hover:after,
-.et_button_icon_visible.woocommerce-page #respond input#submit:hover:after,
-.et_button_icon_visible.woocommerce #content input.button:hover:after,
-.et_button_icon_visible.woocommerce-page #content input.button:hover:after {
+.et_button_left.et_button_icon_visible.woocommerce a.button.alt:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce-page a.button.alt:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce button.button.alt:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce-page button.button.alt:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce input.button.alt:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce-page input.button.alt:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce #respond input#submit.alt:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce-page #respond input#submit.alt:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce #content input.button.alt:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce-page #content input.button.alt:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce a.button:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce-page a.button:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce button.button:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce-page button.button:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce input.button:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce-page input.button:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce #respond input#submit:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce-page #respond input#submit:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce #content input.button:hover:after,
+.et_button_left.et_button_icon_visible.woocommerce-page #content input.button:hover:after {
 	left: 0.15em;
 }
 
@@ -6461,6 +6461,36 @@ p.et_pb_gallery_caption {
 	background-size: cover;
 }
 
+/* Default Border Styles */
+.et_pb_with_border,
+.et_pb_with_border .et_pb_portfolio_item,
+.et_pb_with_border .et_pb_portfolio_image,
+.et_pb_with_border .et_pb_gallery_item,
+.et_pb_with_border .et_pb_counter_container,
+.et_pb_with_border .et_pb_main_blurb_image,
+.et_pb_with_border .et_portfolio_image,
+.et_pb_with_border .et_pb_gallery_image,
+.et_pb_with_border .et_pb_team_member_image,
+.et_pb_with_border .et_pb_testimonial_portrait,
+.et_pb_with_border .et_pb_image_wrap,
+.et_pb_with_border .et_pb_newsletter_form input,
+.et_pb_with_border .et_pb_contact_form input,
+.et_pb_with_border .et_pb_contact_form textarea,
+.et_pb_with_border .et_pb_contact_form .input[type="checkbox"] + label i,
+.et_pb_with_border .et_pb_contact_form .input[type="radio"] + label i,
+.et_pb_with_border.et_pb_blog .et_pb_post,
+.et_pb_with_border.et_pb_comments_module textarea,
+.et_pb_with_border.et_pb_comments_module input,
+.et_pb_with_border.et_pb_posts_nav span.nav-previous a,
+.et_pb_with_border.et_pb_posts_nav span.nav-next a,
+.et_pb_with_border.et_pb_video_slider .et_pb_slider,
+.et_pb_with_border.et_pb_video_slider .et_pb_carousel_item,
+.et_pb_with_border.et_pb_shop .et_shop_image > img {
+	border-width: 0;
+	border-style: solid;
+	border-color: #333;
+}
+
 /* Image Module */
 .et_pb_image {
 	display: block;
@@ -7607,10 +7637,8 @@ p.et_pb_gallery_caption {
 .et_pb_newsletter_form p input {
 	width: 100%;
 	padding: 14px 4% !important;
-	border: none !important;
-	-webkit-border-radius: 3px !important;
-	-moz-border-radius: 3px !important;
-	border-radius: 3px !important;
+	border: none;
+	border-radius: 3px;
 	color: #666;
 	background-color: #fff;
 	font-size: 14px;
@@ -10221,6 +10249,7 @@ ul.et_pb_social_media_follow {
 }
 
 .et_pb_social_media_follow li a.icon {
+	box-sizing: content-box;
 	width: 32px;
 	height: 32px;
 	padding: 0;
@@ -10244,16 +10273,8 @@ ul.et_pb_social_media_follow {
 	color: rgba(255, 255, 255, 0.7);
 }
 
-.et_pb_social_media_follow li a.icon.rounded_rectangle {
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
+.et_pb_social_media_follow li a.icon {
 	border-radius: 3px;
-}
-
-.et_pb_social_media_follow li a.icon.circle {
-	-webkit-border-radius: 100%;
-	-moz-border-radius: 100%;
-	border-radius: 100%;
 }
 
 .et_pb_social_media_follow_network_name {
@@ -11828,7 +11849,7 @@ span.comment_date {
 #commentform input[type="email"],
 #commentform input[type="url"] {
 	padding: 12px;
-	border: none;
+	border-width: 0;
 	color: #999;
 	background-color: #eee;
 	font-size: 18px;
@@ -15725,10 +15746,18 @@ span.comment_date {
 
 /* Person Module */
 	.et_pb_column .et_pb_team_member_image {
-		float: left !important;
-		width: 280px !important;
-		margin: 0 30px 0 0 !important;
-		text-align: left !important;
+		float: left;
+		width: 280px;
+		margin: 0 30px 0 0;
+		text-align: left;
+	}
+
+	.et_pb_row_4col .et_pb_column.et_pb_column_1_4 .et_pb_team_member_image {
+		float: none;
+		width: auto;
+		max-width: none;
+		margin: 0 0 12px 0;
+		text-align: center;
 	}
 
 	.et_pb_column .et_pb_team_member_description {
@@ -17576,7 +17605,7 @@ span.comment_date {
 	animation-name: et_pb_flipRight;
 }
 
-/* Flip: Right */
+/* Flip: Bottom */
 @-webkit-keyframes et_pb_flipBottom {
 	from {
 		-webkit-transform-origin: center;
@@ -17617,8 +17646,8 @@ span.comment_date {
 
 	to {
 		opacity: 1;
-		-webkit-transform: perspective(0px) rotateX(0deg);
-		transform: perspective(0px) rotateX(0deg);
+		-webkit-transform: perspective(0px) rotateY(0deg);
+		transform: perspective(0px) rotateY(0deg);
 	}
 }
 
@@ -17630,8 +17659,8 @@ span.comment_date {
 
 	to {
 		opacity: 1;
-		-webkit-transform: perspective(0px) rotateX(0deg);
-		transform: perspective(0px) rotateX(0deg);
+		-webkit-transform: perspective(0px) rotateY(0deg);
+		transform: perspective(0px) rotateY(0deg);
 	}
 }
 

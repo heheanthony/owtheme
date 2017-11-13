@@ -83,6 +83,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 			'background_color_gradient_direction_radial_1',
 			'background_color_gradient_start_position_1',
 			'background_color_gradient_end_position_1',
+			'background_color_gradient_overlays_image_1',
 			'background_size_2',
 			'background_position_2',
 			'background_repeat_2',
@@ -95,6 +96,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 			'background_color_gradient_direction_radial_2',
 			'background_color_gradient_start_position_2',
 			'background_color_gradient_end_position_2',
+			'background_color_gradient_overlays_image_2',
 			'background_size_3',
 			'background_position_3',
 			'background_repeat_3',
@@ -107,6 +109,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 			'background_color_gradient_direction_radial_3',
 			'background_color_gradient_start_position_3',
 			'background_color_gradient_end_position_3',
+			'background_color_gradient_overlays_image_3',
 			'background_video_mp4_1',
 			'background_video_webm_1',
 			'background_video_width_1',
@@ -206,6 +209,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 					),
 				),
 			),
+			'border' => array(),
 		);
 
 		$this->fields_defaults = array(
@@ -655,6 +659,15 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 			'background_color_gradient_end_position_3' => array(
 				'type' => 'skip',
 			),
+			'background_color_gradient_overlays_image_1' => array(
+				'type' => 'skip',
+			),
+			'background_color_gradient_overlays_image_2' => array(
+				'type' => 'skip',
+			),
+			'background_color_gradient_overlays_image_3' => array(
+				'type' => 'skip',
+			),
 			'background_video_mp4_1' => array(
 				'type' => 'skip',
 				'computed_affects'   => array(
@@ -965,6 +978,9 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 		$background_color_gradient_end_position_1     = $this->shortcode_atts['background_color_gradient_end_position_1'];
 		$background_color_gradient_end_position_2     = $this->shortcode_atts['background_color_gradient_end_position_2'];
 		$background_color_gradient_end_position_3     = $this->shortcode_atts['background_color_gradient_end_position_3'];
+		$background_color_gradient_overlays_image_1   = $this->shortcode_atts['background_color_gradient_overlays_image_1'];
+		$background_color_gradient_overlays_image_2   = $this->shortcode_atts['background_color_gradient_overlays_image_2'];
+		$background_color_gradient_overlays_image_3   = $this->shortcode_atts['background_color_gradient_overlays_image_3'];
 		$background_video_mp4_1     = $this->shortcode_atts['background_video_mp4_1'];
 		$background_video_mp4_2     = $this->shortcode_atts['background_video_mp4_2'];
 		$background_video_mp4_3     = $this->shortcode_atts['background_video_mp4_3'];
@@ -1044,6 +1060,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 					'color_end'        => $background_color_gradient_end_1,
 					'start_position'   => $background_color_gradient_start_position_1,
 					'end_position'     => $background_color_gradient_end_position_1,
+					'overlays_image'   => $background_color_gradient_overlays_image_1,
 				),
 				array(
 					'active'           => $use_background_color_gradient_2,
@@ -1054,6 +1071,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 					'color_end'        => $background_color_gradient_end_2,
 					'start_position'   => $background_color_gradient_start_position_2,
 					'end_position'     => $background_color_gradient_end_position_2,
+					'overlays_image'   => $background_color_gradient_overlays_image_2,
 				),
 				array(
 					'active'           => $use_background_color_gradient_3,
@@ -1064,6 +1082,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 					'color_end'        => $background_color_gradient_end_3,
 					'start_position'   => $background_color_gradient_start_position_3,
 					'end_position'     => $background_color_gradient_end_position_3,
+					'overlays_image'   => $background_color_gradient_overlays_image_3,
 				),
 			);
 
@@ -1144,8 +1163,10 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 				ET_Builder_Element::set_style( $function_name, array(
 					'selector'    => '%%order_class%% > .et_pb_row',
 					'declaration' => sprintf(
-						'max-width:%1$s !important;',
-						'on' === $width_unit ? esc_attr( sprintf( '%1$spx', intval( $custom_width_px ) ) ) : esc_attr( sprintf( '%1$s%%', intval( $custom_width_percent ) ) )
+						'max-width:%1$s !important;
+						%2$s',
+						'on' === $width_unit ? esc_attr( sprintf( '%1$spx', intval( $custom_width_px ) ) ) : esc_attr( sprintf( '%1$s%%', intval( $custom_width_percent ) ) ),
+						'on' !== $width_unit ? esc_attr( sprintf( 'width: %1$s%%;', intval( $custom_width_percent ) ) ) : ''
 					),
 				) );
 			}
@@ -1306,6 +1327,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 					'important' => 'all',
 				),
 			),
+			'border' => array(),
 		);
 
 		$this->options_toggles = array(
@@ -1463,6 +1485,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 			'background_color_gradient_direction_radial_1',
 			'background_color_gradient_start_position_1',
 			'background_color_gradient_end_position_1',
+			'background_color_gradient_overlays_image_1',
 			'background_size_2',
 			'background_position_2',
 			'background_repeat_2',
@@ -1475,6 +1498,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 			'background_color_gradient_direction_radial_2',
 			'background_color_gradient_start_position_2',
 			'background_color_gradient_end_position_2',
+			'background_color_gradient_overlays_image_2',
 			'background_size_3',
 			'background_position_3',
 			'background_repeat_3',
@@ -1487,6 +1511,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 			'background_color_gradient_direction_radial_3',
 			'background_color_gradient_start_position_3',
 			'background_color_gradient_end_position_3',
+			'background_color_gradient_overlays_image_3',
 			'background_size_4',
 			'background_position_4',
 			'background_repeat_4',
@@ -1499,6 +1524,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 			'background_color_gradient_direction_radial_4',
 			'background_color_gradient_start_position_4',
 			'background_color_gradient_end_position_4',
+			'background_color_gradient_overlays_image_4',
 			'background_video_mp4_1',
 			'background_video_webm_1',
 			'background_video_width_1',
@@ -1976,6 +2002,18 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 			'background_color_gradient_end_position_4' => array(
 				'type' => 'skip',
 			),
+			'background_color_gradient_overlays_image_1' => array(
+				'type' => 'skip',
+			),
+			'background_color_gradient_overlays_image_2' => array(
+				'type' => 'skip',
+			),
+			'background_color_gradient_overlays_image_3' => array(
+				'type' => 'skip',
+			),
+			'background_color_gradient_overlays_image_4' => array(
+				'type' => 'skip',
+			),
 			'background_video_mp4_1' => array(
 				'type' => 'skip',
 				'computed_affects'   => array(
@@ -2450,6 +2488,10 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 		$background_color_gradient_end_position_2     = $this->shortcode_atts['background_color_gradient_end_position_2'];
 		$background_color_gradient_end_position_3     = $this->shortcode_atts['background_color_gradient_end_position_3'];
 		$background_color_gradient_end_position_4     = $this->shortcode_atts['background_color_gradient_end_position_4'];
+		$background_color_gradient_overlays_image_1   = $this->shortcode_atts['background_color_gradient_overlays_image_1'];
+		$background_color_gradient_overlays_image_2   = $this->shortcode_atts['background_color_gradient_overlays_image_2'];
+		$background_color_gradient_overlays_image_3   = $this->shortcode_atts['background_color_gradient_overlays_image_3'];
+		$background_color_gradient_overlays_image_4   = $this->shortcode_atts['background_color_gradient_overlays_image_4'];
 		$background_video_mp4_1     = $this->shortcode_atts['background_video_mp4_1'];
 		$background_video_mp4_2     = $this->shortcode_atts['background_video_mp4_2'];
 		$background_video_mp4_3     = $this->shortcode_atts['background_video_mp4_3'];
@@ -2544,6 +2586,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 				'color_end'        => $background_color_gradient_end_1,
 				'start_position'   => $background_color_gradient_start_position_1,
 				'end_position'     => $background_color_gradient_end_position_1,
+				'overlays_image'   => $background_color_gradient_overlays_image_1,
 			),
 			array(
 				'active'           => $use_background_color_gradient_2,
@@ -2554,6 +2597,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 				'color_end'        => $background_color_gradient_end_2,
 				'start_position'   => $background_color_gradient_start_position_2,
 				'end_position'     => $background_color_gradient_end_position_2,
+				'overlays_image'   => $background_color_gradient_overlays_image_2,
 			),
 			array(
 				'active'           => $use_background_color_gradient_3,
@@ -2564,6 +2608,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 				'color_end'        => $background_color_gradient_end_3,
 				'start_position'   => $background_color_gradient_start_position_3,
 				'end_position'     => $background_color_gradient_end_position_3,
+				'overlays_image'   => $background_color_gradient_overlays_image_3,
 			),
 			array(
 				'active'           => $use_background_color_gradient_4,
@@ -2574,6 +2619,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 				'color_end'        => $background_color_gradient_end_4,
 				'start_position'   => $background_color_gradient_start_position_4,
 				'end_position'     => $background_color_gradient_end_position_4,
+				'overlays_image'   => $background_color_gradient_overlays_image_4,
 			),
 		);
 
@@ -2776,8 +2822,10 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 			ET_Builder_Element::set_style( $function_name, array(
 				'selector'    => '%%order_class%%',
 				'declaration' => sprintf(
-					'max-width:%1$s !important;',
-					'on' === $width_unit ? esc_attr( $custom_width_px ) : esc_attr( $custom_width_percent )
+					'max-width:%1$s !important;
+					%2$s',
+					'on' === $width_unit ? esc_attr( sprintf( '%1$spx', intval( $custom_width_px ) ) ) : esc_attr( sprintf( '%1$s%%', intval( $custom_width_percent ) ) ),
+					'on' !== $width_unit ? esc_attr( sprintf( 'width: %1$s%%;', intval( $custom_width_percent ) ) ) : ''
 				),
 			) );
 		}
@@ -2986,6 +3034,7 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 			'background_color_gradient_direction_radial_1',
 			'background_color_gradient_start_position_1',
 			'background_color_gradient_end_position_1',
+			'background_color_gradient_overlays_image_1',
 			'use_background_color_gradient_2',
 			'background_color_gradient_start_2',
 			'background_color_gradient_end_2',
@@ -2994,6 +3043,7 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 			'background_color_gradient_direction_radial_2',
 			'background_color_gradient_start_position_2',
 			'background_color_gradient_end_position_2',
+			'background_color_gradient_overlays_image_2',
 			'use_background_color_gradient_3',
 			'background_color_gradient_start_3',
 			'background_color_gradient_end_3',
@@ -3002,6 +3052,7 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 			'background_color_gradient_direction_radial_3',
 			'background_color_gradient_start_position_3',
 			'background_color_gradient_end_position_3',
+			'background_color_gradient_overlays_image_3',
 			'background_video_mp4_1',
 			'background_video_webm_1',
 			'background_video_width_1',
@@ -3454,6 +3505,15 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 			'background_color_gradient_end_position_3' => array(
 				'type' => 'skip',
 			),
+			'background_color_gradient_overlays_image_1' => array(
+				'type' => 'skip',
+			),
+			'background_color_gradient_overlays_image_2' => array(
+				'type' => 'skip',
+			),
+			'background_color_gradient_overlays_image_3' => array(
+				'type' => 'skip',
+			),
 			'background_video_mp4_1' => array(
 				'type' => 'skip',
 				'computed_affects'   => array(
@@ -3688,6 +3748,9 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 		$background_color_gradient_end_position_1     = $this->shortcode_atts['background_color_gradient_end_position_1'];
 		$background_color_gradient_end_position_2     = $this->shortcode_atts['background_color_gradient_end_position_2'];
 		$background_color_gradient_end_position_3     = $this->shortcode_atts['background_color_gradient_end_position_3'];
+		$background_color_gradient_overlays_image_1   = $this->shortcode_atts['background_color_gradient_overlays_image_1'];
+		$background_color_gradient_overlays_image_2   = $this->shortcode_atts['background_color_gradient_overlays_image_2'];
+		$background_color_gradient_overlays_image_3   = $this->shortcode_atts['background_color_gradient_overlays_image_3'];
 		$background_video_mp4_1     = $this->shortcode_atts['background_video_mp4_1'];
 		$background_video_mp4_2     = $this->shortcode_atts['background_video_mp4_2'];
 		$background_video_mp4_3     = $this->shortcode_atts['background_video_mp4_3'];
@@ -3768,6 +3831,7 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 				'color_end'        => $background_color_gradient_end_1,
 				'start_position'   => $background_color_gradient_start_position_1,
 				'end_position'     => $background_color_gradient_end_position_1,
+				'overlays_image'   => $background_color_gradient_overlays_image_1,
 			),
 			array(
 				'active'           => $use_background_color_gradient_2,
@@ -3778,6 +3842,7 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 				'color_end'        => $background_color_gradient_end_2,
 				'start_position'   => $background_color_gradient_start_position_2,
 				'end_position'     => $background_color_gradient_end_position_2,
+				'overlays_image'   => $background_color_gradient_overlays_image_2,
 			),
 			array(
 				'active'           => $use_background_color_gradient_3,
@@ -3788,6 +3853,7 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 				'color_end'        => $background_color_gradient_end_3,
 				'start_position'   => $background_color_gradient_start_position_3,
 				'end_position'     => $background_color_gradient_end_position_3,
+				'overlays_image'   => $background_color_gradient_overlays_image_3,
 			),
 		);
 
@@ -3997,6 +4063,7 @@ class ET_Builder_Column extends ET_Builder_Structure_Element {
 			'background_color_gradient_direction_radial',
 			'background_color_gradient_start_position',
 			'background_color_gradient_end_position',
+			'background_color_gradient_overlays_image',
 			'background_video_mp4',
 			'background_video_webm',
 			'background_video_width',
@@ -4048,8 +4115,8 @@ class ET_Builder_Column extends ET_Builder_Structure_Element {
 			$et_specialty_column_type = $type;
 			$array_index = isset( $et_pb_all_column_settings[ $current_row_position ] ) ? $et_pb_all_column_settings[ $current_row_position ]['et_pb_columns_counter'] : 0;
 			$backgrounds_array = isset( $et_pb_all_column_settings[ $current_row_position ] ) ? $et_pb_all_column_settings[ $current_row_position ]['et_pb_column_backgrounds'] : array();
-			$background_gradient = isset( $et_pb_all_column_settings[ $current_row_position ] ) ? $et_pb_all_column_settings[ $current_row_position ]['et_pb_column_backgrounds_gradient'][ $array_index ] : '';
-			$background_video = isset( $et_pb_all_column_settings[ $current_row_position ] ) ? $et_pb_all_column_settings[ $current_row_position ]['et_pb_column_backgrounds_video'][ $array_index ] : '';
+			$background_gradient = isset( $et_pb_all_column_settings[ $current_row_position ], $et_pb_all_column_settings[ $current_row_position ]['et_pb_column_backgrounds_gradient'][ $array_index ] ) ? $et_pb_all_column_settings[ $current_row_position ]['et_pb_column_backgrounds_gradient'][ $array_index ] : '';
+			$background_video = isset( $et_pb_all_column_settings[ $current_row_position ], $et_pb_all_column_settings[ $current_row_position ]['et_pb_column_backgrounds_video'][ $array_index ] ) ? $et_pb_all_column_settings[ $current_row_position ]['et_pb_column_backgrounds_video'][ $array_index ] : '';
 			$paddings_array = isset( $et_pb_all_column_settings[ $current_row_position ] ) ? $et_pb_all_column_settings[ $current_row_position ]['et_pb_column_paddings'] : array();
 			$paddings_mobile_array = isset( $et_pb_all_column_settings[ $current_row_position ] ) ? $et_pb_all_column_settings[ $current_row_position ]['et_pb_column_paddings_mobile'] : array();
 			$column_css_array = isset( $et_pb_all_column_settings[ $current_row_position ] ) ? $et_pb_all_column_settings[ $current_row_position ]['et_pb_column_css'] : array();
@@ -4095,6 +4162,8 @@ class ET_Builder_Column extends ET_Builder_Structure_Element {
 		$background_position = isset( $backgrounds_array[$array_index]['image_position'] ) ? $backgrounds_array[$array_index]['image_position'] : '';
 		$background_repeat = isset( $backgrounds_array[$array_index]['image_repeat'] ) ? $backgrounds_array[$array_index]['image_repeat'] : '';
 		$background_blend = isset( $backgrounds_array[$array_index]['image_blend'] ) ? $backgrounds_array[$array_index]['image_blend'] : '';
+		$background_gradient_overlays_image = isset( $background_gradient['overlays_image'] ) ? $background_gradient['overlays_image'] : '';
+
 		$padding_values = isset( $paddings_array[$array_index] ) ? $paddings_array[$array_index] : array();
 		$padding_mobile_values = isset( $paddings_mobile_array[$array_index] ) ? $paddings_mobile_array[$array_index] : array();
 		$padding_last_edited = isset( $padding_mobile_values['last_edited'] ) ? $padding_mobile_values['last_edited'] : 'off|desktop';
@@ -4182,8 +4251,11 @@ class ET_Builder_Column extends ET_Builder_Structure_Element {
 		}
 
 		if ( ! empty( $background_images ) ) {
-			// The browsers stack the images in the opposite order to what you'd expect.
-			$background_images = array_reverse( $background_images );
+			if ( 'on' !== $background_gradient_overlays_image ) {
+				// The browsers stack the images in the opposite order to what you'd expect.
+				$background_images = array_reverse( $background_images );
+			}
+
 			$backgorund_images_declaration = sprintf(
 				'background-image: %1$s;',
 				esc_html( implode( ', ', $background_images ) )

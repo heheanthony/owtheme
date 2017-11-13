@@ -122,7 +122,6 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 					'color' => 'alpha',
 				),
 			),
-			'border' => array(),
 			'custom_margin_padding' => array(
 				'css' => array(
 					'important' => 'all',
@@ -205,6 +204,8 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 				),
 				'toggle_slug'     => 'image',
 				'affects'         => array(
+					'border_radii_image',
+					'border_styles_image',
 					'box_shadow_style_image',
 					'font_icon',
 					'image_max_width',
@@ -685,6 +686,64 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 
 		parent::process_box_shadow( $function_name );
 	}
+
+	protected function _add_additional_border_fields() {
+		parent::_add_additional_border_fields();
+
+		$suffix = 'image';
+		$tab_slug = 'advanced';
+		$toggle_slug = 'icon_settings';
+
+		$this->_additional_fields_options = array_merge(
+			$this->_additional_fields_options,
+			ET_Builder_Module_Fields_Factory::get( 'Border' )->get_fields( array(
+				'suffix'          => "_{$suffix}",
+				'label_prefix'    => esc_html__( 'Image', 'et_builder' ),
+				'tab_slug'        => $tab_slug,
+				'toggle_slug'     => $toggle_slug,
+				'depends_to'      => array( 'use_icon' ),
+				'depends_show_if' => 'off',
+			) )
+		);
+
+		$this->advanced_options["border_{$suffix}"]["border_radii_{$suffix}"] = $this->_additional_fields_options["border_radii_{$suffix}"];
+		$this->advanced_options["border_{$suffix}"]["border_styles_{$suffix}"] = $this->_additional_fields_options["border_styles_{$suffix}"];
+
+		$this->advanced_options["border_{$suffix}"]['css'] = array(
+			'main' => array(
+				'border_radii' => "%%order_class%% .et_pb_main_blurb_image",
+				'border_styles' => "%%order_class%% .et_pb_main_blurb_image",
+			)
+		);
+	}
+
+	function process_advanced_border_options( $function_name ) {
+		parent::process_advanced_border_options( $function_name );
+
+		if ( isset( $this->shortcode_atts['use_icon'] ) && $this->shortcode_atts['use_icon'] == "off" ) {
+			$suffix = 'image';
+			/**
+			 * @var ET_Builder_Module_Field_Border $border_field
+			 */
+			$border_field = ET_Builder_Module_Fields_Factory::get( 'Border' );
+
+			$css_selector = ! empty( $this->advanced_options["border_{$suffix}"]['css']['main']['border_radii'] ) ? $this->advanced_options["border_{$suffix}"]['css']['main']['border_radii'] : $this->main_css_element;
+			self::set_style( $function_name, array(
+				'selector'    => $css_selector,
+				'declaration' => $border_field->get_radii_style( $this->shortcode_atts, $this->advanced_options, "_{$suffix}" ),
+				'priority'    => $this->_style_priority,
+			) );
+
+			$css_selector = ! empty( $this->advanced_options["border_{$suffix}"]['css']['main']['border_styles'] ) ? $this->advanced_options["border_{$suffix}"]['css']['main']['border_styles'] : $this->main_css_element;
+			self::set_style( $function_name, array(
+				'selector'    => $css_selector,
+				'declaration' => $border_field->get_borders_style( $this->shortcode_atts, $this->advanced_options, "_{$suffix}" ),
+				'priority'    => $this->_style_priority,
+			) );
+		}
+	}
+
+
 }
 
 new ET_Builder_Module_Blurb;

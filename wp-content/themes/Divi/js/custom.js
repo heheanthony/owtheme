@@ -860,6 +860,13 @@
 						$waypoint_selector = $('#main-content');
 					}
 
+					// Disabled section/row/module can cause waypoint to trigger 'down' event during its setup even if
+					// no scrolling happened, which would result in 'et-fixed-header' class being prematurely added.
+					// Since this only happens when page is loaded, we add an extra check that is no longer needed
+					// as soon as waypoint initialization is finished.
+					var checkIfScrolled = true;
+					setTimeout(function() { checkIfScrolled = false; }, 0);
+
 					$waypoint_selector.waypoint( {
 						offset: function() {
 							if ( etRecalculateOffset ) {
@@ -887,6 +894,9 @@
 							et_fix_logo_transition();
 
 							if ( direction === 'down' ) {
+								if (checkIfScrolled && $et_window.scrollTop() === 0) {
+									return;
+								}
 								$main_header.addClass( 'et-fixed-header' );
 								$main_container_wrapper.addClass ( 'et-animated-content' );
 								$top_header.addClass( 'et-fixed-header' );

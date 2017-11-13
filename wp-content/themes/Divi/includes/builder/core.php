@@ -1564,6 +1564,8 @@ function et_pb_get_backbone_template() {
 	$module_slugs = json_decode( str_replace( '\\', '', sanitize_text_field( $_POST['et_modules_slugs'] ) ) );
 	$post_type   = sanitize_text_field( $_POST['et_post_type'] );
 
+	// Enable zlib compression
+	et_builder_enable_zlib_compression();
 	// get the portion of templates for specified slugs
 	$result = json_encode( ET_Builder_Element::get_modules_templates( $post_type, $module_slugs->missing_modules_array ) );
 
