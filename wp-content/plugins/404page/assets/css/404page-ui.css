@@ -2,6 +2,40 @@
   margin-bottom: 40px;
 }
 
+#pp-plugin-info-404page {
+  min-height: 48px; 
+  line-height: 48px; 
+  vertical-align: middle; 
+  padding-left: 60px; 
+  background-repeat: no-repeat; 
+  background-position: left center;
+}
+
+.rtl #pp-plugin-info-404page {
+  padding-left: 0;
+  padding-right: 60px;
+  background-position: right center;
+}
+
+#pp-plugin-info-404page span {
+  float: right; 
+  padding-left: 50px;
+}
+
+.rtl #pp-plugin-info-404page span {
+  float: left; 
+  padding-left: 0;
+  padding-right: 50px;
+}
+
+#pp-plugin-info-404page .dashicons {
+  vertical-align: middle; 
+}
+
+#select404page {
+  width: 100%; 
+}
+
 #pp-404page-settings .form-table th, .form-table td {
   display: block;
   width: auto;
@@ -27,21 +61,6 @@
   display: none;
 }
 
-.ui-accordion .ui-accordion-header {
-    cursor: pointer;
-    outline: 0;
-}
-.ui-accordion .ui-accordion-header:before {
-  font-family: dashicons;
-  content: "\f132";
-  margin-right: 10px;
-  float: left;
-}
-
-.ui-accordion .ui-accordion-header-active:before {
-  content: "\f460";
-}
-
 #pp-404page-settings input[type="checkbox"] {
 	display: none;
 }
@@ -59,6 +78,12 @@
   margin-right: 40px;
 }
 
+.rtl #pp-404page-settings input[type="checkbox"] + label.check {
+  float: right;
+  margin-left: 40px;
+  margin-right: 0;
+}
+
 #pp-404page-settings input[type="checkbox"]:disabled + label.check {
   background-color: #DDD;
 }
@@ -67,7 +92,6 @@
 	content: '';
 	position: absolute;
 	top: 5px;
-	left: 5px;
 	width: 30px;
 	height: 30px;
 	background: #fff;
@@ -75,18 +99,18 @@
 	transition: 0.3s;
 }
 
+body:not(.rtl) #pp-404page-settings input[type="checkbox"] + label.check:after, .rtl #pp-404page-settings input[type="checkbox"]:enabled:checked + label.check:after {
+  left: 5px;
+  transform: none;
+}
+
 #pp-404page-settings input[type="checkbox"]:enabled:checked + label.check {
   background: #104060;
 }
 
-#pp-404page-settings input[type="checkbox"]:enabled:checked + label.check:after {
+body:not(.rtl) #pp-404page-settings input[type="checkbox"]:enabled:checked + label.check:after, .rtl #pp-404page-settings input[type="checkbox"] + label.check:after {
   left: calc(100% - 5px);
 	transform: translateX(-100%);
-}
-
-
-#pp-seetings-advanced>div {
-  display: none;
 }
 
 #pp-404page-settings select {

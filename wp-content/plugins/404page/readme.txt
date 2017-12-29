@@ -1,10 +1,11 @@
 === 404page - your smart custom 404 error page ===
 Contributors: petersplugins
-Donate link: http://petersplugins.com/make-a-donation/
+Donate link: https://petersplugins.com/make-a-donation/
 Tags: page, 404, error, error page, 404 page, page not found, page not found error, 404 error page, missing, broken link, template, 404 link, seo, custom 404, custom 404 page, custom 404 error, custom 404 error page, customize 404, customize 404 page, customize 404 error page
 Requires at least: 3.0
-Tested up to: 4.8
-Stable tag: 3.2
+Tested up to: 4.9
+Stable tag: 3.3
+Requires PHP: 5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +13,7 @@ Custom 404 the easy way! Set any page as custom 404 error page. No coding needed
 
 == Description ==
 
-<strong>The 404page plugin is the most used plugin to create a customized 404 error page in WordPress.</strong>
+<strong>The [404page](https://petersplugins.com/free-wordpress-plugins/404page/) plugin is the most used plugin to create a customized 404 error page in WordPress.</strong>
 
 It allows you to easily create your own 404 error page without any effort and it works with almost every theme.
 
@@ -31,7 +32,10 @@ Create your custom 404 error page just like any other page using the WordPress P
 
 = Docs & Support =
 
+Video: [A quick Overview over the Advanced Settings](https://youtu.be/9rL9LbYiSJk=)
+
 More detailed information about the 404page plugin can be found in the [Plugin Manual](http://petersplugins.com/docs/404page/). For support check the [Support Forum](https://wordpress.org/support/plugin/404page).
+
 
 == Compatibility ==
 
@@ -114,6 +118,10 @@ No, there is no redirection! The chosen page is delivered as a 'real' 404 error 
 The 404page plugin adds a CSS class `error404` to the `<body>` tag which can be used for extra styling.
 
 == Changelog ==
+
+= 3.3 (2017-11-16) =
+* support for right-to-left-languages added
+* faulty display in WP 4.9 fixed
 
 = 3.2 (2017-10-05) =
 * new feature to send an HTTP 410 error for deleted objects
@@ -198,6 +206,9 @@ The 404page plugin adds a CSS class `error404` to the `<body>` tag which can be 
 * Initial Release
 
 == Upgrade Notice ==
+
+= 3.3 =
+support for right-to-left-languages
 
 = 3.2 =
 new feature to send an HTTP 410 error for deleted objects

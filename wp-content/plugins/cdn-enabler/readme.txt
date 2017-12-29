@@ -2,7 +2,7 @@
 Contributors: keycdn
 Tags: cdn, content delivery network, content distribution network
 Requires at least: 4.6
-Tested up to: 4.8
+Tested up to: 4.9
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -46,6 +46,10 @@ The CDN Enabler plugin has been developed to link your content to the CDN URLs.
 
 
 == Changelog ==
+
+= 1.0.6 =
+* Minor bug fixes
+* Improved CDN purging
 
 = 1.0.5 =
 * Multiprotocol CDN rewriting
