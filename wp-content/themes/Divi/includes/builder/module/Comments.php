@@ -11,7 +11,6 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 			'module_id',
 			'module_class',
 			'form_background_color',
-			'input_border_radius',
 			'show_count',
 			'show_reply',
 			'show_avatar',
@@ -19,7 +18,6 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 		);
 
 		$this->fields_defaults = array(
-			'input_border_radius' => array( '0px', 'add_default_setting' ),
 			'background_layout'   => array( 'light' ),
 			'show_count'          => array( 'on' ),
 			'show_reply'          => array( 'on' ),
@@ -108,16 +106,6 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 					'letter_spacing' => array(
 						'default' => '0px',
 					),
-				),
-			),
-			'border' => array(
-				'label'    => esc_html__( 'Field border', 'et_builder' ),
-				'css'      => array(
-					'main'      => "{$this->main_css_element} #commentform textarea, {$this->main_css_element} #commentform input[type='text'], {$this->main_css_element} #commentform input[type='email'], {$this->main_css_element} #commentform input[type='url']",
-					'important' => 'all',
-				),
-				'settings' => array(
-					'color' => 'alpha',
 				),
 			),
 			'button' => array(
@@ -244,13 +232,6 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 				'toggle_slug'  => 'form_field',
 				'tab_slug'     => 'advanced',
 			),
-			'input_border_radius' => array(
-				'label'           => esc_html__( 'Fields Border Radius', 'et_builder' ),
-				'type'            => 'range',
-				'option_category' => 'layout',
-				'tab_slug'        => 'advanced',
-				'toggle_slug'     => 'border',
-			),
 			'disabled_on' => array(
 				'label'           => esc_html__( 'Disable on', 'et_builder' ),
 				'type'            => 'multiple_checkboxes',
@@ -286,7 +267,7 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 				'tab_slug'        => 'custom_css',
 				'toggle_slug'     => 'classes',
 				'option_class'    => 'et_pb_custom_css_regular',
-			)
+			),
 		);
 
 		return $fields;
@@ -348,7 +329,6 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 		$button_custom         = $this->shortcode_atts['custom_button'];
 		$custom_icon           = $this->shortcode_atts['button_icon'];
 		$form_background_color = $this->shortcode_atts['form_background_color'];
-		$input_border_radius   = $this->shortcode_atts['input_border_radius'];
 		$show_avatar           = $this->shortcode_atts['show_avatar'];
 		$show_reply            = $this->shortcode_atts['show_reply'];
 		$show_count            = $this->shortcode_atts['show_count'];
@@ -367,16 +347,6 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 				'declaration' => sprintf(
 					'background-color: %1$s;',
 					esc_html( $form_background_color )
-				),
-			) );
-		}
-
-		if ( ! in_array( $input_border_radius, array( '', '0' ) ) ) {
-			ET_Builder_Element::set_style( $function_name, array(
-				'selector'    => '%%order_class%% #commentform textarea, %%order_class%% #commentform input[type="text"], %%order_class%% #commentform input[type="email"], %%order_class%% #commentform input[type="url"]',
-				'declaration' => sprintf(
-					'-moz-border-radius: %1$s; -webkit-border-radius: %1$s; border-radius: %1$s;',
-					esc_html( et_builder_process_range_value( $input_border_radius ) )
 				),
 			) );
 		}
@@ -424,6 +394,20 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 
 		return $output;
 	}
+
+	protected function _add_additional_border_fields() {
+		parent::_add_additional_border_fields();
+
+		$this->advanced_options['border']['css'] = array(
+			'main' => array(
+				'border_radii'  => "{$this->main_css_element} #commentform textarea, {$this->main_css_element} #commentform input[type='text'], {$this->main_css_element} #commentform input[type='email'], {$this->main_css_element} #commentform input[type='url']",
+				'border_styles' => "{$this->main_css_element} #commentform textarea, {$this->main_css_element} #commentform input[type='text'], {$this->main_css_element} #commentform input[type='email'], {$this->main_css_element} #commentform input[type='url']",
+			),
+			'important' => 'all',
+		);
+	}
+
+
 }
 
 new ET_Builder_Module_Comments;

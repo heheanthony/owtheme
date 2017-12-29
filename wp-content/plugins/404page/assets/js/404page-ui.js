@@ -9,5 +9,4 @@ jQuery(document).ready(function($) {
   $( '#test_404_page' ).click(function() {
     window.location.href = $( '#404page_test_link' ).text();
   });
-  $( '#pp-404page-settings-advanced' ).accordion({ collapsible: true, active: false });
 });

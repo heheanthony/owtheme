@@ -33,6 +33,22 @@ class ET_Builder_Module_Accordion extends ET_Builder_Module {
 		);
 
 		$this->advanced_options = array(
+			'border' => array(
+				'css'      => array(
+					'main' => array(
+						'border_radii'  => "{$this->main_css_element} .et_pb_accordion_item",
+						'border_styles' => "{$this->main_css_element} .et_pb_accordion_item",
+					),
+				),
+				'defaults' => array(
+					'border_radii' => 'on|0px|0px|0px|0px',
+					'border_styles' => array(
+						'width' => '1px',
+						'color' => '#d9d9d9',
+						'style' => 'solid',
+					),
+				),
+			),
 			'fonts' => array(
 				'body'   => array(
 					'label'    => esc_html__( 'Body', 'et_builder' ),
@@ -54,11 +70,6 @@ class ET_Builder_Module_Accordion extends ET_Builder_Module {
 				),
 			),
 			'background' => array(),
-			'border' => array(
-				'css'        => array(
-					'main' => "{$this->main_css_element} .et_pb_toggle",
-				),
-			),
 			'custom_margin_padding' => array(
 				'css'        => array(
 					'padding'   => "{$this->main_css_element} .et_pb_toggle_content",

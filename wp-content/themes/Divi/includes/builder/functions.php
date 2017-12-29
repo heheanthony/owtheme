@@ -2,7 +2,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '3.0.85' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '3.0.87' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -412,9 +412,33 @@ function et_pb_get_svg_icons_list() {
 		'animation-roll' =>
 			'<g>
 				<path d="M18.8 5c-5.3-2.7-11.8.2-14 5.6-1.1 2.8-1 6 .2 8.8.4 1 3.9 6.5 5 3.6.5-1.2-1.3-2.2-1.9-3-.8-1.2-1.4-2.5-1.6-3.9-.4-2.7.5-5.5 2.4-7.4 4-4 11.6-2.5 12.6 3.4.4 2.7-.9 5.5-3.4 6.6-2.6 1.1-6 0-6.8-2.8-.7-2.4 1.2-5.7 4-4.8 1.1.3 2 1.5 1.5 2.7-.3.7-1.7 1.2-1.6.1 0-.3.2-.4.2-.8-.1-.4-.5-.6-.9-.6-1.1.1-1.6 1.6-1.3 2.5.3 1.2 1.5 1.9 2.7 1.9 2.9 0 4.2-3.4 3.1-5.7-1.2-2.6-4.6-3.4-7-2.2-2.6 1.3-3.8 4.4-3.1 7.2 1.6 5.9 9.3 6.8 13.1 2.5 3.8-4.2 1.9-11.1-3.2-13.7z"/>
-			</g>'
+			</g>',
+		'border-link'    =>
+			'<g>
+ 				<path d="M14.71 17.71a3 3 0 0 1-2.12-.88l-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 0 1.41 0l5-4.95a1 1 0 0 0 0-1.41l-1.46-1.42a1 1 0 0 0-1.41 0L16.1 9.07a1 1 0 0 1-1.41-1.41l1.43-1.43a3.07 3.07 0 0 1 4.24 0l1.41 1.41a3 3 0 0 1 0 4.24l-5 4.95a3 3 0 0 1-2.06.88z"/>		
+ 				<path d="M9.76 22.66a3 3 0 0 1-2.12-.88l-1.42-1.42a3 3 0 0 1 0-4.24l5-4.95a3.07 3.07 0 0 1 4.24 0l.71.71a1 1 0 0 1-1.41 1.41l-.76-.7a1 1 0 0 0-1.41 0l-5 4.95a1 1 0 0 0 0 1.41L9 20.36a1 1 0 0 0 1.41 0L11.82 19a1 1 0 0 1 1.41 1.41l-1.36 1.36a3 3 0 0 1-2.11.89z"/>		
+ 			</g>',
+		'border-all'     =>
+			'<g>
+ 				<path d="M22 5H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zm-2 15H8V8h12z"/>		
+ 			</g>',
+		'border-top'    =>
+			'<g>
+ 				<path d="M17 21h2v2h-2zM5 9h2v2H5zM21 17h2v2h-2zM21 9h2v2h-2zM21 13h2v2h-2zM21 23h1a1 1 0 0 0 1-1v-1h-2zM5 17h2v2H5zM5 13h2v2H5zM13 21h2v2h-2zM9 21h2v2H9zM5 21v1a1 1 0 0 0 1 1h1v-2zM22 5H6a1 1 0 0 0-1 1v2h18V6a1 1 0 0 0-1-1z"/>		
+ 			</g>',
+		'border-right'  =>
+			'<g>
+ 				<path d="M13 5h2v2h-2zM5 9h2v2H5zM9 5h2v2H9zM7 5H6a1 1 0 0 0-1 1v1h2zM5 13h2v2H5zM13 21h2v2h-2zM5 17h2v2H5zM9 21h2v2H9zM17 5h2v2h-2zM5 21v1a1 1 0 0 0 1 1h1v-2zM22 5h-2v18h2a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 21h2v2h-2z"/>		
+ 			</g>',
+		'border-bottom' =>
+			'<g>		
+ 				<path d="M9 5h2v2H9zM7 20H5v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2H7zM17 5h2v2h-2zM5 13h2v2H5zM5 9h2v2H5zM13 5h2v2h-2zM5 17h2v2H5zM21 9h2v2h-2zM21 17h2v2h-2zM22 5h-1v2h2V6a1 1 0 0 0-1-1zM21 13h2v2h-2zM7 5H6a1 1 0 0 0-1 1v1h2z"/>		
+ 			</g>',
+		'border-left'   =>
+			'<g>
+ 				<path d="M22 5h-1v2h2V6a1 1 0 0 0-1-1zM9 21h2v2H9zM21 17h2v2h-2zM13 21h2v2h-2zM21 13h2v2h-2zM9 5h2v2H9zM17 21h2v2h-2zM17 5h2v2h-2zM21 9h2v2h-2zM8 7V5H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h2V7zM21 23h1a1 1 0 0 0 1-1v-1h-2zM13 5h2v2h-2z"/>		
+ 			</g>',
 	);
-
 	return $all_icons;
 }
 endif;
@@ -1459,13 +1483,14 @@ if ( ! function_exists( 'et_builder_get_border_styles' ) ) :
 function et_builder_get_border_styles() {
 	$styles = array(
 		'solid'  => esc_html__( 'Solid', 'et_builder' ),
-		'dotted' => esc_html__( 'Dotted', 'et_builder' ),
 		'dashed' => esc_html__( 'Dashed', 'et_builder' ),
+		'dotted' => esc_html__( 'Dotted', 'et_builder' ),
 		'double' => esc_html__( 'Double', 'et_builder' ),
 		'groove' => esc_html__( 'Groove', 'et_builder' ),
 		'ridge'  => esc_html__( 'Ridge', 'et_builder' ),
 		'inset'  => esc_html__( 'Inset', 'et_builder' ),
 		'outset' => esc_html__( 'Outset', 'et_builder' ),
+		'none'   => esc_html__( 'None', 'et_builder' ),
 	);
 
 	return apply_filters( 'et_builder_border_styles', $styles );
@@ -2663,7 +2688,7 @@ function et_pb_add_builder_page_js_css(){
 	}
 
 	// force update cache if et_pb_clear_templates_cache option is set to on
-	$force_cache_value  = et_get_option( 'et_pb_clear_templates_cache', '' );
+	$force_cache_value  = et_get_option( 'et_pb_clear_templates_cache', '', '', true );
 	$force_cache_update = '' !== $force_cache_value ? $force_cache_value : ET_BUILDER_FORCE_CACHE_PURGE;
 
 	/**
@@ -4483,7 +4508,7 @@ function et_pb_pagebuilder_meta_box() {
 
 				<h4>%2$s</h4>
 				<input type="text" value="" id="et-font-uploader-name" class="regular-text" />
-				
+
 				<form class="et-core-portability-import-form">
 					<span class="et-core-portability-import-placeholder">%3$s</span>
 					<button class="et-core-button">%4$s</button>
@@ -5162,7 +5187,7 @@ function et_pb_pagebuilder_meta_box() {
 			<div class="et_pb_font_line_settings">
 				<div class="et_pb_font_line_color">
 					<label for="et_builder_font_style" data-underline_label="%5$s %7$s" data-strikethrough_label="%6$s %7$s">%1$s:</label>
-					
+
 					<span class="et-pb-custom-color-button et-pb-choose-custom-color-button"><span>%4$s</span></span>
 					<div class="et-pb-custom-color-container et_pb_hidden">
 						<input class="et-pb-color-picker-hex et-pb-color-picker-hex-alpha" type="text" data-alpha="true" placeholder="%2$s" data-selected-value="" value="" />
@@ -5227,7 +5252,7 @@ function et_pb_pagebuilder_meta_box() {
 				var select_value_escaped = _.escape( select_value );
 				var option_value_escaped = _.escape( option_value );
 				var default_value = this.et_builder_template_options.select.options.default;
-				var selected_attr = ! _.isUndefined( select_value ) && option_value_escaped === select_value_escaped || ( _.isUndefined( select_value ) && default_value !== "" && option_value_escaped === default_value ) ? \' selected="selected"\' : "";
+				var selected_attr = ! _.isUndefined( select_value ) && "" !== select_value && option_value_escaped === select_value_escaped || ( _.isUndefined( select_value ) && default_value !== "" && option_value_escaped === default_value ) ? \' selected="selected"\' : "";
 				%%>
 				<option <%%= data %%> value="<%%= option_value_escaped %%>" <%%= selected_attr %%>><%%= _.escape( option_label_updated ) %%></option>
 			<%% }); %%>

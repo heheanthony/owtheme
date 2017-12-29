@@ -150,7 +150,7 @@
 				// Empty or Error = clear
 				if ( val === '' || self.element.hasClass('iris-error') ) {
 					if ( self.options.alpha ) {
-						self.toggler.removeAttr('style');
+						self.toggler.css( 'backgroundColor', '' );
 						self.toggler.find('span').css( 'backgroundColor', '' );
 					} else {
 						self.toggler.css( 'backgroundColor', '' );
@@ -175,7 +175,7 @@
 				if ( me.hasClass( 'wp-picker-clear' ) ) {
 					self.element.val( '' );
 					if ( self.options.alpha ) {
-						self.toggler.removeAttr('style');
+						self.toggler.css( 'backgroundColor', '' );
 						self.toggler.find('span').css( 'backgroundColor', '' );
 					} else {
 						self.toggler.css( 'backgroundColor', '' );

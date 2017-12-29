@@ -90,7 +90,6 @@ class ET_Builder_Module_Number_Counter extends ET_Builder_Module {
 					'color' => 'alpha',
 				),
 			),
-			'border' => array(),
 			'custom_margin_padding' => array(
 				'css' => array(
 					'important' => array( 'custom_margin' ),

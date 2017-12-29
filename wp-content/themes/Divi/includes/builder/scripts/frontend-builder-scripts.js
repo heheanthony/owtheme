@@ -3605,6 +3605,105 @@
 				$element.addClass( animation_repeat );
 			}
 
+			function et_process_animation_data( waypoints_enabled ) {
+				if ( 'undefined' !== typeof et_animation_data && et_animation_data.length > 0 ) {
+					$('body').css('overflow-x', 'hidden');
+					$('#page-container').css('overflow-y', 'hidden');
+
+					for ( var i = 0; i < et_animation_data.length; i++ ) {
+						var animation_entry = et_animation_data[i];
+
+						if (
+							! animation_entry.class ||
+							! animation_entry.style ||
+							! animation_entry.repeat ||
+							! animation_entry.duration ||
+							! animation_entry.delay ||
+							! animation_entry.intensity ||
+							! animation_entry.starting_opacity ||
+							! animation_entry.speed_curve
+						) {
+							continue;
+						}
+
+						var $animated = $('.' + animation_entry.class);
+
+						$animated.attr({
+							'data-animation-style'           : animation_entry.style,
+							'data-animation-repeat'          : 'once' === animation_entry.repeat ? '' : 'infinite',
+							'data-animation-duration'        : animation_entry.duration,
+							'data-animation-delay'           : animation_entry.delay,
+							'data-animation-intensity'       : animation_entry.intensity,
+							'data-animation-starting-opacity': animation_entry.starting_opacity,
+							'data-animation-speed-curve'     : animation_entry.speed_curve
+						});
+
+						// Process the waypoints logic if the waypoints are not ignored
+						// Otherwise add the animation to the element right away
+						if ( true === waypoints_enabled ) {
+							if ( $animated.hasClass('et_pb_circle_counter') ) {
+								et_waypoint( $animated, {
+									offset: '65%',
+									handler: function() {
+										if ( $(this.element).data( 'PieChartHasLoaded' ) || typeof $(this.element).data('easyPieChart') === 'undefined' ) {
+											return;
+										}
+
+										$(this.element).data('easyPieChart').update( $(this.element).data('number-value') );
+
+										$(this.element).data( 'PieChartHasLoaded', true );
+
+										et_animate_element( $(this.element) );
+									}
+								});
+
+								// fallback to 'bottom-in-view' offset, to make sure animation applied when element is on the bottom of page and other offsets are not triggered
+								et_waypoint( $animated, {
+									offset: 'bottom-in-view',
+									handler: function() {
+										if ( $(this.element).data( 'PieChartHasLoaded' ) || typeof $(this.element).data('easyPieChart') === 'undefined' ) {
+											return;
+										}
+
+										$(this.element).data('easyPieChart').update( $(this.element).data('number-value') );
+
+										$(this.element).data( 'PieChartHasLoaded', true );
+
+										et_animate_element( $(this.element) );
+									}
+								});
+							} else if ( $animated.hasClass('et_pb_number_counter') ) {
+								et_waypoint( $animated, {
+									offset: '75%',
+									handler: function() {
+										$(this.element).data('easyPieChart').update( $(this.element).data('number-value') );
+										et_animate_element( $(this.element) );
+									}
+								});
+
+								// fallback to 'bottom-in-view' offset, to make sure animation applied when element is on the bottom of page and other offsets are not triggered
+								et_waypoint( $animated, {
+									offset: 'bottom-in-view',
+									handler: function() {
+										$(this.element).data('easyPieChart').update( $(this.element).data('number-value') );
+										et_animate_element( $(this.element) );
+									}
+								});
+							} else {
+								et_waypoint( $animated, {
+									offset: '100%',
+									handler: function() {
+										et_animate_element( $(this.element) );
+									}
+								} );
+							}
+						} else {
+							et_animate_element( $animated );
+						}
+					}
+				}
+			}
+
 			function et_process_animation_intensity( animation, direction, intensity ) {
 				var intensity_css = {};
 
@@ -3876,103 +3975,7 @@
 
 				// if waypoint is available and we are not ignoring them.
 				if ( $.fn.waypoint && 'yes' !== et_pb_custom.ignore_waypoints ) {
-					if ( 'undefined' !== typeof et_animation_data && et_animation_data.length > 0 ) {
-						$('body').css('overflow-x', 'hidden');
-						$('#page-container').css('overflow-y', 'hidden');
-
-						for ( var i = 0; i < et_animation_data.length; i++ ) {
-							var animation_entry = et_animation_data[i];
-
-							if (
-								! animation_entry.class ||
-								! animation_entry.style ||
-								! animation_entry.repeat ||
-								! animation_entry.duration ||
-								! animation_entry.delay ||
-								! animation_entry.intensity ||
-								! animation_entry.starting_opacity ||
-								! animation_entry.speed_curve
-							) {
-								continue;
-							}
-
-							var $waypointed                = $('.' + animation_entry.class);
-							var animation_style            = animation_entry.style;
-							var animation_repeat           = 'once' === animation_entry.repeat ? '' : 'infinite';
-							var animation_duration         = animation_entry.duration;
-							var animation_delay            = animation_entry.delay;
-							var animation_intensity        = animation_entry.intensity;
-							var animation_starting_opacity = animation_entry.starting_opacity;
-							var animation_speed_curve      = animation_entry.speed_curve;
-
-							$waypointed.attr({
-								'data-animation-style'           : animation_style,
-								'data-animation-repeat'          : animation_repeat,
-								'data-animation-duration'        : animation_duration,
-								'data-animation-delay'           : animation_delay,
-								'data-animation-intensity'       : animation_intensity,
-								'data-animation-starting-opacity': animation_starting_opacity,
-								'data-animation-speed-curve'     : animation_speed_curve
-							});
-
-							if ( $waypointed.hasClass('et_pb_circle_counter') ) {
-								et_waypoint( $waypointed, {
-									offset: '65%',
-									handler: function() {
-										if ( $(this.element).data( 'PieChartHasLoaded' ) || typeof $(this.element).data('easyPieChart') === 'undefined' ) {
-											return;
-										}
-
-										$(this.element).data('easyPieChart').update( $(this.element).data('number-value') );
-
-										$(this.element).data( 'PieChartHasLoaded', true );
-
-										et_animate_element( $(this.element) );
-									}
-								});
-
-								// fallback to 'bottom-in-view' offset, to make sure animation applied when element is on the bottom of page and other offsets are not triggered
-								et_waypoint( $waypointed, {
-									offset: 'bottom-in-view',
-									handler: function() {
-										if ( $(this.element).data( 'PieChartHasLoaded' ) || typeof $(this.element).data('easyPieChart') === 'undefined' ) {
-											return;
-										}
-
-										$(this.element).data('easyPieChart').update( $(this.element).data('number-value') );
-
-										$(this.element).data( 'PieChartHasLoaded', true );
-
-										et_animate_element( $(this.element) );
-									}
-								});
-							} else if ( $waypointed.hasClass('et_pb_number_counter') ) {
-								et_waypoint( $waypointed, {
-									offset: '75%',
-									handler: function() {
-										$(this.element).data('easyPieChart').update( $(this.element).data('number-value') );
-										et_animate_element( $(this.element) );
-									}
-								});
-
-								// fallback to 'bottom-in-view' offset, to make sure animation applied when element is on the bottom of page and other offsets are not triggered
-								et_waypoint( $waypointed, {
-									offset: 'bottom-in-view',
-									handler: function() {
-										$(this.element).data('easyPieChart').update( $(this.element).data('number-value') );
-										et_animate_element( $(this.element) );
-									}
-								});
-							} else {
-								et_waypoint( $waypointed, {
-									offset: '100%',
-									handler: function() {
-										et_animate_element( $(this.element) );
-									}
-								} );
-							}
-						}
-					}
+					et_process_animation_data( true );
 
 					et_waypoint( $( '.et_pb_counter_container, .et-waypoint' ), {
 						offset: '75%',
@@ -4067,6 +4070,8 @@
 					}
 				} else {
 					// if no waypoints supported then apply all the animations right away
+					et_process_animation_data( false );
+
 					$( '.et_pb_counter_container, .et-waypoint' ).addClass( 'et-animated' );
 
 					if ( $et_pb_circle_counter.length ) {
@@ -4412,6 +4417,18 @@
 					// cancel automatic padding-top added by transparent nav mechanism
 					if ( $body.hasClass('et_transparent_nav') && $body.hasClass( 'et_hide_nav' ) &&  0 === this_section_index ) {
 						$this_section.css( 'padding-top', '' );
+					}
+
+					// reduce section height by its top border width
+					var section_border_top_width = parseInt( $this_section.css( 'borderTopWidth' ) );
+					if ( section_border_top_width ) {
+						sectionHeight -= section_border_top_width;
+					}
+
+					// reduce section height by its bottom border width
+					var section_border_bottom_width = parseInt( $this_section.css( 'borderBottomWidth' ) );
+					if ( section_border_bottom_width ) {
+						sectionHeight -= section_border_bottom_width;
 					}
 
 					$this_section.css('min-height', sectionHeight + 'px' );
@@ -4814,7 +4831,7 @@
 				$current_module.fadeTo( 'slow', 1 );
 
 				// scroll to the top of the module
-				$( 'body' ).animate({
+				$( 'html, body' ).animate({
 					scrollTop: ( $current_module.offset().top - ( $( '#main-header' ).innerHeight() + $( '#top-header' ).innerHeight() + 50 ) )
 				});
 			}

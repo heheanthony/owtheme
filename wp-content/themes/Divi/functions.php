@@ -6139,7 +6139,7 @@ function et_divi_add_customizer_css() {
 				<?php } ?>
 			}
 		<?php } ?>
-		<?php if ( ! in_array( $primary_nav_font_size, array( $body_font_size, $default_primary_nav_font_size ) ) ) { ?>
+		<?php if ( $primary_nav_font_size !== $default_primary_nav_font_size ) { ?>
 			#top-menu li a { font-size: <?php echo esc_html( $primary_nav_font_size ); ?>px; }
 			body.et_vertical_nav .container.et_search_form_container .et-search-form input { font-size: <?php echo esc_html( $primary_nav_font_size ); ?>px !important; }
 		<?php } ?>
@@ -8498,6 +8498,10 @@ add_action( 'init', 'et_divi_activate_features' );
 
 require_once( get_template_directory() . '/et-pagebuilder/et-pagebuilder.php' );
 
+/**
+ * Custom body classes for sidebar location in different places
+ * @return array
+ */
 function et_divi_sidebar_class( $classes ) {
 	$default_sidebar_class = et_get_option( 'divi_sidebar' );
 
@@ -8508,9 +8512,8 @@ function et_divi_sidebar_class( $classes ) {
 	// Set Woo shop and taxonomies layout.
 	if ( class_exists( 'woocommerce' ) && ( is_woocommerce() && ( is_shop() || is_tax() ) ) ) {
 		$page_layout = et_get_option( 'divi_shop_page_sidebar', $default_sidebar_class );
-	}
-	// Set post meta layout which will work for all third party plugins.
-	elseif ( false == ( $page_layout = get_post_meta( get_queried_object_id(), '_et_pb_page_layout', true ) ) ) {
+	} elseif ( ! is_singular() || false === ( $page_layout = get_post_meta( get_queried_object_id(), '_et_pb_page_layout', true ) ) ) {
+		// Set post meta layout which will work for all third party plugins.
 		$page_layout = $default_sidebar_class;
 	}
 

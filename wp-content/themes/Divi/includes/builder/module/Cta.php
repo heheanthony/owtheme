@@ -75,7 +75,6 @@ class ET_Builder_Module_CTA extends ET_Builder_Module {
 			'background' => array(
 				'use_background_color' => false,
 			),
-			'border' => array(),
 			'max_width' => array(
 				'css' => array(
 					'module_alignment' => '%%order_class%%.et_pb_promo.et_pb_module',

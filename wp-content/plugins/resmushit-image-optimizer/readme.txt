@@ -2,12 +2,12 @@
 Contributors: maecia
 Tags: image, optimizer, image optimization, resmush.it, smush, jpg, png, gif, optimization, compression, Compress, Images, Pictures, Reduce Image Size, Smush, Smush.it
 Requires at least: 4.0.0
-Tested up to: 4.8.1
-Stable tag: 0.1.12
+Tested up to: 4.9.1
+Stable tag: 0.1.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Use reSmush.it Image Optimizer for FREE to optimize your pictures file sizes. Improve your performances by using reSmush.it, the Billion images API optimizer.
+Use reSmush.it Image Optimizer for FREE to optimize your pictures file sizes. Improve your performances by using reSmush.it, the 3 billion images API optimizer.
 
 == Description ==
 
@@ -34,7 +34,7 @@ This plugin has been developped by [Maecia Agency](http://www.maecia.com/ "Maeci
 
 = How great is reSmush.it ? =
 
-Since we've optimized more than 2,500,000,000 pictures, we've risen new skills. Our service is still in development to bring you new crazy functionalities.
+Since we've optimized more than 3,000,000,000 pictures, we've risen new skills. Our service is still in development to bring you new crazy functionalities.
 
 = Is there an "Optimize on upload" feature ? =
 
@@ -65,6 +65,10 @@ Yes ! Absolutely free, the only restriction is to send images below 5MB.
 1. The simple interface
 
 == Changelog ==
+
+= 0.1.13 =
+* Tested up to Wordpress 4.9.1
+* New header banner for 3 billionth images optimized :)
 
 = 0.1.12 =
 * Tested up to Wordpress 4.8.1

@@ -308,6 +308,7 @@ class ET_Builder_Module_Slider extends ET_Builder_Module {
 			'background_color_gradient_end'              => $this->shortcode_atts['background_color_gradient_end'],
 			'background_color_gradient_start_position'   => $this->shortcode_atts['background_color_gradient_start_position'],
 			'background_color_gradient_end_position'     => $this->shortcode_atts['background_color_gradient_end_position'],
+			'background_color_gradient_overlays_image'   => $this->shortcode_atts['background_color_gradient_overlays_image'],
 			'background_image'                           => $this->shortcode_atts['background_image'],
 			'background_size'                            => $this->shortcode_atts['background_size'],
 			'background_position'                        => $this->shortcode_atts['background_position'],

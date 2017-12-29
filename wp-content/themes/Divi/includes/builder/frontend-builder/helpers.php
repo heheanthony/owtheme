@@ -172,7 +172,6 @@ function et_fb_backend_helpers() {
 		'builderVersion'               => ET_BUILDER_PRODUCT_VERSION,
 		'commentsModuleMarkup'         => et_fb_get_comments_markup(),
 		'shortcode_tags'               => et_fb_shortcode_tags(),
-		'getFontIconSymbols'           => et_pb_get_font_icon_symbols(),
 		'failureNotification'          => et_builder_get_failure_notification_modal(),
 		'exitNotification'             => et_builder_get_exit_notification_modal(),
 		'browserAutosaveNotification'  => et_builder_get_browser_autosave_notification_modal(),
@@ -192,6 +191,7 @@ function et_fb_backend_helpers() {
 		'allFontWeights'               => et_builder_get_font_weight_list(),
 		'allFontFormats'               => et_pb_get_supported_font_formats(),
 		'gutterWidth'                  => et_get_option( 'gutter_width', 3 ),
+		'sectionPadding'               => et_get_option( 'section_padding', 4 ),
 		'fontIcons'                    => et_pb_get_font_icon_symbols(),
 		'fontIconsDown'                => et_pb_get_font_down_icon_symbols(),
 		'widgetAreas'                  => et_builder_get_widget_areas_list(),
@@ -400,6 +400,7 @@ function et_fb_backend_helpers() {
 						'background_color_gradient_start_position_%s',
 						'background_color_gradient_end_position_%s',
 						'background_color_gradient_type_%s',
+						'background_color_gradient_overlays_image_%s'
 					),
 					'description'     => '',
 					'tab_slug'        => 'general',
@@ -544,6 +545,25 @@ function et_fb_backend_helpers() {
 					'toggle_slug'     => 'background',
 					'sub_toggle'      => 'column_%s',
 				),
+				'background_color_gradient_overlays_image_%s' => array(
+					'label'           => esc_html__( 'Column %s Place Gradient Above Background Image', 'et_builder' ),
+					'type'            => 'yes_no_button',
+					'option_category' => 'configuration',
+					'options'         => array(
+						'off' => esc_html__( 'No', 'et_builder' ),
+						'on'  => esc_html__( 'Yes', 'et_builder' ),
+
+					'default'         => intval( ET_Global_Settings::get_value( 'all_background_gradient_overlays_image' ) ) ),
+					'description'     => '',
+					'depends_show_if' => 'on',
+					'depends_to'      => array(
+						'use_background_color_gradient_%s',
+					),
+					'tab_slug'        => 'general',
+					'toggle_slug'     => 'background',
+					'sub_toggle'      => 'column_%s',
+				),
+
 				'background_video_mp4_%s' => array(
 					'label'              => esc_html__( 'Column %s Background Video MP4', 'et_builder' ),
 					'type'               => 'upload',

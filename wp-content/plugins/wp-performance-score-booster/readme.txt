@@ -1,10 +1,10 @@
 === WP Performance Score Booster ===
 Contributors: dipakcg
-Tags: performance, speed, compression, caching, booster, query
+Tags: performance, speed, gzip, booster, query string
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=3S8BRPLWLNQ38
 Requires at least: 3.5
-Tested up to: 4.8
-Stable tag: 1.8
+Tested up to: 4.9
+Stable tag: 1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,8 @@ This plugin speed-up page load times and improve website scores in services like
 * Enable GZIP compression (compress text, html, javascript, css, xml and so on)
 * Add Vary: Accept-Encoding header, and
 * Set expires caching (leverage browser caching).
+
+[youtube https://www.youtube.com/watch?v=nEFZLFyZNcE]
 
 **Follow the development of this plugin on [GitHub](https://github.com/dipakcg/wp-performance-score-booster)**
 
@@ -56,6 +58,11 @@ Alternatively, you can open a [support thread](http://wordpress.org/support/plug
 1. Admin Settings
 
 == Changelog ==
+= 1.9, November 28, 2017 =
+* Completely rewritten
+* Fixed few CSS bugs (admin settings)
+* Removed Donate button
+
 = 1.8, July 03, 2017 =
 * Added a feature that auto-backup .htaccess file before appending any rules (for GZIP and browser caching)
 * Improved uninstallation process

@@ -68,7 +68,6 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 		);
 
 		$this->advanced_options = array(
-			'border'                => array(),
 			'custom_margin_padding' => array(
 				'css' => array(
 					'important' => array( 'custom_margin' ),
@@ -461,6 +460,20 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 			$this->shortcode_atts
 		) );
 	}
+
+	protected function _add_additional_border_fields() {
+		parent::_add_additional_border_fields();
+
+		$this->advanced_options["border"]['css'] = array(
+			'main' => array(
+				'border_radii'  => "%%order_class%% .et_pb_image_wrap",
+				'border_styles' => "%%order_class%% .et_pb_image_wrap",
+			)
+		);
+
+	}
+
+
 }
 
 new ET_Builder_Module_Image;

@@ -17,13 +17,14 @@ abstract class ET_Builder_Module_Settings_Migration {
 	public static $last_hook_checked;
 	public static $last_hook_check_decision;
 
-	public static $max_version = '3.0.84';
+	public static $max_version = '3.0.87';
 	public static $migrated    = array();
 	public static $migrations  = array(
 		'3.0.48' => 'BackgroundUI',
 		'3.0.72' => 'Animation',
 		'3.0.74' => 'OptionsHarmony',
 		'3.0.84' => 'FullwidthHeader',
+		'3.0.87' => 'BorderOptions',
 	);
 
 	public static $migrations_by_version = array();
@@ -38,22 +39,10 @@ abstract class ET_Builder_Module_Settings_Migration {
 	}
 
 	protected static function _migrate_field_names( $fields, $module_slug ) {
-		foreach ( self::$field_name_migrations[ $module_slug ] as $new_name => $old_name ) {
-
-			// Multiple attrs can migrate to one attr. i.e: top and button paddings to custom padding
-			if ( is_array( $old_name ) ) {
-				foreach ( $old_name as $old_name_item ) {
-					if ( ! isset( $fields[ $old_name_item ] ) ) {
-						// Add old to-be-migrated attribute as skipped field if it doesn't exist so its value can be used
-						$fields[ $old_name_item ] = array( 'type' => 'skip' );
-					}
-
-					// For the BB...
-					self::$migrated['name_changes'][ $module_slug ][ $old_name_item ] = $new_name;
-				}
-			} else {
-				// Add old to-be-migrated attribute as skipped field if it doesn't exist so its value can be used
+		foreach ( self::$field_name_migrations[ $module_slug ] as $new_name => $old_names ) {
+			foreach ( $old_names as $old_name ) {
 				if ( ! isset( $fields[ $old_name ] ) ) {
+					// Add old to-be-migrated attribute as skipped field if it doesn't exist so its value can be used.
 					$fields[ $old_name ] = array( 'type' => 'skip' );
 				}
 
@@ -100,27 +89,19 @@ abstract class ET_Builder_Module_Settings_Migration {
 			return $fields;
 		}
 
-		if ( isset( self::$field_name_migrations[ $module_slug ] ) ) {
-			return self::_migrate_field_names( $fields, $module_slug );
-		}
-
 		foreach ( $this->fields as $field_name => $field_info ) {
 			foreach ( $field_info['affected_fields'] as $affected_field => $affected_modules ) {
+
 				if ( $affected_field === $field_name || ! in_array( $module_slug, $affected_modules ) ) {
 					continue;
 				}
 
 				foreach ( $affected_modules as $affected_module ) {
-					// Multiple attrs can migrate to one attr. i.e: top and button paddings to custom padding
-					if ( isset( self::$field_name_migrations[ $affected_module ][ $field_name ] ) ) {
-						self::$field_name_migrations[ $affected_module ][ $field_name ] = array(
-							self::$field_name_migrations[ $affected_module ][ $field_name ],
-						);
-
-						self::$field_name_migrations[ $affected_module ][ $field_name ][] = $affected_field;
-					} else {
-						self::$field_name_migrations[ $affected_module ][ $field_name ] = $affected_field;
+					if ( ! isset( self::$field_name_migrations[ $affected_module ][ $field_name ] ) ) {
+						self::$field_name_migrations[ $affected_module ][ $field_name ] = array();
 					}
+
+					self::$field_name_migrations[ $affected_module ][ $field_name ][] = $affected_field;
 				}
 			}
 		}

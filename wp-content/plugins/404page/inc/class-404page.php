@@ -44,7 +44,7 @@ if ( !class_exists( 'PP_404Page' ) ) {
       $this->_file = $file;
       $this->plugin_name = '404page';
       $this->plugin_slug = '404page';
-      $this->version = '3.2';
+      $this->version = '3.3';
       $this->get_settings();
       $this->load();
     } 
@@ -74,8 +74,8 @@ if ( !class_exists( 'PP_404Page' ) ) {
     private function load() {
       
       $this->wp_url = 'https://wordpress.org/plugins/' . $this->plugin_slug;
-      $this->my_url = 'http://petersplugins.com/free-wordpress-plugins/' . $this->plugin_slug;
-      $this->dc_url = 'http://petersplugins.com/docs/' . $this->plugin_slug;
+      $this->my_url = 'https://petersplugins.com/free-wordpress-plugins/' . $this->plugin_slug;
+      $this->dc_url = 'https://petersplugins.com/docs/' . $this->plugin_slug;
       
       add_action( 'init', array( $this, 'add_text_domain' ) );
       add_action( 'init', array( $this, 'init' ) );
@@ -538,7 +538,7 @@ if ( !class_exists( 'PP_404Page' ) ) {
      */
     function admin_style() {
       
-      echo '<style type="text/css">#pp-plugin-info-404page{ min-height: 48px; line-height: 48px; vertical-align: middle; padding-left: 60px; background-image: url(' . plugins_url( 'assets/pluginicon.png', $this->_file ) .'); background-repeat: no-repeat; background-position: left center;}#pp-plugin-info-404page span{float: right; padding-left: 50px;}#pp-plugin-info-404page .dashicons{ vertical-align: middle; }#select404page {width: 100%; }';
+      echo '<style type="text/css">#pp-plugin-info-404page { background-image: url(' . plugins_url( 'assets/pluginicon.png', $this->_file ) .'); }';
       
       if ( $this->settings['404page_page_id'] > 0 ) {
         
@@ -996,8 +996,6 @@ if ( !class_exists( 'PP_404Page' ) ) {
       
       if ( get_current_screen()->id == $this->admin_handle ) {
         
-        wp_enqueue_script( 'jquery-ui-accordion' );
-        
         wp_enqueue_script( '404page-ui', plugins_url( 'assets/js/404page-ui.js', $this->_file ), 'jquery', $this->version, true );
       
       }
@@ -1017,16 +1015,14 @@ if ( !class_exists( 'PP_404Page' ) ) {
       }
       ?>
       <div class="wrap" id="pp-404page-settings">
-        <h1 id="pp-plugin-info-404page"><?php echo $this->plugin_name; ?> <?php _e( 'Settings', '404page' ); ?><span><a class="dashicons dashicons-wordpress" href="<?php echo $this->wp_url; ?>/" title="<?php _e( 'wordpress.org plugin directory', '404page' ); ?>"></a> <a class="dashicons dashicons-admin-home" href="http://petersplugins.com/" title="<?php _e( 'Author homepage', '404page' );?>"></a> <a class="dashicons dashicons-googleplus" href="http://g.petersplugins.com/" title="<?php _e( 'Authors Google+ Page', '404page' ); ?>"></a> <a class="dashicons dashicons-facebook-alt" href="http://f.petersplugins.com/" title="<?php _e( 'Authors facebook Page', '404page' ); ?>"></a> <a class="dashicons dashicons-book-alt" href="<?php echo $this->dc_url; ?>" title="<?php _e( 'Plugin Doc', '404page' ); ?>"></a> <a class="dashicons dashicons-editor-help" href="http://wordpress.org/support/plugin/<?php echo $this->plugin_slug; ?>/" title="<?php _e( 'Support', '404page'); ?>"></a> <a class="dashicons dashicons-admin-comments" href="http://petersplugins.com/contact/" title="<?php _e( 'Contact Author', '404page' ); ?>"></a></span></h1>
+        <h1 id="pp-plugin-info-404page"><?php echo $this->plugin_name; ?> <?php _e( 'Settings', '404page' ); ?><span><a class="dashicons dashicons-wordpress" href="<?php echo $this->wp_url; ?>/" title="<?php _e( 'wordpress.org plugin directory', '404page' ); ?>"></a> <a class="dashicons dashicons-admin-home" href="https://petersplugins.com/" title="<?php _e( 'Author homepage', '404page' );?>"></a> <a class="dashicons dashicons-googleplus" href="https://plus.google.com/+petersplugins" title="<?php _e( 'Authors Google+ Page', '404page' ); ?>"></a> <a class="dashicons dashicons-facebook-alt" href="https://www.facebook.com/petersplugins" title="<?php _e( 'Authors facebook Page', '404page' ); ?>"></a> <a class="dashicons dashicons-book-alt" href="<?php echo $this->dc_url; ?>" title="<?php _e( 'Plugin Doc', '404page' ); ?>"></a> <a class="dashicons dashicons-editor-help" href="https://wordpress.org/support/plugin/<?php echo $this->plugin_slug; ?>/" title="<?php _e( 'Support', '404page'); ?>"></a> <a class="dashicons dashicons-admin-comments" href="https://petersplugins.com/contact/" title="<?php _e( 'Contact Author', '404page' ); ?>"></a></span></h1>
         <?php settings_errors(); ?>
         <form method="post" action="options.php">
           <?php settings_fields( '404page_settings' ); ?>
           <?php do_settings_sections( '404page_settings_section' ); ?>
-          <div id="pp-404page-settings-advanced">
+          <div id="pp-seetings-advanced">
             <h3>Advanced Settings</h3>
-            <div>
-              <?php do_settings_sections( '404page_settings_section_advanced' ); ?>
-            </div>
+            <?php do_settings_sections( '404page_settings_section_advanced' ); ?>
           </div>
           <?php submit_button(); ?>
         </form>
@@ -1044,7 +1040,7 @@ if ( !class_exists( 'PP_404Page' ) ) {
       if ( current_user_can( 'manage_options' ) && get_user_meta( get_current_user_id(), 'pp-404page-admin-notice-1', true ) != 'dismissed' ) {
         ?>
         <div class="notice is-dismissible pp-404page-admin-notice" id="pp-404page-admin-notice-1">
-          <p><img src="<?php echo plugins_url( 'assets/pluginicon.png', $this->_file ); ?>" style="width: 48px; height: 48px; float: left; margin-right: 20px" /><strong><?php _e( 'Do you like the 404page plugin?', '404page' ); ?></strong><br /><?php _e( 'Follow me:', '404page' ); ?> <a class="dashicons dashicons-googleplus" href="http://g.petersplugins.com/" title="<?php _e( 'Authors Google+ Page', '404page' ); ?>"></a> <a class="dashicons dashicons-facebook-alt" href="http://f.petersplugins.com/" title="<?php _e( 'Authors facebook Page', '404page' ); ?>"></a><div class="clear"></div></p>
+          <p><img src="<?php echo plugins_url( 'assets/pluginicon.png', $this->_file ); ?>" style="width: 48px; height: 48px; float: left; margin-right: 20px" /><strong><?php _e( 'Do you like the 404page plugin?', '404page' ); ?></strong><br /><?php _e( 'Follow me:', '404page' ); ?> <a class="dashicons dashicons-googleplus" href="https://plus.google.com/+petersplugins" title="<?php _e( 'Authors Google+ Page', '404page' ); ?>"></a> <a class="dashicons dashicons-facebook-alt" href="https://www.facebook.com/petersplugins" title="<?php _e( 'Authors facebook Page', '404page' ); ?>"></a><div class="clear"></div></p>
         </div>
         <?php
       }
@@ -1273,7 +1269,7 @@ if ( !class_exists( 'PP_404Page' ) ) {
      */
     function add_settings_links( $links ) {
       
-      return array_merge( $links, array( '<a class="dashicons dashicons-admin-tools" href="' . admin_url( 'themes.php?page=404pagesettings' ) . '" title="' . __( 'Settings', '404page' ) . '"></a>', '<a class="dashicons dashicons-star-filled" href="https://wordpress.org/support/plugin/' . $this->plugin_slug . '/reviews/" title="' . __( 'Please rate plugin', '404page' ) . '"></a>' ) );
+      return array_merge( $links, array( '<a href="' . admin_url( 'themes.php?page=404pagesettings' ) . '" title="' . __( 'Settings', '404page' ) . '">' . __( 'Settings', '404page' ) . '</a>', '<a href="https://wordpress.org/support/plugin/' . $this->plugin_slug . '/reviews/" title="' . __( 'Please rate plugin', '404page' ) . '">' . __( 'Please rate plugin', '404page' ) . '</a>' ) );
       
     }
     

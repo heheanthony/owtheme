@@ -99,6 +99,13 @@ class ET_Builder_Module_Search extends ET_Builder_Module {
 					'main' => "{$this->main_css_element} input.et_pb_s",
 				)
 			),
+			'border' => array(
+				'css' => array(
+					'main' => array(
+						'border_radii' => "{$this->main_css_element}, {$this->main_css_element} input.et_pb_s",
+					),
+				),
+			),
 			'max_width'  => array(),
 			'text'       => array(
 				'css'              => array(
