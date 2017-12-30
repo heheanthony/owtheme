@@ -29,7 +29,7 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 				'label'    => esc_html__( 'Main Element', 'et_builder' ),
 				'selector' => '.et_pb_button.et_pb_module',
 				'no_space_before_selector' => true,
-			)
+			),
 		);
 
 		$this->options_toggles = array(
@@ -66,6 +66,7 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 					'important' => 'all',
 				),
 			),
+			'filters'               => array(),
 		);
 	}
 
@@ -154,6 +155,7 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 				'option_class'    => 'et_pb_custom_css_regular',
 			),
 		);
+
 		return $fields;
 	}
 
@@ -198,7 +200,7 @@ class ET_Builder_Module_Button extends ET_Builder_Module {
 			( '' !== $module_id ? sprintf( ' id="%1$s"', esc_attr( $module_id ) ) : '' ),
 			( '' !== $module_class ? sprintf( ' %1$s', esc_attr( $module_class ) ) : '' ),
 			$this->get_rel_attributes( $button_rel ),
-			'right' === $button_alignment || 'center' === $button_alignment ? sprintf( ' et_pb_button_alignment_%1$s', esc_attr( $button_alignment ) )  : ''
+			'right' === $button_alignment || 'center' === $button_alignment ? sprintf( ' et_pb_button_alignment_%1$s', esc_attr( $button_alignment ) ) : ''
 		);
 
 		return $output;

@@ -29,6 +29,7 @@ class ET_Builder_Module_Fullwidth_Code extends ET_Builder_Module {
 			'custom_margin_padding' => array(),
 			'max_width'             => array(),
 			'text'                  => array(),
+			'filters'               => array(),
 		);
 
 		// wptexturize is often incorrectly parsed single and double quotes

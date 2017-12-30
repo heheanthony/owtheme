@@ -66,6 +66,7 @@ class ET_Builder_Module_Fullwidth_Image extends ET_Builder_Module {
 			),
 			'background' => array(),
 			'max_width' => array(),
+			'filters' => array(),
 		);
 	}
 

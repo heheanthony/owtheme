@@ -98,6 +98,7 @@ class ET_Builder_Module_Countdown_Timer extends ET_Builder_Module {
 					'text_orientation' => '%%order_class%% .et_pb_countdown_timer_container, %%order_class%% .title',
 				),
 			),
+			'filters'               => array(),
 		);
 		$this->custom_css_options = array(
 			'container' => array(

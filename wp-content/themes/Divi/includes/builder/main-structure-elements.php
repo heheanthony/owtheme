@@ -210,6 +210,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 				),
 			),
 			'border' => array(),
+			'filters' => array(),
 		);
 
 		$this->fields_defaults = array(
@@ -849,7 +850,7 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 				'tab_slug'        => 'custom_css',
 				'toggle_slug'     => 'classes',
 			),
-			'custom_padding_last_edited' =>array(
+			'custom_padding_last_edited' => array(
 				'type'           => 'skip',
 				'tab_slug'       => 'advanced',
 				'specialty_only' => 'yes',
@@ -1115,19 +1116,19 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 					'padding-top'    => $padding_top_1,
 					'padding-right'  => $padding_right_1,
 					'padding-bottom' => $padding_bottom_1,
-					'padding-left'   => $padding_left_1
+					'padding-left'   => $padding_left_1,
 				),
 				array(
 					'padding-top'    => $padding_top_2,
 					'padding-right'  => $padding_right_2,
 					'padding-bottom' => $padding_bottom_2,
-					'padding-left'   => $padding_left_2
+					'padding-left'   => $padding_left_2,
 				),
 				array(
 					'padding-top'    => $padding_top_3,
 					'padding-right'  => $padding_right_3,
 					'padding-bottom' => $padding_bottom_3,
-					'padding-left'   => $padding_left_3
+					'padding-left'   => $padding_left_3,
 				),
 			);
 
@@ -1221,6 +1222,9 @@ class ET_Builder_Section extends ET_Builder_Structure_Element {
 		if ( '' !== $background_video_mp4 || '' !== $background_video_webm || ( '' !== $background_color && ! $is_transparent_background ) || '' !== $background_image ) {
 			$module_class .= ' et_pb_with_background';
 		}
+
+		// CSS Filters
+		$module_class .= $this->generate_css_filters( $function_name );
 
 		$output = sprintf(
 			'<div%7$s class="et_pb_section%3$s%4$s%5$s%6$s%8$s%12$s%13$s"%14$s>
@@ -1328,6 +1332,7 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 				),
 			),
 			'border' => array(),
+			'filters' => array(),
 		);
 
 		$this->options_toggles = array(
@@ -2659,25 +2664,25 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 				'padding-top'    => $padding_top_1,
 				'padding-right'  => $padding_right_1,
 				'padding-bottom' => $padding_bottom_1,
-				'padding-left'   => $padding_left_1
+				'padding-left'   => $padding_left_1,
 			),
 			array(
 				'padding-top'    => $padding_top_2,
 				'padding-right'  => $padding_right_2,
 				'padding-bottom' => $padding_bottom_2,
-				'padding-left'   => $padding_left_2
+				'padding-left'   => $padding_left_2,
 			),
 			array(
 				'padding-top'    => $padding_top_3,
 				'padding-right'  => $padding_right_3,
 				'padding-bottom' => $padding_bottom_3,
-				'padding-left'   => $padding_left_3
+				'padding-left'   => $padding_left_3,
 			),
 			array(
 				'padding-top'    => $padding_top_4,
 				'padding-right'  => $padding_right_4,
 				'padding-bottom' => $padding_bottom_4,
-				'padding-left'   => $padding_left_4
+				'padding-left'   => $padding_left_4,
 			),
 		);
 
@@ -2843,6 +2848,9 @@ class ET_Builder_Row extends ET_Builder_Structure_Element {
 		// reset the global column settings to make sure they are not affected by internal content
 		$et_pb_all_column_settings = $et_pb_all_column_settings_backup;
 
+		// CSS Filters
+		$module_class .= $this->generate_css_filters( $function_name );
+
 		$output = sprintf(
 			'<div%4$s class="%2$s%6$s%7$s">
 				%1$s
@@ -2894,6 +2902,7 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 					),
 				),
 			),
+			'filters' => array(),
 		);
 
 		$this->options_toggles = array(
@@ -3886,19 +3895,19 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 				'padding-top'    => $padding_top_1,
 				'padding-right'  => $padding_right_1,
 				'padding-bottom' => $padding_bottom_1,
-				'padding-left'   => $padding_left_1
+				'padding-left'   => $padding_left_1,
 			),
 			array(
 				'padding-top'    => $padding_top_2,
 				'padding-right'  => $padding_right_2,
 				'padding-bottom' => $padding_bottom_2,
-				'padding-left'   => $padding_left_2
+				'padding-left'   => $padding_left_2,
 			),
 			array(
 				'padding-top'    => $padding_top_3,
 				'padding-right'  => $padding_right_3,
 				'padding-bottom' => $padding_bottom_3,
-				'padding-left'   => $padding_left_3
+				'padding-left'   => $padding_left_3,
 			),
 		);
 
@@ -4028,6 +4037,9 @@ class ET_Builder_Row_Inner extends ET_Builder_Structure_Element {
 
 		// reset the global column settings to make sure they are not affected by internal content
 		$et_pb_all_column_settings_inner = $et_pb_all_column_settings_backup;
+
+		// CSS Filters
+		$module_class .= $this->generate_css_filters( $function_name );
 
 		$output = sprintf(
 			'<div%4$s class="%2$s">
@@ -4393,6 +4405,9 @@ class ET_Builder_Column extends ET_Builder_Structure_Element {
 		$class .= '' == trim( $inner_content ) ? ' et_pb_column_empty' : '';
 
 		$class .= $is_specialty_column ? ' et_pb_specialty_column' : '';
+
+		// CSS Filters
+		$class .= $this->generate_css_filters( $function_name );
 
 		$output = sprintf(
 			'<div class="et_pb_column %1$s%3$s%6$s%8$s"%5$s>

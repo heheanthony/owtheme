@@ -2,7 +2,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '3.0.87' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '3.0.92' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -37,6 +37,18 @@ function et_remove_predefined_layouts_from_import( $posts ) {
 	return $processed_posts;
 }
 add_filter( 'wp_import_posts', 'et_remove_predefined_layouts_from_import', 5 );
+
+
+/**
+ * Output all module fields JSON dump.
+ * For dev use only.
+ *
+ * @return void
+ */
+// function et_dev_output_all_fields() {
+// 	die( json_encode( ET_Builder_Element::get_all_fields('page') ) );
+// }
+// add_action('wp', 'et_dev_output_all_fields', 100);
 
 // set the layout_type taxonomy to "layout" for layouts imported from old version of Divi.
 function et_update_old_layouts_taxonomy( $posts ) {
@@ -415,28 +427,28 @@ function et_pb_get_svg_icons_list() {
 			</g>',
 		'border-link'    =>
 			'<g>
- 				<path d="M14.71 17.71a3 3 0 0 1-2.12-.88l-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 0 1.41 0l5-4.95a1 1 0 0 0 0-1.41l-1.46-1.42a1 1 0 0 0-1.41 0L16.1 9.07a1 1 0 0 1-1.41-1.41l1.43-1.43a3.07 3.07 0 0 1 4.24 0l1.41 1.41a3 3 0 0 1 0 4.24l-5 4.95a3 3 0 0 1-2.06.88z"/>		
- 				<path d="M9.76 22.66a3 3 0 0 1-2.12-.88l-1.42-1.42a3 3 0 0 1 0-4.24l5-4.95a3.07 3.07 0 0 1 4.24 0l.71.71a1 1 0 0 1-1.41 1.41l-.76-.7a1 1 0 0 0-1.41 0l-5 4.95a1 1 0 0 0 0 1.41L9 20.36a1 1 0 0 0 1.41 0L11.82 19a1 1 0 0 1 1.41 1.41l-1.36 1.36a3 3 0 0 1-2.11.89z"/>		
+ 				<path d="M14.71 17.71a3 3 0 0 1-2.12-.88l-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 0 1.41 0l5-4.95a1 1 0 0 0 0-1.41l-1.46-1.42a1 1 0 0 0-1.41 0L16.1 9.07a1 1 0 0 1-1.41-1.41l1.43-1.43a3.07 3.07 0 0 1 4.24 0l1.41 1.41a3 3 0 0 1 0 4.24l-5 4.95a3 3 0 0 1-2.06.88z"/>
+ 				<path d="M9.76 22.66a3 3 0 0 1-2.12-.88l-1.42-1.42a3 3 0 0 1 0-4.24l5-4.95a3.07 3.07 0 0 1 4.24 0l.71.71a1 1 0 0 1-1.41 1.41l-.76-.7a1 1 0 0 0-1.41 0l-5 4.95a1 1 0 0 0 0 1.41L9 20.36a1 1 0 0 0 1.41 0L11.82 19a1 1 0 0 1 1.41 1.41l-1.36 1.36a3 3 0 0 1-2.11.89z"/>
  			</g>',
 		'border-all'     =>
 			'<g>
- 				<path d="M22 5H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zm-2 15H8V8h12z"/>		
+ 				<path d="M22 5H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zm-2 15H8V8h12z"/>
  			</g>',
 		'border-top'    =>
 			'<g>
- 				<path d="M17 21h2v2h-2zM5 9h2v2H5zM21 17h2v2h-2zM21 9h2v2h-2zM21 13h2v2h-2zM21 23h1a1 1 0 0 0 1-1v-1h-2zM5 17h2v2H5zM5 13h2v2H5zM13 21h2v2h-2zM9 21h2v2H9zM5 21v1a1 1 0 0 0 1 1h1v-2zM22 5H6a1 1 0 0 0-1 1v2h18V6a1 1 0 0 0-1-1z"/>		
+ 				<path d="M17 21h2v2h-2zM5 9h2v2H5zM21 17h2v2h-2zM21 9h2v2h-2zM21 13h2v2h-2zM21 23h1a1 1 0 0 0 1-1v-1h-2zM5 17h2v2H5zM5 13h2v2H5zM13 21h2v2h-2zM9 21h2v2H9zM5 21v1a1 1 0 0 0 1 1h1v-2zM22 5H6a1 1 0 0 0-1 1v2h18V6a1 1 0 0 0-1-1z"/>
  			</g>',
 		'border-right'  =>
 			'<g>
- 				<path d="M13 5h2v2h-2zM5 9h2v2H5zM9 5h2v2H9zM7 5H6a1 1 0 0 0-1 1v1h2zM5 13h2v2H5zM13 21h2v2h-2zM5 17h2v2H5zM9 21h2v2H9zM17 5h2v2h-2zM5 21v1a1 1 0 0 0 1 1h1v-2zM22 5h-2v18h2a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 21h2v2h-2z"/>		
+ 				<path d="M13 5h2v2h-2zM5 9h2v2H5zM9 5h2v2H9zM7 5H6a1 1 0 0 0-1 1v1h2zM5 13h2v2H5zM13 21h2v2h-2zM5 17h2v2H5zM9 21h2v2H9zM17 5h2v2h-2zM5 21v1a1 1 0 0 0 1 1h1v-2zM22 5h-2v18h2a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 21h2v2h-2z"/>
  			</g>',
 		'border-bottom' =>
-			'<g>		
- 				<path d="M9 5h2v2H9zM7 20H5v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2H7zM17 5h2v2h-2zM5 13h2v2H5zM5 9h2v2H5zM13 5h2v2h-2zM5 17h2v2H5zM21 9h2v2h-2zM21 17h2v2h-2zM22 5h-1v2h2V6a1 1 0 0 0-1-1zM21 13h2v2h-2zM7 5H6a1 1 0 0 0-1 1v1h2z"/>		
+			'<g>
+ 				<path d="M9 5h2v2H9zM7 20H5v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2H7zM17 5h2v2h-2zM5 13h2v2H5zM5 9h2v2H5zM13 5h2v2h-2zM5 17h2v2H5zM21 9h2v2h-2zM21 17h2v2h-2zM22 5h-1v2h2V6a1 1 0 0 0-1-1zM21 13h2v2h-2zM7 5H6a1 1 0 0 0-1 1v1h2z"/>
  			</g>',
 		'border-left'   =>
 			'<g>
- 				<path d="M22 5h-1v2h2V6a1 1 0 0 0-1-1zM9 21h2v2H9zM21 17h2v2h-2zM13 21h2v2h-2zM21 13h2v2h-2zM9 5h2v2H9zM17 21h2v2h-2zM17 5h2v2h-2zM21 9h2v2h-2zM8 7V5H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h2V7zM21 23h1a1 1 0 0 0 1-1v-1h-2zM13 5h2v2h-2z"/>		
+ 				<path d="M22 5h-1v2h2V6a1 1 0 0 0-1-1zM9 21h2v2H9zM21 17h2v2h-2zM13 21h2v2h-2zM21 13h2v2h-2zM9 5h2v2H9zM17 21h2v2h-2zM17 5h2v2h-2zM21 9h2v2h-2zM8 7V5H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h2V7zM21 23h1a1 1 0 0 0 1-1v-1h-2zM13 5h2v2h-2z"/>
  			</g>',
 	);
 	return $all_icons;
@@ -1311,6 +1323,11 @@ function et_fb_disable_product_tour() {
 }
 endif;
 
+/**
+ * Generate output string for `include_categories` option used in backbone template.
+ * @param array
+ * @return string
+ */
 if ( ! function_exists( 'et_builder_include_categories_option' ) ) :
 function et_builder_include_categories_option( $args = array() ) {
 	$defaults = apply_filters( 'et_builder_include_categories_defaults', array (
@@ -1322,7 +1339,7 @@ function et_builder_include_categories_option( $args = array() ) {
 
 	$term_args = apply_filters( 'et_builder_include_categories_option_args', array( 'hide_empty' => false, ) );
 
-	$output = "\t" . "<% var et_pb_include_categories_temp = typeof et_pb_include_categories !== 'undefined' ? et_pb_include_categories.split( ',' ) : []; %>" . "\n";
+	$output = "\t" . "<% var et_pb_include_categories_temp = typeof data !== 'undefined' && typeof data.et_pb_include_categories !== 'undefined' ? data.et_pb_include_categories.split( ',' ) : []; et_pb_include_categories_temp = typeof data === 'undefined' && typeof et_pb_include_categories !== 'undefined' ? et_pb_include_categories.split( ',' ) : et_pb_include_categories_temp; %>" . "\n";
 
 	if ( $args['use_terms'] ) {
 		$cats_array = get_terms( $args['term_name'], $term_args );
@@ -1355,40 +1372,40 @@ function et_builder_include_categories_option( $args = array() ) {
 }
 endif;
 
+/**
+ * Generate output string for `include_shop_categories` option used in backbone template.
+ * @param array
+ * @return string
+ */
 if ( ! function_exists( 'et_builder_include_categories_shop_option' ) ) :
 function et_builder_include_categories_shop_option( $args = array() ) {
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		return '';
 	}
 
-	$defaults = apply_filters( 'et_builder_include_categories_shop_defaults', array (
-		'use_terms' => true,
-		'term_name' => 'product_category',
-	) );
+	$output = "\t" . "<% var et_pb_include_categories_shop_temp = typeof data !== 'undefined' && typeof data.et_pb_include_categories !== 'undefined' ? data.et_pb_include_categories.split( ',' ) : []; et_pb_include_categories_shop_temp = typeof data === 'undefined' && typeof et_pb_include_categories !== 'undefined' ? et_pb_include_categories.split( ',' ) : et_pb_include_categories_shop_temp; %>" . "\n";
 
-	$term_args = apply_filters( 'et_builder_include_categories_shop_args', array( 'hide_empty' => false, ) );
-
-	$args = wp_parse_args( $args, $defaults );
-
-	$output = "\t" . "<% var et_pb_include_categories_shop_temp = typeof et_pb_include_categories !== 'undefined' ? et_pb_include_categories.split( ',' ) : []; %>" . "\n";
-
-	$cats_array = $args['use_terms'] ? get_terms( $args['term_name'], $term_args ) : get_categories( apply_filters( 'et_builder_get_categories_shop_args', 'hide_empty=0' ) );
+	$product_categories = et_builder_get_shop_categories( $args );
 
 	$output .= '<div id="et_pb_include_categories">';
 
-	foreach ( $cats_array as $category ) {
-		$contains = sprintf(
-			'<%%= _.contains( et_pb_include_categories_shop_temp, "%1$s" ) ? checked="checked" : "" %%>',
-			esc_html( $category->slug )
-		);
+	if ( is_array( $product_categories ) && ! empty( $product_categories ) ) {
+		foreach ( $product_categories as $category ) {
+			if ( is_object( $category ) && is_a($category, 'WP_Term') ) {
+				$contains = sprintf(
+					'<%%= _.contains( et_pb_include_categories_shop_temp, "%1$s" ) ? checked="checked" : "" %%>',
+					esc_html( $category->term_id )
+				);
 
-		$output .= sprintf(
-			'%4$s<label><input type="checkbox" name="et_pb_include_categories" value="%1$s"%3$s> %2$s</label><br/>',
-			esc_attr( $category->slug ),
-			esc_html( $category->name ),
-			$contains,
-			"\n\t\t\t\t\t"
-		);
+				$output .= sprintf(
+					'%4$s<label><input type="checkbox" name="et_pb_include_categories" value="%1$s"%3$s> %2$s</label><br/>',
+					esc_attr( $category->term_id ),
+					esc_html( $category->name ),
+					$contains,
+					"\n\t\t\t\t\t"
+				);
+			}
+		}
 	}
 
 	$output .= '</div>';
@@ -1825,13 +1842,106 @@ function et_builder_print_font() {
 	$subsets        = wp_list_pluck( $et_fonts_queue, 'subset' );
 	$unique_subsets = array_unique( explode(',', implode(',', $subsets ) ) );
 
+	// Get the google fonts for the current page that are stored as an option
+	$post_fonts_data = array();
+
+	$post_id = is_singular() ? get_the_ID() : false;
+
+	if ( false !== $post_id ) {
+		$post_fonts_data = get_post_meta( $post_id, 'et_enqueued_post_fonts', true );
+	}
+
+	if ( ! is_array( $post_fonts_data ) ) {
+		$post_fonts_data = array();
+	}
+
+	if ( empty( $post_fonts_data ) ) {
+		$post_fonts_data = array(
+			'family' => array(),
+			'subset' => array(),
+		);
+	}
+
+	// We only need the difference in the fonts since the subsets might be needed
+	// in cases where a new font is added to the page and it is not yet present
+	// in the option cache
+	$cached_fonts = $post_fonts_data[ 'family'];
+
+	$fonts = array_diff( $fonts, $cached_fonts );
+
+	if ( ! $fonts ) {
+		// The `$fonts` variable stores all the fonts used on the page (cache does not matter)
+		// while the `$cached_fonts` one only stores the fonts that were lastly saved into
+		// the post meta. When we run `array_diff` we would only get a result if there
+		// are new fonts present on the page that are not yet cached. However if some
+		// of the cached fonts are no longer in use this will not be caught by the
+		// `array_diff`. To fix this if the item count in `$fonts` is different
+		// than the one in `$cached_fonts` we update the post meta with the
+		// data from the `$fonts` variable to force unused fonts removal
+		if ( count( $fonts ) !== count( $cached_fonts ) ) {
+			update_post_meta( $post_id, 'et_enqueued_post_fonts', array(
+				'family' => et_sanitized_previously( $fonts ),
+				'subset' => et_sanitized_previously( $unique_subsets ),
+			) );
+		}
+
+		return;
+	}
+
 	// Append combined subset at the end of the URL as different query string
 	wp_enqueue_style( 'et-builder-googlefonts', esc_url( add_query_arg( array(
 		'family' => implode( '|', $fonts ) ,
 		'subset' => implode( ',', $unique_subsets ),
 	), "$protocol://fonts.googleapis.com/css" ) ), array(), null );
+
+	// Create a merge of the existing fonts and subsets in the option and the newly added ones
+	$updated_fonts   = array_merge( $fonts, $post_fonts_data[ 'family'] );
+	$updated_subsets = array_merge( $unique_subsets, $post_fonts_data[ 'subset'] );
+
+	// Update the option for the current page with the new data
+	$post_fonts_data = array(
+		'family' => array_unique( $updated_fonts ),
+		'subset' => array_unique( $updated_subsets ),
+	);
+
+	update_post_meta( $post_id, 'et_enqueued_post_fonts', et_sanitized_previously( $post_fonts_data ) );
 }
 add_action( 'wp_footer', 'et_builder_print_font' );
+
+/**
+ * Enqueue queued Google Fonts into WordPress' wp_enqueue_style as one request (cached version)
+ * @return void
+ */
+function et_builder_preprint_font() {
+	// Return if this is not a post or a page
+	if ( ! is_singular() ) {
+		return;
+	}
+
+	$post_id = get_the_ID();
+
+	$post_fonts_data = get_post_meta( $post_id, 'et_enqueued_post_fonts', true );
+
+	// No need to proceed if the proper data is missing from the cache
+	if ( ! is_array( $post_fonts_data ) || ! isset( $post_fonts_data['family'], $post_fonts_data['subset'] ) ) {
+		return;
+	}
+
+	$fonts = $post_fonts_data[ 'family'];
+
+	if ( ! $fonts ) {
+		return;
+	}
+
+	$unique_subsets = $post_fonts_data[ 'subset'];
+	$protocol       = is_ssl() ? 'https' : 'http';
+
+	wp_enqueue_style( 'et-builder-googlefonts-cached', esc_url( add_query_arg( array(
+		'family' => implode( '|', $fonts ) ,
+		'subset' => implode( ',', $unique_subsets ),
+	), "$protocol://fonts.googleapis.com/css" ) ) );
+}
+add_action( 'wp_enqueue_scripts', 'et_builder_preprint_font' );
 
 if ( ! function_exists( 'et_pb_get_page_custom_css' ) ) :
 function et_pb_get_page_custom_css() {
@@ -2606,7 +2716,10 @@ endif;
 
 if ( ! function_exists( 'et_pb_add_builder_page_js_css' ) ) :
 function et_pb_add_builder_page_js_css(){
-	global $typenow, $post;
+	global $typenow, $post, $wp_version;
+
+	// Get WP major version
+	$wp_major_version = substr( $wp_version, 0, 3 );
 
 	// Avoid serving any data from object cache
 	if ( ! defined( 'DONOTCACHEPAGE' ) ) {
@@ -2711,7 +2824,17 @@ function et_pb_add_builder_page_js_css(){
 
 	wp_enqueue_script( 'wp-color-picker' );
 	wp_enqueue_style( 'wp-color-picker' );
-	wp_enqueue_script( 'wp-color-picker-alpha', ET_BUILDER_URI . '/scripts/ext/wp-color-picker-alpha.min.js', array( 'jquery', 'wp-color-picker' ), ET_BUILDER_VERSION, true );
+
+	if ( version_compare( $wp_major_version, '4.9', '>=' ) ) {
+		wp_enqueue_script( 'wp-color-picker-alpha', ET_BUILDER_URI . '/scripts/ext/wp-color-picker-alpha.min.js', array( 'jquery', 'wp-color-picker' ), ET_BUILDER_VERSION, true );
+		wp_localize_script( 'wp-color-picker-alpha', 'et_pb_color_picker_strings', apply_filters( 'et_pb_color_picker_strings_builder', array(
+			'legacy_pick'    => esc_html__( 'Select', 'et_builder' ),
+			'legacy_current' => esc_html__( 'Current Color', 'et_builder' ),
+		) ) );
+	} else {
+		wp_enqueue_script( 'wp-color-picker-alpha', ET_BUILDER_URI . '/scripts/ext/wp-color-picker-alpha-48.min.js', array( 'jquery', 'wp-color-picker' ), ET_BUILDER_VERSION, true );
+	}
+
 	wp_register_script( 'chart', ET_BUILDER_URI . '/scripts/ext/chart.min.js', array(), ET_BUILDER_VERSION, true );
 	wp_register_script( 'jquery-tablesorter', ET_BUILDER_URI . '/scripts/ext/jquery.tablesorter.min.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
 
@@ -6847,6 +6970,17 @@ function et_is_yoast_seo_plugin_active() {
 endif;
 
 /**
+ * Is WP Job Manager plugin active?
+ *
+ * @return bool  True - if the plugin is active
+ */
+if ( ! function_exists( 'et_is_wp_job_manager_plugin_active' ) ) :
+	function et_is_wp_job_manager_plugin_active() {
+		return class_exists( 'WP_Job_Manager' );
+	}
+endif;
+
+/**
  * Modify comment count for preview screen. Somehow WordPress' get_comments_number() doesn't get correct $post_id
  * param and doesn't have proper fallback to global $post if $post_id variable isn't found. This causes incorrect
  * comment count in preview screen
@@ -6881,6 +7015,11 @@ function et_pb_admin_excluded_shortcodes() {
 	// WPL real estate prints unwanted on-page JS that caused an issue on BB
 	if ( class_exists( 'wpl_extensions' ) ) {
 		$shortcodes[] = 'WPL';
+	}
+
+	// [submit_job_form] shortcode prints wp_editor this creating problems post edit page render
+	if ( et_is_wp_job_manager_plugin_active() ) {
+		$shortcodes[] = 'submit_job_form';
 	}
 
 	return apply_filters( 'et_pb_admin_excluded_shortcodes', $shortcodes );
@@ -7999,7 +8138,7 @@ function et_sanitize_input_unit( $value = '', $auto_important = false, $default_
 	}
 
 	if ( in_array( substr( $value, -1, 1 ), $valid_one_char_units ) ) {
-		$unit_value = floatval( $value ) . '%';
+		$unit_value = floatval( $value ) . substr( $value, -1, 1 );
 
 		// Re-add !important tag
 		if ( $has_important && ! $auto_important ) {
@@ -8047,6 +8186,26 @@ function et_sanitize_input_unit( $value = '', $auto_important = false, $default_
 
 	// Return and automatically append px (default value)
 	return $result;
+}
+endif;
+
+/**
+ * Get taxonomies for modules
+ *
+ * @return array Array of WP taxonomies splitted into the taxonomy types
+ */
+if ( ! function_exists( 'et_builder_get_taxonomies' ) ) :
+function et_builder_get_shop_categories( $args = array() ) {
+	$defaults = apply_filters( 'et_builder_include_categories_shop_defaults', array (
+		'use_terms' => true,
+		'term_name' => 'product_cat',
+	) );
+
+	$term_args = apply_filters( 'et_builder_include_categories_shop_args', array( 'hide_empty' => false, ) );
+	$args = wp_parse_args( $args, $defaults );
+	$product_categories = $args['use_terms'] ? get_terms( $args['term_name'], $term_args ) : get_categories( apply_filters( 'et_builder_get_categories_shop_args', 'hide_empty=0' ) );
+
+	return $product_categories;
 }
 endif;
 

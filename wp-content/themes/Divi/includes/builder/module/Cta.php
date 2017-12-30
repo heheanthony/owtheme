@@ -100,6 +100,7 @@ class ET_Builder_Module_CTA extends ET_Builder_Module {
 					'text_shadow' => '%%order_class%% .et_pb_promo_description',
 				),
 			),
+			'filters' => array(),
 		);
 		$this->custom_css_options = array(
 			'promo_description' => array(

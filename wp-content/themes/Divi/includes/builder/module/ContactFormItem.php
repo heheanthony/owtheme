@@ -79,12 +79,12 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 					'css'      => array(
 						'main' => array(
 							"%%order_class%%.et_pb_contact_field .et_pb_contact_field_options_title",
-							"{$this->main_css_element}",
-							"{$this->main_css_element}::-webkit-input-placeholder",
-							"{$this->main_css_element}::-moz-placeholder",
-							"{$this->main_css_element}:-ms-input-placeholder",
-							"{$this->main_css_element}[type=checkbox] + label",
-							"{$this->main_css_element}[type=radio] + label",
+							"{$this->main_css_element} .input",
+							"{$this->main_css_element} .input::-webkit-input-placeholder",
+							"{$this->main_css_element} .input::-moz-placeholder",
+							"{$this->main_css_element} .input:-ms-input-placeholder",
+							"{$this->main_css_element} .input[type=checkbox] + label",
+							"{$this->main_css_element} .input[type=radio] + label",
 						),
 						'important' => 'plugin_only',
 					),
@@ -92,7 +92,7 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 			),
 			'background' => array(
 				'css' => array(
-					'main' => '%%order_class%%'
+					'main' => '%%order_class%%',
 				),
 			),
 			'custom_margin_padding' => array(
@@ -105,6 +105,15 @@ class ET_Builder_Module_Contact_Form_Item extends ET_Builder_Module {
 			'text'      => array(
 				'css' => array(
 					'text_orientation' => '%%order_class%% input, %%order_class%% textarea, %%order_class%% label',
+				),
+			),
+			'filters' => array(
+				'css' => array(
+					'main' => array(
+						'%%order_class%% input',
+						'%%order_class%% textarea',
+						'%%order_class%% label',
+					),
 				),
 			),
 		);

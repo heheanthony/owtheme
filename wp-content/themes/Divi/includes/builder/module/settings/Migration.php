@@ -3,6 +3,8 @@
 
 abstract class ET_Builder_Module_Settings_Migration {
 
+	protected static $_bb_excluded_name_changes = array();
+
 	public static $field_name_migrations = array();
 
 	public static $hooks = array(
@@ -17,7 +19,7 @@ abstract class ET_Builder_Module_Settings_Migration {
 	public static $last_hook_checked;
 	public static $last_hook_check_decision;
 
-	public static $max_version = '3.0.87';
+	public static $max_version = '3.0.92';
 	public static $migrated    = array();
 	public static $migrations  = array(
 		'3.0.48' => 'BackgroundUI',
@@ -25,6 +27,8 @@ abstract class ET_Builder_Module_Settings_Migration {
 		'3.0.74' => 'OptionsHarmony',
 		'3.0.84' => 'FullwidthHeader',
 		'3.0.87' => 'BorderOptions',
+		'3.0.91' => 'FilterOptions',
+		'3.0.92' => 'ShopModuleSlugs',
 	);
 
 	public static $migrations_by_version = array();
@@ -47,7 +51,9 @@ abstract class ET_Builder_Module_Settings_Migration {
 				}
 
 				// For the BB...
-				self::$migrated['name_changes'][ $module_slug ][ $old_name ] = $new_name;
+				if ( ! in_array( $old_name, self::$_bb_excluded_name_changes ) ) {
+					self::$migrated['name_changes'][ $module_slug ][ $old_name ] = $new_name;
+				}
 			}
 		}
 
@@ -173,7 +179,7 @@ abstract class ET_Builder_Module_Settings_Migration {
 
 					$new_value = $migration->migrate( $field_name, $current_value, $module_slug, $saved_value, $affected_field, $attrs );
 
-					if ( isset( $attrs[ $field_name ] ) && $new_value !== $attrs[ $field_name ] ) {
+					if ( $new_value !== $saved_value || ( $affected_field !== $field_name && $new_value !== $current_value ) ) {
 						$attrs[ $field_name ] = self::$migrated['value_changes'][ $module_address ][ $field_name ] = $new_value;
 					}
 				}

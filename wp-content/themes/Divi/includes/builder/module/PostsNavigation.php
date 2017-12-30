@@ -65,6 +65,7 @@ class ET_Builder_Module_Posts_Navigation extends ET_Builder_Module {
 				),
 			),
 			'max_width' => array(),
+			'filters' => array(),
 		);
 
 		$this->custom_css_options = array(

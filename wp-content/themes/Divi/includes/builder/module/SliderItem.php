@@ -59,6 +59,9 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 					'overlay'    => esc_html__( 'Overlay', 'et_builder' ),
 					'navigation' => esc_html__( 'Navigation', 'et_builder' ),
 					'alignment'  => esc_html__( 'Alignment', 'et_builder' ),
+					'image' => array(
+						'title' => esc_html__( 'Image', 'et_builder' ),
+					),
 					'text'       => array(
 						'title'    => esc_html__( 'Text', 'et_builder' ),
 						'priority' => 49,
@@ -117,7 +120,7 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 					'css'      => array(
 						'main' => ".et_pb_slider {$this->main_css_element}.et_pb_slide .et_pb_button",
 						'plugin_main' => ".et_pb_slider {$this->main_css_element}.et_pb_slide .et_pb_more_button.et_pb_button",
-						'alignment' => ".et_pb_slider {$this->main_css_element} .et_pb_slide_description .et_pb_button_wrapper"
+						'alignment' => ".et_pb_slider {$this->main_css_element} .et_pb_slide_description .et_pb_button_wrapper",
 					),
 					'use_alignment' => true,
 				),
@@ -138,6 +141,20 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 				'css' => array(
 					'text_orientation' => '.et_pb_slides %%order_class%%.et_pb_slide .et_pb_slide_description',
 					'text_shadow'      => '.et_pb_slides %%order_class%%.et_pb_slide .et_pb_slide_description',
+				),
+			),
+			'filters' => array(
+				'child_filters_target' => array(
+					'tab_slug' => 'advanced',
+					'toggle_slug' => 'image',
+				),
+			),
+			'image' => array(
+				'css' => array(
+					'main' => array(
+						'%%order_class%% .et_pb_slide_image',
+						'%%order_class%% .et_pb_section_video_bg',
+					),
 				),
 			),
 		);
@@ -573,6 +590,15 @@ class ET_Builder_Module_Slider_Item extends ET_Builder_Module {
 			: '';
 
 		$class = ET_Builder_Element::add_module_order_class( $class, $function_name );
+
+		// Images: Add CSS Filters and Mix Blend Mode rules (if set)
+		if ( array_key_exists( 'image', $this->advanced_options ) && array_key_exists( 'css', $this->advanced_options['image'] ) ) {
+			$class .= $this->generate_css_filters(
+				$function_name,
+				'child_',
+				self::$data_utils->array_get( $this->advanced_options['image']['css'], 'main', '%%order_class%%' )
+			);
+		}
 
 		if ( 1 === $et_pb_slider_item_num ) {
 			$class .= " et-pb-active-slide";

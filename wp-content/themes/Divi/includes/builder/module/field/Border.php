@@ -306,6 +306,11 @@ class ET_Builder_Module_Field_Border extends ET_Builder_Module_Field_Base {
 					}
 				}
 
+				// Don't output wrongly migrated border-color value
+				if ( 'color' === $property && 'off' === $value ) {
+					continue;
+				}
+
 				if ( ! isset( $styles[ $property ] ) ) {
 					$styles[ $property ] = array();
 				}

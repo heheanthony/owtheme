@@ -125,6 +125,7 @@ class ET_Builder_Module_Fullwidth_Slider extends ET_Builder_Module {
 					'text_shadow'      => '%%order_class%% .et_pb_slide .et_pb_slide_description',
 				),
 			),
+			'filters'               => array(),
 		);
 		$this->custom_css_options = array(
 			'slide_description' => array(

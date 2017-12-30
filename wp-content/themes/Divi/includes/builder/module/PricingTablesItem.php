@@ -168,6 +168,7 @@ class ET_Builder_Module_Pricing_Tables_Item extends ET_Builder_Module {
 					'text_shadow'      => '%%order_class%% .et_pb_pricing_heading, %%order_class%% .et_pb_pricing_content_top, %%order_class%% .et_pb_pricing_content',
 				),
 			),
+			'filters' => array(),
 		);
 
 		$this->custom_css_options = array(

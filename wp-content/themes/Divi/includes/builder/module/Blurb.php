@@ -138,7 +138,20 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 					'text_shadow' => "{$this->main_css_element} .et_pb_blurb_container",
 				),
 			),
+			'filters' => array(
+				'child_filters_target' => array(
+					'tab_slug' => 'advanced',
+					'toggle_slug' => 'icon_settings',
+					'depends_show_if' => 'off',
+				),
+			),
+			'icon_settings' => array(
+				'css' => array(
+					'main' => '%%order_class%% .et_pb_main_blurb_image',
+				),
+			),
 		);
+
 		$this->custom_css_options = array(
 			'blurb_image' => array(
 				'label'    => esc_html__( 'Blurb Image', 'et_builder' ),
@@ -214,6 +227,15 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 					'icon_color',
 					'image',
 					'alt',
+					'child_filter_hue_rotate',
+					'child_filter_saturate',
+					'child_filter_brightness',
+					'child_filter_contrast',
+					'child_filter_invert',
+					'child_filter_sepia',
+					'child_filter_opacity',
+					'child_filter_blur',
+					'child_mix_blend_mode',
 				),
 				'description' => esc_html__( 'Here you can choose whether icon set below should be used.', 'et_builder' ),
 			),
@@ -400,12 +422,12 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 				'mobile_options'  => true,
 				'depends_default' => true,
 			),
-			'image_max_width_tablet' => array (
+			'image_max_width_tablet' => array(
 				'type'        => 'skip',
 				'tab_slug'    => 'advanced',
 				'toggle_slug' => 'width',
 			),
-			'image_max_width_phone' => array (
+			'image_max_width_phone' => array(
 				'type'        => 'skip',
 				'tab_slug'    => 'advanced',
 				'toggle_slug' => 'width',
@@ -415,12 +437,12 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 				'tab_slug'    => 'advanced',
 				'toggle_slug' => 'width',
 			),
-			'content_max_width_tablet' => array (
+			'content_max_width_tablet' => array(
 				'type'        => 'skip',
 				'tab_slug'    => 'advanced',
 				'toggle_slug' => 'width',
 			),
-			'content_max_width_phone' => array (
+			'content_max_width_phone' => array(
 				'type'        => 'skip',
 				'tab_slug'    => 'advanced',
 				'toggle_slug' => 'width',
@@ -545,7 +567,7 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 				$image_max_width = '100%';
 			}
 
-			$image_max_width_selector = $is_image_svg ? '%%order_class%% .et_pb_main_blurb_image' : '%%order_class%% .et_pb_main_blurb_image img';
+			$image_max_width_selector = '%%order_class%% .et_pb_main_blurb_image .et_pb_image_wrap';
 			$image_max_width_property = $is_image_svg ? 'width' : 'max-width';
 
 			$image_max_width_responsive_active = et_pb_get_responsive_status( $image_max_width_last_edited );
@@ -620,8 +642,19 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 			) : '';
 		}
 
+		// Images: Add CSS Filters and Mix Blend Mode rules (if set)
+		$generate_css_image_filters = '';
+		if ( $image && array_key_exists( 'icon_settings', $this->advanced_options ) && array_key_exists( 'css', $this->advanced_options['icon_settings'] ) ) {
+			$generate_css_image_filters = $this->generate_css_filters(
+				$function_name,
+				'child_',
+				self::$data_utils->array_get( $this->advanced_options['icon_settings']['css'], 'main', '%%order_class%%' )
+			);
+		}
+
+		$image = $image ? sprintf( '<span class="et_pb_image_wrap">%1$s</span>', $image ) : '';
 		$image = $image ? sprintf(
-			'<div class="et_pb_main_blurb_image">%1$s</div>',
+			'<div class="et_pb_main_blurb_image%2$s">%1$s</div>',
 			( '' !== $url
 				? sprintf(
 					'<a href="%1$s"%3$s>%2$s</a>',
@@ -630,7 +663,8 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 					( 'on' === $url_new_window ? ' target="_blank"' : '' )
 				)
 				: $image
-			)
+			),
+			esc_attr( $generate_css_image_filters )
 		) : '';
 
 		$video_background = $this->video_background();
@@ -678,7 +712,7 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 			$this->shortcode_atts['use_icon'] !== 'on'
 		) {
 			self::set_style( $function_name, $boxShadow->get_style(
-				$selector . ' .et_pb_main_blurb_image',
+				$selector . ' .et_pb_main_blurb_image .et_pb_image_wrap',
 				$this->shortcode_atts,
 				array( 'suffix' => '_image' )
 			) );
@@ -711,8 +745,8 @@ class ET_Builder_Module_Blurb extends ET_Builder_Module {
 
 		$this->advanced_options["border_{$suffix}"]['css'] = array(
 			'main' => array(
-				'border_radii' => "%%order_class%% .et_pb_main_blurb_image",
-				'border_styles' => "%%order_class%% .et_pb_main_blurb_image",
+				'border_radii' => "%%order_class%% .et_pb_main_blurb_image .et_pb_image_wrap",
+				'border_styles' => "%%order_class%% .et_pb_main_blurb_image .et_pb_image_wrap",
 			)
 		);
 	}

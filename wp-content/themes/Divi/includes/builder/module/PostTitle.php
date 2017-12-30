@@ -108,6 +108,7 @@ class ET_Builder_Module_Post_Title extends ET_Builder_Module {
 				),
 			),
 			'text'     => array(),
+			'filters' => array(),
 		);
 		$this->custom_css_options = array(
 			'post_title' => array(

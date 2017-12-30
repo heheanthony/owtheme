@@ -41,11 +41,26 @@ class ET_Builder_Module_Text extends ET_Builder_Module {
 						'tabbed_subtoggles' => true,
 						'bb_icons_support' => true,
 						'sub_toggles' => array(
-							'p' => array( 'name' => 'P', 'icon' => 'text-left'),
-							'a' => array( 'name' => 'A', 'icon' => 'text-link'),
-							'ul' => array( 'name' => 'UL', 'icon' => 'list'),
-							'ol' => array( 'name' => 'OL', 'icon' => 'numbered-list'),
-							'quote' => array( 'name' => 'QUOTE', 'icon' => 'text-quote'),
+							'p'     => array(
+								'name' => 'P',
+								'icon' => 'text-left',
+							),
+							'a'     => array(
+								'name' => 'A',
+								'icon' => 'text-link',
+							),
+							'ul'    => array(
+								'name' => 'UL',
+								'icon' => 'list',
+							),
+							'ol'    => array(
+								'name' => 'OL',
+								'icon' => 'numbered-list',
+							),
+							'quote' => array(
+								'name' => 'QUOTE',
+								'icon' => 'text-quote',
+							),
 						),
 					),
 					'header' => array(
@@ -53,12 +68,30 @@ class ET_Builder_Module_Text extends ET_Builder_Module {
 						'priority' => 49,
 						'tabbed_subtoggles' => true,
 						'sub_toggles' => array(
-							'h1' => array( 'name' => 'H1', 'icon' => 'text-h1' ),
-							'h2' => array( 'name' => 'H2', 'icon' => 'text-h2' ),
-							'h3' => array( 'name' => 'H3', 'icon' => 'text-h3' ),
-							'h4' => array( 'name' => 'H4', 'icon' => 'text-h4' ),
-							'h5' => array( 'name' => 'H5', 'icon' => 'text-h5' ),
-							'h6' => array( 'name' => 'H6', 'icon' => 'text-h6' ),
+							'h1' => array(
+								'name' => 'H1',
+								'icon' => 'text-h1',
+							),
+							'h2' => array(
+								'name' => 'H2',
+								'icon' => 'text-h2',
+							),
+							'h3' => array(
+								'name' => 'H3',
+								'icon' => 'text-h3',
+							),
+							'h4' => array(
+								'name' => 'H4',
+								'icon' => 'text-h4',
+							),
+							'h5' => array(
+								'name' => 'H5',
+								'icon' => 'text-h5',
+							),
+							'h6' => array(
+								'name' => 'H6',
+								'icon' => 'text-h6',
+							),
 						),
 					),
 					'width' => array(
@@ -243,7 +276,10 @@ class ET_Builder_Module_Text extends ET_Builder_Module {
 				),
 			),
 			'max_width' => array(),
-			'text'      => array('sub_toggle'  => 'p'),
+			'text'      => array(
+				'sub_toggle'  => 'p',
+			),
+			'filters' => array(),
 		);
 	}
 
@@ -300,20 +336,20 @@ class ET_Builder_Module_Text extends ET_Builder_Module {
 				'sub_toggle'        => 'ul',
 			),
 			'ul_item_indent' => array(
- 				'label'           => esc_html__( 'Unordered List Item Indent', 'et_builder' ),
- 				'type'            => 'range',
- 				'option_category' => 'configuration',
- 				'tab_slug'        => 'advanced',
- 				'toggle_slug'     => 'text',
- 				'sub_toggle'      => 'ul',
- 				'priority'        => 90,
- 				'default'         => '0px',
- 				'range_settings'  => array(
- 					'min'  => '0',
- 					'max'  => '100',
- 					'step' => '1',
- 				),
- 			),
+				'label'           => esc_html__( 'Unordered List Item Indent', 'et_builder' ),
+				'type'            => 'range',
+				'option_category' => 'configuration',
+				'tab_slug'        => 'advanced',
+				'toggle_slug'     => 'text',
+				'sub_toggle'      => 'ul',
+				'priority'        => 90,
+				'default'         => '0px',
+				'range_settings'  => array(
+					'min'  => '0',
+					'max'  => '100',
+					'step' => '1',
+				),
+			),
 			'ol_type' => array(
 				'label'             => esc_html__( 'Ordered List Style Type', 'et_builder' ),
 				'type'              => 'select',
@@ -360,20 +396,20 @@ class ET_Builder_Module_Text extends ET_Builder_Module {
 				'sub_toggle'        => 'ol',
 			),
 			'ol_item_indent' => array(
- 				'label'           => esc_html__( 'Ordered List Item Indent', 'et_builder' ),
- 				'type'            => 'range',
- 				'option_category' => 'configuration',
- 				'tab_slug'        => 'advanced',
- 				'toggle_slug'     => 'text',
- 				'sub_toggle'      => 'ol',
- 				'priority'        => 90,
- 				'default'         => '0px',
- 				'range_settings'  => array(
- 					'min'  => '0',
- 					'max'  => '100',
- 					'step' => '1',
- 				),
- 			),
+				'label'           => esc_html__( 'Ordered List Item Indent', 'et_builder' ),
+				'type'            => 'range',
+				'option_category' => 'configuration',
+				'tab_slug'        => 'advanced',
+				'toggle_slug'     => 'text',
+				'sub_toggle'      => 'ol',
+				'priority'        => 90,
+				'default'         => '0px',
+				'range_settings'  => array(
+					'min'  => '0',
+					'max'  => '100',
+					'step' => '1',
+				),
+			),
 			'quote_border_weight' => array(
 				'label'           => esc_html__( 'Blockquote Border Weight', 'et_builder' ),
 				'type'            => 'range',

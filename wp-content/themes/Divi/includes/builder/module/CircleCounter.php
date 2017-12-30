@@ -93,6 +93,11 @@ class ET_Builder_Module_Circle_Counter extends ET_Builder_Module {
 				),
 			),
 			'text' => array(),
+			'filters'               => array(
+				'css' => array(
+					'main' => '%%order_class%%',
+				),
+			),
 		);
 		$this->custom_css_options = array(
 			'percent' => array(

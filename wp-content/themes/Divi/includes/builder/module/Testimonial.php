@@ -58,10 +58,13 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 			'advanced' => array(
 				'toggles' => array(
 					'icon'       => esc_html__( 'Quote Icon', 'et_builder' ),
-					'portrait'   => esc_html__( 'Portrait', 'et_builder' ),
 					'text'       => array(
 						'title'    => esc_html__( 'Text', 'et_builder' ),
 						'priority' => 49,
+					),
+					'image' => array(
+						'title' => esc_html__( 'Image', 'et_builder' ),
+						'priority' => 51,
 					),
 					'animation' => array(
 						'title'    => esc_html__( 'Animation', 'et_builder' ),
@@ -95,6 +98,17 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 			'max_width' => array(),
 			'text'      => array(),
 			'animation' => array(),
+			'filters' => array(
+				'child_filters_target' => array(
+					'tab_slug' => 'advanced',
+					'toggle_slug' => 'image',
+				),
+			),
+			'image' => array(
+				'css' => array(
+					'main' => '%%order_class%% .et_pb_testimonial_portrait',
+				),
+			),
 		);
 
 		$this->custom_css_options = array(
@@ -240,7 +254,7 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 				'type'            => 'range',
 				'option_category' => 'layout',
 				'tab_slug'        => 'advanced',
-				'toggle_slug'     => 'portrait',
+				'toggle_slug'     => 'image',
 				'range_settings'  => array(
 					'min'  => '1',
 					'max'  => '200',
@@ -252,7 +266,7 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 				'type'            => 'range',
 				'option_category' => 'layout',
 				'tab_slug'        => 'advanced',
-				'toggle_slug'     => 'portrait',
+				'toggle_slug'     => 'image',
 				'range_settings'  => array(
 					'min'  => '1',
 					'max'  => '200',
@@ -302,7 +316,7 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 			'label'           => esc_html__( 'Image Box Shadow', 'et_builder' ),
 			'option_category' => 'layout',
 			'tab_slug'        => 'advanced',
-			'toggle_slug'     => 'portrait',
+			'toggle_slug'     => 'image',
 		) ) );
 
 		return $fields;
@@ -413,6 +427,15 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 			}
 		}
 
+		// Images: Add CSS Filters and Mix Blend Mode rules (if set)
+		if ( array_key_exists( 'image', $this->advanced_options ) && array_key_exists( 'css', $this->advanced_options['image'] ) ) {
+			$module_class .= $this->generate_css_filters(
+				$function_name,
+				'child_',
+				self::$data_utils->array_get( $this->advanced_options['image']['css'], 'main', '%%order_class%%' )
+			);
+		}
+
 		$output = sprintf(
 			'<div%3$s class="et_pb_testimonial%4$s%5$s%9$s%10$s%12$s%13$s clearfix%15$s"%11$s>
 				%16$s
@@ -473,16 +496,23 @@ class ET_Builder_Module_Testimonial extends ET_Builder_Module {
 
 		$suffix      = 'portrait';
 		$tab_slug    = 'advanced';
-		$toggle_slug = 'portrait';
+		$toggle_slug = 'image';
 
 		$this->_additional_fields_options = array_merge(
 			$this->_additional_fields_options,
 			ET_Builder_Module_Fields_Factory::get( 'Border' )->get_fields( array(
 				'suffix'       => "_{$suffix}",
-				'label_prefix' => esc_html__( 'Portrait', 'et_builder' ),
+				'label_prefix' => esc_html__( 'Image', 'et_builder' ),
 				'tab_slug'     => $tab_slug,
 				'toggle_slug'  => $toggle_slug,
-				'border_radii' => 'on|90px|90px|90px|90px',
+				'defaults'        => array(
+					'border_radii'  => 'on|90px|90px|90px|90px',
+					'border_styles' => array(
+						'width' => '0px',
+						'color' => '#333333',
+						'style' => 'solid',
+					),
+				),
 			) )
 		);
 

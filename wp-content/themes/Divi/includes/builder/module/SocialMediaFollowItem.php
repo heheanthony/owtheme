@@ -89,6 +89,7 @@ class ET_Builder_Module_Social_Media_Follow_Item extends ET_Builder_Module {
 					'important' => array( 'custom_margin' ), // needed to overwrite last module margin-bottom styling
 				),
 			),
+			'filters' => array(),
 		);
 	}
 
@@ -282,7 +283,7 @@ class ET_Builder_Module_Social_Media_Follow_Item extends ET_Builder_Module {
 
 		$output = sprintf(
 			'<li class="et_pb_social_icon et_pb_social_network_link%1$s">
-				<a href="%2$s" class="icon et_pb_with_border%7$s%9$s" title="%3$s"%5$s>%10$s%9$s<span class="et_pb_social_media_follow_network_name">%4$s</span></a>
+				<a href="%2$s" class="icon et_pb_with_border%7$s%8$s" title="%3$s"%5$s>%10$s%9$s<span class="et_pb_social_media_follow_network_name">%4$s</span></a>
 				%6$s
 			</li>',
 			( '' !== $social_network ? sprintf( ' et-social-%s', esc_attr( $social_network ) ) : '' ),
