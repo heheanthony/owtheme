@@ -68,6 +68,7 @@ class ET_Builder_Module_Tabs extends ET_Builder_Module {
 				),
 			),
 			'max_width' => array(),
+			'filters' => array(),
 		);
 		$this->custom_css_options = array(
 			'tabs_controls' => array(

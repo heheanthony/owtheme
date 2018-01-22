@@ -71,6 +71,7 @@ class ET_Builder_Module_Accordion_Item extends ET_Builder_Module {
 					'text_orientation' => '%%order_class%%',
 				),
 			),
+			'filters' => array(),
 		);
 
 		$this->custom_css_options = array(

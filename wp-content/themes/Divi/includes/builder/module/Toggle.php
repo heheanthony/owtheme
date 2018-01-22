@@ -96,6 +96,7 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 			),
 			'max_width' => array(),
 			'text'      => array(),
+			'filters' => array(),
 		);
 		$this->custom_css_options = array(
 			'open_toggle' => array(
@@ -267,7 +268,7 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 
 		if ( '' !== $closed_toggle_text_color ) {
 			ET_Builder_Element::set_style( $function_name, array(
-				'selector'    => '%%order_class%%.et_pb_toggle_close h5.et_pb_toggle_title',
+				'selector'    => '%%order_class%%.et_pb_toggle.et_pb_toggle_close h5.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_close h1.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_close h2.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_close h3.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_close h4.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_close h6.et_pb_toggle_title',
 				'declaration' => sprintf(
 					'color: %1$s !important;',
 					esc_html( $closed_toggle_text_color )
@@ -277,7 +278,7 @@ class ET_Builder_Module_Toggle extends ET_Builder_Module {
 
 		if ( '' !== $open_toggle_text_color ) {
 			ET_Builder_Element::set_style( $function_name, array(
-				'selector'    => '%%order_class%%.et_pb_toggle_open h5.et_pb_toggle_title',
+				'selector'    => '%%order_class%%.et_pb_toggle.et_pb_toggle_open h5.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_open h1.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_open h2.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_open h3.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_open h4.et_pb_toggle_title, %%order_class%%.et_pb_toggle.et_pb_toggle_open h6.et_pb_toggle_title',
 				'declaration' => sprintf(
 					'color: %1$s !important;',
 					esc_html( $open_toggle_text_color )

@@ -57,6 +57,7 @@ class ET_Builder_Module_Code extends ET_Builder_Module {
 			),
 			'max_width' => array(),
 			'text'      => array(),
+			'filters' => array(),
 		);
 
 		// wptexturize is often incorrectly parsed single and double quotes

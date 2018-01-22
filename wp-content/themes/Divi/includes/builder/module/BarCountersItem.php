@@ -68,6 +68,7 @@ class ET_Builder_Module_Bar_Counters_Item extends ET_Builder_Module {
 					'text_orientation' => '%%order_class%% .et_pb_counter_title, %%order_class%% .et_pb_counter_amount',
 				),
 			),
+			'filters' => array(),
 		);
 
 		$this->options_toggles = array(

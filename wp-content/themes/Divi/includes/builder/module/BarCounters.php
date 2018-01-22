@@ -84,6 +84,11 @@ class ET_Builder_Module_Bar_Counters extends ET_Builder_Module {
 			),
 			'max_width' => array(),
 			'text'      => array(),
+			'filters'   => array(
+				'css' => array(
+					'main' => '%%order_class%%',
+				),
+			),
 		);
 		$this->custom_css_options = array(
 			'counter_title' => array(

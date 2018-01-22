@@ -101,6 +101,7 @@ class ET_Builder_Module_Number_Counter extends ET_Builder_Module {
 				),
 			),
 			'text'      => array(),
+			'filters' => array(),
 		);
 
 		if ( et_is_builder_plugin_active() ) {

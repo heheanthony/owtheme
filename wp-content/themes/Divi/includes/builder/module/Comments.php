@@ -126,6 +126,7 @@ class ET_Builder_Module_Comments extends ET_Builder_Module {
 					'text_shadow' => '%%order_class%% p, %%order_class%% .comment_postinfo, %%order_class%% .page_title, %%order_class%% .comment-reply-title',
 				),
 			),
+			'filters' => array(),
 		);
 
 		$this->custom_css_options = array(

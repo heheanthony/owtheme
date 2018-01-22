@@ -104,6 +104,7 @@ class ET_Builder_Module_Social_Media_Follow extends ET_Builder_Module {
 					),
 				),
 			),
+			'filters' => array(),
 		);
 	}
 

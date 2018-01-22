@@ -97,12 +97,21 @@ class ET_Builder_Module_Search extends ET_Builder_Module {
 			'background' => array(
 				'css' => array(
 					'main' => "{$this->main_css_element} input.et_pb_s",
-				)
+				),
 			),
 			'border' => array(
 				'css' => array(
 					'main' => array(
-						'border_radii' => "{$this->main_css_element}, {$this->main_css_element} input.et_pb_s",
+						'border_radii' => "{$this->main_css_element}.et_pb_search, {$this->main_css_element} input.et_pb_s",
+						'border_styles' => "{$this->main_css_element}.et_pb_search",
+					),
+				),
+				'defaults' => array(
+					'border_radii' => 'on|3px|3px|3px|3px',
+					'border_styles' => array(
+						'width' => '1px',
+						'color' => '#dddddd',
+						'style' => 'solid',
 					),
 				),
 			),
@@ -115,6 +124,7 @@ class ET_Builder_Module_Search extends ET_Builder_Module {
 					'exclude_options' => array( 'justified' ),
 				),
 			),
+			'filters' => array(),
 		);
 
 		$this->custom_css_options = array(

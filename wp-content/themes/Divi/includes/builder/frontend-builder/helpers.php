@@ -131,6 +131,12 @@ function et_fb_backend_helpers() {
 	}
 
 	$fb_modules_array = apply_filters( 'et_fb_modules_array', ET_Builder_Element::get_modules_array( $post_type, true, true ) );
+	$modules_row_overlapping_add_new = apply_filters( 'et_fb_modules_row_overlapping_add_new', array(
+		'et_pb_counters',
+		'et_pb_post_nav',
+		'et_pb_search',
+		'et_pb_social_media_follow',
+	) );
 
 	$helpers = array(
 		'debug'                        => true,
@@ -166,6 +172,7 @@ function et_fb_backend_helpers() {
 		'modulesWithChildren'          => ET_Builder_Element::get_shortcodes_with_children( $post_type ),
 		'modulesShowOnCancelDropClassname' => apply_filters( 'et_fb_modules_show_on_cancel_drop_classname', array( 'et_pb_gallery', 'et_pb_filterable_portfolio') ),
 		'modulesFeaturedImageBackground' => ET_Builder_Element::get_featured_image_background_modules( $post_type ),
+		'modulesRowOverlappingAddNew'  => $modules_row_overlapping_add_new,
 		'structureModules'             => ET_Builder_Element::get_structure_modules(),
 		'et_builder_css_media_queries' => ET_Builder_Element::get_media_quries( 'for_js' ),
 		'builderOptions'               => et_builder_options(),
@@ -224,7 +231,7 @@ function et_fb_backend_helpers() {
 		'columnLayouts'                => et_builder_get_columns(),
 		'pageSettingsFields'           => ET_Builder_Settings::get_fields(),
 		'pageSettingsValues'           => ET_Builder_Settings::get_values(),
-		'splitTestSubjects'            => false !== ( $all_subjects_raw = get_post_meta( $post_id, '_et_pb_ab_subjects' , true ) ) ? explode( ',', $all_subjects_raw ) : array(),
+		'abTestingSubjects'            => false !== ( $all_subjects_raw = get_post_meta( $post_id, '_et_pb_ab_subjects' , true ) ) ? explode( ',', $all_subjects_raw ) : array(),
 		'defaults'                     => array(
 			'contactFormInputs'        => array(),
 			'backgroundOptions'        => array(
@@ -235,6 +242,17 @@ function et_fb_backend_helpers() {
 				'colorEnd'             => ET_Global_Settings::get_value( 'all_background_gradient_end' ),
 				'startPosition'        => ET_Global_Settings::get_value( 'all_background_gradient_start_position' ),
 				'endPosition'          => ET_Global_Settings::get_value( 'all_background_gradient_end_position' ),
+			),
+			'filterOptions'            => array(
+				'hue_rotate'     => ET_Global_Settings::get_value( 'all_filter_hue_rotate' ),
+				'saturate'       => ET_Global_Settings::get_value( 'all_filter_saturate' ),
+				'brightness'     => ET_Global_Settings::get_value( 'all_filter_brightness' ),
+				'contrast'       => ET_Global_Settings::get_value( 'all_filter_contrast' ),
+				'invert'         => ET_Global_Settings::get_value( 'all_filter_invert' ),
+				'sepia'          => ET_Global_Settings::get_value( 'all_filter_sepia' ),
+				'opacity'        => ET_Global_Settings::get_value( 'all_filter_opacity' ),
+				'blur'           => ET_Global_Settings::get_value( 'all_filter_blur' ),
+				'mix_blend_mode' => ET_Global_Settings::get_value( 'all_mix_blend_mode' ),
 			),
 		),
 		'saveModuleLibraryCategories'  => et_fb_prepare_library_cats(),
@@ -290,6 +308,7 @@ function et_fb_backend_helpers() {
 						'off' => esc_html__( 'CSS', 'et_builder' ),
 						'on'  => esc_html__( 'True Parallax', 'et_builder' ),
 					),
+					'default'         => 'on',
 					'depends_show_if' => 'on',
 					'depends_to'      => array(
 						'parallax_%s',
@@ -693,6 +712,7 @@ function et_fb_backend_helpers() {
 			),
 		),
 		'acceptableCSSStringValues'    => et_builder_get_acceptable_css_string_values( 'all' ),
+		'abTesting' => et_builder_ab_options( $post->ID ),
 	);
 
 	// Internationalization.
@@ -844,12 +864,16 @@ function et_fb_backend_helpers() {
 			'disable'         => esc_html__( 'Disable', 'et_builder' ),
 			'enable'          => esc_html__( 'Enable', 'et_builder' ),
 			'save'            => esc_html__( 'Save to Library', 'et_builder' ),
+			'startABTesting'  => esc_html__( 'Split Test', 'et_builder' ),
+			'endABTesting'    => esc_html__( 'End Split Test', 'et_builder' ),
 			'moduleType'      => array(
 				'module'      => esc_html__( 'Module', 'et_builder' ),
 				'row'         => esc_html__( 'Row', 'et_builder' ),
 				'section'     => esc_html__( 'Section', 'et_builder' ),
 			),
 			'disableGlobal'   => esc_html__( 'Disable Global', 'et_builder' ),
+			'collapse'        => esc_html__( 'Collapse', 'et_builder' ),
+			'expand'          => esc_html__( 'Expand', 'et_builder' ),
 		),
 		'tooltips'            => array(
 			'insertModule'     => esc_html__( 'Insert Module', 'et_builder' ),
@@ -902,6 +926,10 @@ function et_fb_backend_helpers() {
 			'saveText'              => esc_html__( 'Save to Library', 'et_builder' ),
 			'allCategoriesText'     => esc_html__( 'All Categories', 'et_builder' ),
 		),
+		'alertModal' => array(
+			'buttonCancelLabel'  => esc_html__( 'Cancel', 'et_builder' ),
+			'buttonProceedLabel' => esc_html__( 'Proceed', 'et_builder' ),
+		),
 		'modals' => array(
 			'defaultTitle'   => esc_html__( 'Modal Title', 'et_builder' ),
 			'tabItemTitles'  => array(
@@ -937,13 +965,36 @@ function et_fb_backend_helpers() {
 		),
 		'help' => array(
 			'modal' => array(
-				'title' => esc_html__( 'Divi Builder Helper', 'et_builder' ),
-				'tabs' => array(
-					'shortcut' => esc_html__( 'Shortcuts', 'et_builder' ),
+				'title' 				=> esc_html__( 'Divi Builder Helper', 'et_builder' ),
+				'tabs'					=> array(
+					'gettingStarted' 	=> esc_html__( 'Video Tutorials', 'et_builder' ),
+					'shortcut' 			=> esc_html__( 'Keyboard Shortcuts', 'et_builder' ),
 				),
 			),
-			'shortcuts' => et_builder_get_shortcuts('fb'),
+			'shortcuts' 				=> et_builder_get_shortcuts('fb'),
+			'button' 					=> esc_html__( 'Help', 'et_builder' ),
 		),
+		'abTesting' => array_merge( et_builder_ab_labels(), array(
+			'reportTitle'      => esc_html__( 'Split Testing Statistics', 'et_builder' ),
+			'reportTabNavs' => array(
+				'clicks'          => esc_html__( 'Clicks', 'et_builder' ),
+				'reads'           => esc_html__( 'Reads', 'et_builder' ),
+				'bounces'         => esc_html__( 'Bounces', 'et_builder' ),
+				'engagements'     => esc_html__( 'Goal Engagement', 'et_builder' ),
+				'conversions'     => esc_html__( 'Conversions', 'et_builder' ),
+				'shortcode_conversions' => esc_html__( 'Shortcode Conversions', 'et_builder' ),
+			),
+			'reportFilterTime' => array(
+				'day'   => esc_html__( 'Last 24 Hours', 'et_builder' ),
+				'week'  => esc_html__( 'Last 7 Days', 'et_builder' ),
+				'month' => esc_html__( 'Last Month', 'et_builder' ),
+				'all'   => esc_html__( 'All Time', 'et_builder' ),
+			),
+			'reportTotal'          => esc_html__( 'Total', 'et_builder' ),
+			'reportSummaryTitle'   => esc_html__( 'Summary & Data', 'et_builder' ),
+			'reportRefreshTooltip' => esc_html__( 'Refresh Split Test Data', 'et_builder' ),
+			'reportEndTestButton'  => esc_html__( 'End Split Test & Pick Winner', 'et_builder' ),
+		) ),
 		'fonts' => array(
 			'fontWeight'     => esc_html__( 'Font Weight', 'et_builder' ),
 			'fontStyle'      => esc_html__( 'Font Style', 'et_builder' ),
@@ -969,7 +1020,7 @@ function et_fb_backend_helpers() {
 			'color'          => esc_html__( 'Color', 'et_builder' ),
 			'style'          => esc_html__( 'Style', 'et_builder' ),
 			'all'            => esc_html__( 'All', 'et_builder' ),
-			
+
 		),
 		'app' => array(
 			'modal' => array(
@@ -1001,6 +1052,9 @@ function et_fb_backend_helpers() {
 					'2' => esc_html__( 'Fullscreen', 'et_builder' ),
 					'3' => esc_html__( 'Fixed Left Sidebar', 'et_builder' ),
 					'4' => esc_html__( 'Fixed Right Sidebar', 'et_builder' ),
+					'5' => esc_html__( 'Fixed Bottom Panel', 'et_builder' ),
+					// TODO, disabled until further notice (Issue #3930 & #5859)
+					// '6' => esc_html__( 'Fixed Top Panel', 'et_builder' ),
 				),
 				'builder_animation_toggle' => array(
 					'on'   => esc_html__( 'On', 'et_builder' ),
@@ -1013,6 +1067,848 @@ function et_fb_backend_helpers() {
 				'display_modal_settings' => array(
 					'on'   => esc_html__( 'On', 'et_builder' ),
 					'off'  => esc_html__( 'Off', 'et_builder' ),
+				),
+			),
+		),
+		'video' => array(
+			'active'  => esc_html__( 'Video Overlay is Currently Active.', 'et_builder' ),
+			'offline' => esc_html__( 'Unable to Establish Internet Connection.', 'et_builder' ),
+		),
+		'videos' => array(
+			'et_pb_default' => array(
+				'1' => array(
+					'id'   => esc_html__( 'T-Oe01_J62c', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Divi Builder', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '9eqXcrLcnoc', 'et_builder' ),
+					'name' => esc_html__( 'Jump-starting your page with pre-made layouts', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'exLLvnS5pR8', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading layouts from the Divi Library', 'et_builder' ),
+				),
+				'4' => array(
+					'id'   => esc_html__( '3kmJ_mMVB1w', 'et_builder' ),
+					'name' => esc_html__( 'Getting creative with Sections', 'et_builder' ),
+				),
+				'5' => array(
+					'id'   => esc_html__( 'R9ds7bEaHE8', 'et_builder' ),
+					'name' => esc_html__( 'Organizing your content with Rows', 'et_builder' ),
+				),
+				'6' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Using Design settings to customize your page', 'et_builder' ),
+				),
+				'7' => array(
+					'id'   => esc_html__( 'MVWpwKJR8eE', 'et_builder' ),
+					'name' => esc_html__( 'Using the builders Right Click controls', 'et_builder' ),
+				),
+				'8' => array(
+					'id'   => esc_html__( 'PBmijAL4twA', 'et_builder' ),
+					'name' => esc_html__( 'Importing and exporting Divi Builder layouts', 'et_builder' ),
+				),
+				'9' => array(
+					'id'   => esc_html__( 'pklyz3vcjEs', 'et_builder' ),
+					'name' => esc_html__( 'Become a power use with keyboard shortcuts', 'et_builder' ),
+				),
+			),
+			'et_pb_add_section' => array(
+				'1' => array(
+					'id'   => esc_html__( '3kmJ_mMVB1w', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to Sections', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Section Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_add_row' => array(
+				'1' => array(
+					'id'   => esc_html__( 'R9ds7bEaHE8', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to Rows', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Row Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_add_module' => array(
+				'1' => array(
+					'id'   => esc_html__( 'FkQuawiGWUw', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to Modules', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_default_layouts' => array(
+				'1' => array(
+					'id'   => esc_html__( '9eqXcrLcnoc', 'et_builder' ),
+					'name' => esc_html__( 'Using pre-made layouts', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( ' Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_portability' => array(
+				'1' => array(
+					'id'   => esc_html__( 'PBmijAL4twA', 'et_builder' ),
+					'name' => esc_html__( 'Importing and exporting layouts', 'et_builder' ),
+				),
+			),
+			'et_pb_history' => array(
+				'1' => array(
+					'id'   => esc_html__( 'FkQuawiGWUw', 'et_builder' ),
+					'name' => esc_html__( 'Managing your editing history', 'et_builder' ),
+				),
+			),
+			'et_pb_save_to_library' => array(
+				'1' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( 'TQnPBXzTSGY', 'et_builder' ),
+					'name' => esc_html__( 'Global modules, rows and sections', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'tarDcDjE86w', 'et_builder' ),
+					'name' => esc_html__( 'Using Selective Sync', 'et_builder' ),
+				),
+				'4' => array(
+					'id'   => esc_html__( 'PBmijAL4twA', 'et_builder' ),
+					'name' => esc_html__( ' Importing and exporting items from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_page_settings' => array(
+				'1' => array(
+					'id'   => esc_html__( 'FkQuawiGWUw', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to Page Settings', 'et_builder' ),
+				),
+			),
+			'et_pb_accordion' => array(
+				'1' => array(
+					'id'   => esc_html__( 'OBbuKXTJyj8', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Accordion module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_accordion_item' => array(
+				'1' => array(
+					'id'   => esc_html__( 'OBbuKXTJyj8', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Accordion module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_audio' => array(
+				'1' => array(
+					'id'   => esc_html__( '3bg1qUaSZ5I', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Audio Player module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_counters' => array(
+				'1' => array(
+					'id'   => esc_html__( '2QLX8Lwr3cs', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Bar Counter module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_blog' => array(
+				'1' => array(
+					'id'   => esc_html__( 'PRaWaGI75wc', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Blog module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+				'4' => array(
+					'id'   => esc_html__( 'jETCzKVv6P0', 'et_builder' ),
+					'name' => esc_html__( 'How To Use Divi Blog Post Formats', 'et_builder' ),
+				),
+			),
+			'et_pb_blurb' => array(
+				'1' => array(
+					'id'   => esc_html__( 'XW7HR86lp8U', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Blurb module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_button' => array(
+				'1' => array(
+					'id'   => esc_html__( 'XpM2G7tQQIE', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Button module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_cta' => array(
+				'1' => array(
+					'id'   => esc_html__( 'E3AEllqnCus', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Call To Action module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_circle_counter' => array(
+				'1' => array(
+					'id'   => esc_html__( 'GTslkWWbda0', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Circle Counter module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_code' => array(
+				'1' => array(
+					'id'   => esc_html__( 'dTY6-Cbr00A', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Code module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_comments' => array(
+				'1' => array(
+					'id'   => esc_html__( 'k6vskmOxM4U', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Comments module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_contact_form' => array(
+				'1' => array(
+					'id'   => esc_html__( 'y3NSTE6BSfo', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Contact Form module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_countdown_timer' => array(
+				'1' => array(
+					'id'   => esc_html__( 'irIXKlOw6JA', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Countdown Timer module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_divider' => array(
+				'1' => array(
+					'id'   => esc_html__( 'BL4CEVbDZfw', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Divider module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_signup' => array(
+				'1' => array(
+					'id'   => esc_html__( 'kauQ6xheNiw', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Email Optin module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_filterable_portfolio' => array(
+				'1' => array(
+					'id'   => esc_html__( 'AZheY1hVcJc', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Filterable Portfolio module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_gallery' => array(
+				'1' => array(
+					'id'   => esc_html__( 'BRjX-pNHk-s', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Gallery module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_image' => array(
+				'1' => array(
+					'id'   => esc_html__( 'cYwqxoHnjNA', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Image module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_login' => array(
+				'1' => array(
+					'id'   => esc_html__( '6ZEw-Izfjg8', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Login module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_map' => array(
+				'1' => array(
+					'id'   => esc_html__( 'rV3rxmACDmw', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Map module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_fullwidth_slider' => array(
+				'1' => array(
+					'id'   => esc_html__( 'zfMBE_zX744', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Fullwidth Slider module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_number_counter' => array(
+				'1' => array(
+					'id'   => esc_html__( 'qEE6z2t2oJ8', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Number Counter module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_team_member' => array(
+				'1' => array(
+					'id'   => esc_html__( 'rrKmaQ0n7Hw', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Person module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_portfolio' => array(
+				'1' => array(
+					'id'   => esc_html__( '6NpHdiLciDU', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Portfolio module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_post_nav' => array(
+				'1' => array(
+					'id'   => esc_html__( 'q7SrK2sh7_o', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Post Navigation module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_post_slider' => array(
+				'1' => array(
+					'id'   => esc_html__( 'rDaVUZjDaGQ', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Post Slider module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_post_title' => array(
+				'1' => array(
+					'id'   => esc_html__( 'wb8c06U0uCU', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Post Title module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_pricing_tables' => array(
+				'1' => array(
+					'id'   => esc_html__( 'BVzu4WnjgYI', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Pricing Tables module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_pricing_search' => array(
+				'1' => array(
+					'id'   => esc_html__( 'HNmb20Mdvno', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Search module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_shop' => array(
+				'1' => array(
+					'id'   => esc_html__( 'O5RCEYP-qKI', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Shop module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_sidebar' => array(
+				'1' => array(
+					'id'   => esc_html__( '468VROeyKq4', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Sidebar module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_slide' => array(
+				'1' => array(
+					'id'   => esc_html__( '-YeoR2xSLOY', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Slider module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_slider' => array(
+				'1' => array(
+					'id'   => esc_html__( '-YeoR2xSLOY', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Slider module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_social_media_follow' => array(
+				'1' => array(
+					'id'   => esc_html__( '8b0BlM_rlHQ', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Social Media Follow module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_tabs' => array(
+				'1' => array(
+					'id'   => esc_html__( 'xk2Ite-oFhg', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Tabs module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_testimonial' => array(
+				'1' => array(
+					'id'   => esc_html__( 'FkQuawiGWUw', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Testimonial module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_text' => array(
+				'1' => array(
+					'id'   => esc_html__( 'oL00RjEKZaU', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Text module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_toggle' => array(
+				'1' => array(
+					'id'   => esc_html__( 'hFgp_A_u7mg', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Toggle module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_video' => array(
+				'1' => array(
+					'id'   => esc_html__( '3jXN8CBz0TU', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Video module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_video_slider' => array(
+				'1' => array(
+					'id'   => esc_html__( 'gwTruYDcxoE', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Video Slider module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_fullwidth_code' => array(
+				'1' => array(
+					'id'   => esc_html__( 'dTY6-Cbr00A', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Fullwidth Code module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_fullwidth_header' => array(
+				'1' => array(
+					'id'   => esc_html__( 'llLBZCNCEGk', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Fullwidth Header module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_fullwidth_image' => array(
+				'1' => array(
+					'id'   => esc_html__( 'cYwqxoHnjNA', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Fullwidth Image module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_fullwidth_post_slider' => array(
+				'1' => array(
+					'id'   => esc_html__( 'rDaVUZjDaGQ', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Fullwidth Post Slider module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_fullwidth_post_title' => array(
+				'1' => array(
+					'id'   => esc_html__( 'wb8c06U0uCU', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Fullwidth Post Title module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_fullwidth_map' => array(
+				'1' => array(
+					'id'   => esc_html__( 'JtTSSI6wlU0', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Fullwidth Map module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_fullwidth_menu' => array(
+				'1' => array(
+					'id'   => esc_html__( 'Q2heZC2GbNg', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Fullwidth Menu module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_fullwidth_portfolio' => array(
+				'1' => array(
+					'id'   => esc_html__( 'Mug6LhcJQ5M', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Fullwidth Portfolio module', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Module Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_column' => array(
+				'1' => array(
+					'id'   => esc_html__( 'R9ds7bEaHE8', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to the Column module', 'et_builder' ),
+				),
+			),
+			'et_pb_row' => array(
+				'1' => array(
+					'id'   => esc_html__( 'R9ds7bEaHE8', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to Rows', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Row Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
+				),
+			),
+			'et_pb_section' => array(
+				'1' => array(
+					'id'   => esc_html__( '3kmJ_mMVB1w', 'et_builder' ),
+					'name' => esc_html__( 'An introduction to Sections', 'et_builder' ),
+				),
+				'2' => array(
+					'id'   => esc_html__( '1iqjhnHVA9Y', 'et_builder' ),
+					'name' => esc_html__( 'Design Settings and Advanced Section Settings', 'et_builder' ),
+				),
+				'3' => array(
+					'id'   => esc_html__( 'boNZZ0MYU0E', 'et_builder' ),
+					'name' => esc_html__( 'Saving and loading from the library', 'et_builder' ),
 				),
 			),
 		),
@@ -1102,6 +1998,7 @@ function et_fb_backend_helpers() {
 					'duplicate'    => esc_html__( 'Duplicate Section', 'et_builder' ),
 					'addToLibrary' => esc_html__( 'Save Section To Library', 'et_builder' ),
 					'delete'       => esc_html__( 'Delete Section', 'et_builder' ),
+					'exit'         => esc_html__( 'Exit Section', 'et_builder' ),
 				),
 				'addButton' => esc_html__( 'Add New Section', 'et_builder' ),
 			),
@@ -1112,6 +2009,7 @@ function et_fb_backend_helpers() {
 					'duplicate'    => esc_html__( 'Duplicate Row', 'et_builder' ),
 					'addToLibrary' => esc_html__( 'Save Row To Library', 'et_builder' ),
 					'delete'       => esc_html__( 'Delete Row', 'et_builder' ),
+					'exit'         => esc_html__( 'Exit Row', 'et_builder' ),
 					'update'       => esc_html__( 'Change Column Structure', 'et_builder' ),
 				),
 				'addButton' => esc_html__( 'Add New Row', 'et_builder' ),
@@ -1124,6 +2022,7 @@ function et_fb_backend_helpers() {
 					'duplicate'    => esc_html__( 'Duplicate Module', 'et_builder' ),
 					'addToLibrary' => esc_html__( 'Save Module To Library', 'et_builder' ),
 					'delete'       => esc_html__( 'Delete Module', 'et_builder' ),
+					'exit'         => esc_html__( 'Exit Module', 'et_builder' ),
 				),
 				'addButton' => esc_html__( 'Add New Module', 'et_builder' ),
 			),

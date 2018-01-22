@@ -109,6 +109,7 @@ class ET_Builder_Module_Fullwidth_Post_Title extends ET_Builder_Module {
 				),
 			),
 			'text'      => array(),
+			'filters'   => array(),
 		);
 	}
 
@@ -164,7 +165,7 @@ class ET_Builder_Module_Fullwidth_Post_Title extends ET_Builder_Module {
 				),
 				'depends_show_if'   => 'on',
 				'affects'           => array(
-					'date_format'
+					'date_format',
 				),
 				'toggle_slug'       => 'elements',
 				'description'       => esc_html__( 'Here you can choose whether or not display the Date in Post Meta', 'et_builder' ),

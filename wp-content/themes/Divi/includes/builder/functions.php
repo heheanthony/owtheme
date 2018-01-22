@@ -2,7 +2,7 @@
 
 if ( ! defined( 'ET_BUILDER_PRODUCT_VERSION' ) ) {
 	// Note, this will be updated automatically during grunt release task.
-	define( 'ET_BUILDER_PRODUCT_VERSION', '3.0.87' );
+	define( 'ET_BUILDER_PRODUCT_VERSION', '3.0.97' );
 }
 
 if ( ! defined( 'ET_BUILDER_VERSION' ) ) {
@@ -37,6 +37,18 @@ function et_remove_predefined_layouts_from_import( $posts ) {
 	return $processed_posts;
 }
 add_filter( 'wp_import_posts', 'et_remove_predefined_layouts_from_import', 5 );
+
+
+/**
+ * Output all module fields JSON dump.
+ * For dev use only.
+ *
+ * @return void
+ */
+// function et_dev_output_all_fields() {
+// 	die( json_encode( ET_Builder_Element::get_all_fields('page') ) );
+// }
+// add_action('wp', 'et_dev_output_all_fields', 100);
 
 // set the layout_type taxonomy to "layout" for layouts imported from old version of Divi.
 function et_update_old_layouts_taxonomy( $posts ) {
@@ -415,28 +427,28 @@ function et_pb_get_svg_icons_list() {
 			</g>',
 		'border-link'    =>
 			'<g>
- 				<path d="M14.71 17.71a3 3 0 0 1-2.12-.88l-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 0 1.41 0l5-4.95a1 1 0 0 0 0-1.41l-1.46-1.42a1 1 0 0 0-1.41 0L16.1 9.07a1 1 0 0 1-1.41-1.41l1.43-1.43a3.07 3.07 0 0 1 4.24 0l1.41 1.41a3 3 0 0 1 0 4.24l-5 4.95a3 3 0 0 1-2.06.88z"/>		
- 				<path d="M9.76 22.66a3 3 0 0 1-2.12-.88l-1.42-1.42a3 3 0 0 1 0-4.24l5-4.95a3.07 3.07 0 0 1 4.24 0l.71.71a1 1 0 0 1-1.41 1.41l-.76-.7a1 1 0 0 0-1.41 0l-5 4.95a1 1 0 0 0 0 1.41L9 20.36a1 1 0 0 0 1.41 0L11.82 19a1 1 0 0 1 1.41 1.41l-1.36 1.36a3 3 0 0 1-2.11.89z"/>		
+ 				<path d="M14.71 17.71a3 3 0 0 1-2.12-.88l-.71-.71a1 1 0 0 1 1.41-1.41l.71.71a1 1 0 0 0 1.41 0l5-4.95a1 1 0 0 0 0-1.41l-1.46-1.42a1 1 0 0 0-1.41 0L16.1 9.07a1 1 0 0 1-1.41-1.41l1.43-1.43a3.07 3.07 0 0 1 4.24 0l1.41 1.41a3 3 0 0 1 0 4.24l-5 4.95a3 3 0 0 1-2.06.88z"/>
+ 				<path d="M9.76 22.66a3 3 0 0 1-2.12-.88l-1.42-1.42a3 3 0 0 1 0-4.24l5-4.95a3.07 3.07 0 0 1 4.24 0l.71.71a1 1 0 0 1-1.41 1.41l-.76-.7a1 1 0 0 0-1.41 0l-5 4.95a1 1 0 0 0 0 1.41L9 20.36a1 1 0 0 0 1.41 0L11.82 19a1 1 0 0 1 1.41 1.41l-1.36 1.36a3 3 0 0 1-2.11.89z"/>
  			</g>',
 		'border-all'     =>
 			'<g>
- 				<path d="M22 5H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zm-2 15H8V8h12z"/>		
+ 				<path d="M22 5H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zm-2 15H8V8h12z"/>
  			</g>',
 		'border-top'    =>
 			'<g>
- 				<path d="M17 21h2v2h-2zM5 9h2v2H5zM21 17h2v2h-2zM21 9h2v2h-2zM21 13h2v2h-2zM21 23h1a1 1 0 0 0 1-1v-1h-2zM5 17h2v2H5zM5 13h2v2H5zM13 21h2v2h-2zM9 21h2v2H9zM5 21v1a1 1 0 0 0 1 1h1v-2zM22 5H6a1 1 0 0 0-1 1v2h18V6a1 1 0 0 0-1-1z"/>		
+ 				<path d="M17 21h2v2h-2zM5 9h2v2H5zM21 17h2v2h-2zM21 9h2v2h-2zM21 13h2v2h-2zM21 23h1a1 1 0 0 0 1-1v-1h-2zM5 17h2v2H5zM5 13h2v2H5zM13 21h2v2h-2zM9 21h2v2H9zM5 21v1a1 1 0 0 0 1 1h1v-2zM22 5H6a1 1 0 0 0-1 1v2h18V6a1 1 0 0 0-1-1z"/>
  			</g>',
 		'border-right'  =>
 			'<g>
- 				<path d="M13 5h2v2h-2zM5 9h2v2H5zM9 5h2v2H9zM7 5H6a1 1 0 0 0-1 1v1h2zM5 13h2v2H5zM13 21h2v2h-2zM5 17h2v2H5zM9 21h2v2H9zM17 5h2v2h-2zM5 21v1a1 1 0 0 0 1 1h1v-2zM22 5h-2v18h2a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 21h2v2h-2z"/>		
+ 				<path d="M13 5h2v2h-2zM5 9h2v2H5zM9 5h2v2H9zM7 5H6a1 1 0 0 0-1 1v1h2zM5 13h2v2H5zM13 21h2v2h-2zM5 17h2v2H5zM9 21h2v2H9zM17 5h2v2h-2zM5 21v1a1 1 0 0 0 1 1h1v-2zM22 5h-2v18h2a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1zM17 21h2v2h-2z"/>
  			</g>',
 		'border-bottom' =>
-			'<g>		
- 				<path d="M9 5h2v2H9zM7 20H5v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2H7zM17 5h2v2h-2zM5 13h2v2H5zM5 9h2v2H5zM13 5h2v2h-2zM5 17h2v2H5zM21 9h2v2h-2zM21 17h2v2h-2zM22 5h-1v2h2V6a1 1 0 0 0-1-1zM21 13h2v2h-2zM7 5H6a1 1 0 0 0-1 1v1h2z"/>		
+			'<g>
+ 				<path d="M9 5h2v2H9zM7 20H5v2a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-2H7zM17 5h2v2h-2zM5 13h2v2H5zM5 9h2v2H5zM13 5h2v2h-2zM5 17h2v2H5zM21 9h2v2h-2zM21 17h2v2h-2zM22 5h-1v2h2V6a1 1 0 0 0-1-1zM21 13h2v2h-2zM7 5H6a1 1 0 0 0-1 1v1h2z"/>
  			</g>',
 		'border-left'   =>
 			'<g>
- 				<path d="M22 5h-1v2h2V6a1 1 0 0 0-1-1zM9 21h2v2H9zM21 17h2v2h-2zM13 21h2v2h-2zM21 13h2v2h-2zM9 5h2v2H9zM17 21h2v2h-2zM17 5h2v2h-2zM21 9h2v2h-2zM8 7V5H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h2V7zM21 23h1a1 1 0 0 0 1-1v-1h-2zM13 5h2v2h-2z"/>		
+ 				<path d="M22 5h-1v2h2V6a1 1 0 0 0-1-1zM9 21h2v2H9zM21 17h2v2h-2zM13 21h2v2h-2zM21 13h2v2h-2zM9 5h2v2H9zM17 21h2v2h-2zM17 5h2v2h-2zM21 9h2v2h-2zM8 7V5H6a1 1 0 0 0-1 1v16a1 1 0 0 0 1 1h2V7zM21 23h1a1 1 0 0 0 1-1v-1h-2zM13 5h2v2h-2z"/>
  			</g>',
 	);
 	return $all_icons;
@@ -547,6 +559,25 @@ function et_pb_process_header_level( $new_level, $default ) {
 }
 endif;
 
+if ( ! function_exists( 'et_pb_get_alignment' ) ) {
+	function et_pb_get_alignment( $key ) {
+		if ( is_rtl() && 'left' === $key ) {
+			$key = 'right';
+		}
+
+		switch ( $key ) {
+			case 'force_left' :
+				return 'left';
+				break;
+			case 'justified' :
+				return 'justify';
+				break;
+			default :
+				return $key;
+		}
+	}
+}
+
 if ( ! function_exists( 'et_builder_get_text_orientation_options' ) ) :
 function et_builder_get_text_orientation_options( $exclude_options = array(), $include_options = array() ) {
 	$text_orientation_options = array(
@@ -557,10 +588,11 @@ function et_builder_get_text_orientation_options( $exclude_options = array(), $i
 	);
 
 	if ( is_rtl() ) {
-		$text_orientation_options = array(
-			'right'  => esc_html__( 'Right', 'et_builder' ),
-			'center' => esc_html__( 'Center', 'et_builder' ),
-		);
+	  $text_orientation_options = array(
+		  'right'      => esc_html__( 'Right', 'et_builder' ),
+		  'center'     => esc_html__( 'Center', 'et_builder' ),
+		  'force_left' => esc_html__( 'Left', 'et_builder' ),
+	  );
 	}
 
 	// Exclude some options if needed
@@ -638,7 +670,6 @@ function et_fb_conditional_tag_params() {
 
 	return apply_filters( 'et_fb_conditional_tag_params', $conditional_tags );
 }
-
 
 function _et_fb_get_app_preferences_defaults() {
 	$app_preferences = array(
@@ -1190,6 +1221,12 @@ function et_fb_ajax_save() {
 		}
 	}
 
+	// Clear AB Testing stats & transient data
+	if ( isset( $_POST['ab_testing'] ) && isset( $_POST['ab_testing']['is_clear_stats'] ) && 'true' === $_POST['ab_testing']['is_clear_stats'] && et_pb_is_allowed( 'ab_testing' ) ) {
+		et_pb_ab_remove_stats( $post_id );
+		et_pb_ab_clear_cache_handler( $post_id );
+	}
+
 	if ( $update ) {
 		if ( ! empty( $_POST['et_builder_version'] ) ) {
 			update_post_meta( $post_id, '_et_builder_version', sanitize_text_field( $_POST['et_builder_version'] ) );
@@ -1311,6 +1348,11 @@ function et_fb_disable_product_tour() {
 }
 endif;
 
+/**
+ * Generate output string for `include_categories` option used in backbone template.
+ * @param array
+ * @return string
+ */
 if ( ! function_exists( 'et_builder_include_categories_option' ) ) :
 function et_builder_include_categories_option( $args = array() ) {
 	$defaults = apply_filters( 'et_builder_include_categories_defaults', array (
@@ -1322,7 +1364,7 @@ function et_builder_include_categories_option( $args = array() ) {
 
 	$term_args = apply_filters( 'et_builder_include_categories_option_args', array( 'hide_empty' => false, ) );
 
-	$output = "\t" . "<% var et_pb_include_categories_temp = typeof et_pb_include_categories !== 'undefined' ? et_pb_include_categories.split( ',' ) : []; %>" . "\n";
+	$output = "\t" . "<% var et_pb_include_categories_temp = typeof data !== 'undefined' && typeof data.et_pb_include_categories !== 'undefined' ? data.et_pb_include_categories.split( ',' ) : []; et_pb_include_categories_temp = typeof data === 'undefined' && typeof et_pb_include_categories !== 'undefined' ? et_pb_include_categories.split( ',' ) : et_pb_include_categories_temp; %>" . "\n";
 
 	if ( $args['use_terms'] ) {
 		$cats_array = get_terms( $args['term_name'], $term_args );
@@ -1355,40 +1397,40 @@ function et_builder_include_categories_option( $args = array() ) {
 }
 endif;
 
+/**
+ * Generate output string for `include_shop_categories` option used in backbone template.
+ * @param array
+ * @return string
+ */
 if ( ! function_exists( 'et_builder_include_categories_shop_option' ) ) :
 function et_builder_include_categories_shop_option( $args = array() ) {
 	if ( ! class_exists( 'WooCommerce' ) ) {
 		return '';
 	}
 
-	$defaults = apply_filters( 'et_builder_include_categories_shop_defaults', array (
-		'use_terms' => true,
-		'term_name' => 'product_category',
-	) );
+	$output = "\t" . "<% var et_pb_include_categories_shop_temp = typeof data !== 'undefined' && typeof data.et_pb_include_categories !== 'undefined' ? data.et_pb_include_categories.split( ',' ) : []; et_pb_include_categories_shop_temp = typeof data === 'undefined' && typeof et_pb_include_categories !== 'undefined' ? et_pb_include_categories.split( ',' ) : et_pb_include_categories_shop_temp; %>" . "\n";
 
-	$term_args = apply_filters( 'et_builder_include_categories_shop_args', array( 'hide_empty' => false, ) );
-
-	$args = wp_parse_args( $args, $defaults );
-
-	$output = "\t" . "<% var et_pb_include_categories_shop_temp = typeof et_pb_include_categories !== 'undefined' ? et_pb_include_categories.split( ',' ) : []; %>" . "\n";
-
-	$cats_array = $args['use_terms'] ? get_terms( $args['term_name'], $term_args ) : get_categories( apply_filters( 'et_builder_get_categories_shop_args', 'hide_empty=0' ) );
+	$product_categories = et_builder_get_shop_categories( $args );
 
 	$output .= '<div id="et_pb_include_categories">';
 
-	foreach ( $cats_array as $category ) {
-		$contains = sprintf(
-			'<%%= _.contains( et_pb_include_categories_shop_temp, "%1$s" ) ? checked="checked" : "" %%>',
-			esc_html( $category->slug )
-		);
+	if ( is_array( $product_categories ) && ! empty( $product_categories ) ) {
+		foreach ( $product_categories as $category ) {
+			if ( is_object( $category ) && is_a($category, 'WP_Term') ) {
+				$contains = sprintf(
+					'<%%= _.contains( et_pb_include_categories_shop_temp, "%1$s" ) ? checked="checked" : "" %%>',
+					esc_html( $category->term_id )
+				);
 
-		$output .= sprintf(
-			'%4$s<label><input type="checkbox" name="et_pb_include_categories" value="%1$s"%3$s> %2$s</label><br/>',
-			esc_attr( $category->slug ),
-			esc_html( $category->name ),
-			$contains,
-			"\n\t\t\t\t\t"
-		);
+				$output .= sprintf(
+					'%4$s<label><input type="checkbox" name="et_pb_include_categories" value="%1$s"%3$s> %2$s</label><br/>',
+					esc_attr( $category->term_id ),
+					esc_html( $category->name ),
+					$contains,
+					"\n\t\t\t\t\t"
+				);
+			}
+		}
 	}
 
 	$output .= '</div>';
@@ -1813,7 +1855,7 @@ add_action( 'after_switch_theme', 'et_font_subset_force_check' );
  * @return void
  */
 function et_builder_print_font() {
-	global $et_fonts_queue;
+	global $et_fonts_queue, $et_fonts_cache;
 
 	// Bail if no queued google font found
 	if ( empty( $et_fonts_queue ) ) {
@@ -1825,13 +1867,135 @@ function et_builder_print_font() {
 	$subsets        = wp_list_pluck( $et_fonts_queue, 'subset' );
 	$unique_subsets = array_unique( explode(',', implode(',', $subsets ) ) );
 
+	// Get the google fonts for the current page that are stored as an option
+	$post_fonts_data = array();
+
+	$post_id = is_singular() ? get_the_ID() : false;
+
+	if ( false !== $post_id ) {
+		$post_fonts_data = get_post_meta( $post_id, 'et_enqueued_post_fonts', true );
+	}
+
+	if ( ! is_array( $post_fonts_data ) ) {
+		$post_fonts_data = array();
+	}
+
+	if ( empty( $post_fonts_data ) ) {
+		$post_fonts_data = array(
+			'family' => array(),
+			'subset' => array(),
+		);
+	}
+
+	// We only need the difference in the fonts since the subsets might be needed
+	// in cases where a new font is added to the page and it is not yet present
+	// in the option cache
+	$cached_fonts = $post_fonts_data[ 'family'];
+
+	$fonts_diff = array_diff( $fonts, $cached_fonts );
+
+	if ( ! $fonts_diff ) {
+		// The `$fonts` variable stores all the fonts used on the page (cache does not matter)
+		// while the `$cached_fonts` one only stores the fonts that were lastly saved into
+		// the post meta. When we run `array_diff` we would only get a result if there
+		// are new fonts present on the page that are not yet cached. However if some
+		// of the cached fonts are no longer in use this will not be caught by the
+		// `array_diff`. To fix this if the item count in `$fonts` is different
+		// than the one in `$cached_fonts` we update the post meta with the
+		// data from the `$fonts` variable to force unused fonts removal
+		if ( count( $fonts ) !== count( $cached_fonts ) ) {
+			// Update the option for the current page with the new data
+			$post_fonts_data = array(
+				'family' => et_sanitized_previously( $fonts ),
+				'subset' => et_sanitized_previously( $unique_subsets ),
+			);
+
+			// Do not update post meta here, save the value to global variable and update it at `shutdown` hook.
+			// Prevents object cache error on GoDaddy + Woocommerce websites
+			$et_fonts_cache = et_sanitized_previously( $post_fonts_data );
+		}
+
+		return;
+	}
+
 	// Append combined subset at the end of the URL as different query string
 	wp_enqueue_style( 'et-builder-googlefonts', esc_url( add_query_arg( array(
 		'family' => implode( '|', $fonts ) ,
 		'subset' => implode( ',', $unique_subsets ),
 	), "$protocol://fonts.googleapis.com/css" ) ), array(), null );
+
+	// Create a merge of the existing fonts and subsets in the option and the newly added ones
+	$updated_fonts   = array_merge( $fonts, $post_fonts_data[ 'family'] );
+	$updated_subsets = array_merge( $unique_subsets, $post_fonts_data[ 'subset'] );
+
+	// Update the option for the current page with the new data
+	$post_fonts_data = array(
+		'family' => array_unique( $updated_fonts ),
+		'subset' => array_unique( $updated_subsets ),
+	);
+
+	// Do not update post meta here, save the value to global variable and update it at `shutdown` hook.
+	// Prevents object cache error on GoDaddy + Woocommerce websites
+	$et_fonts_cache = et_sanitized_previously( $post_fonts_data );
 }
 add_action( 'wp_footer', 'et_builder_print_font' );
+
+/**
+ * Update Fonts Cache in post meta
+ * Run this function on shutdown hook to prevents object cache error on GoDaddy + Woocommerce websites
+ * @return void
+ */
+function et_builder_update_fonts_cache() {
+	global $et_fonts_cache;
+
+	if ( ! isset( $et_fonts_cache ) || empty( $et_fonts_cache ) ) {
+		return;
+	}
+
+	$post_id = is_singular() ? get_the_ID() : false;
+
+	if ( ! $post_id ) {
+		return;
+	}
+
+	update_post_meta( $post_id, 'et_enqueued_post_fonts', et_sanitized_previously( $et_fonts_cache ) );
+}
+add_action( 'shutdown', 'et_builder_update_fonts_cache' );
+
+/**
+ * Enqueue queued Google Fonts into WordPress' wp_enqueue_style as one request (cached version)
+ * @return void
+ */
+function et_builder_preprint_font() {
+	// Return if this is not a post or a page
+	if ( ! is_singular() ) {
+		return;
+	}
+
+	$post_id = get_the_ID();
+
+	$post_fonts_data = get_post_meta( $post_id, 'et_enqueued_post_fonts', true );
+
+	// No need to proceed if the proper data is missing from the cache
+	if ( ! is_array( $post_fonts_data ) || ! isset( $post_fonts_data['family'], $post_fonts_data['subset'] ) ) {
+		return;
+	}
+
+	$fonts = $post_fonts_data[ 'family'];
+
+	if ( ! $fonts ) {
+		return;
+	}
+
+	$unique_subsets = $post_fonts_data[ 'subset'];
+	$protocol       = is_ssl() ? 'https' : 'http';
+
+	wp_enqueue_style( 'et-builder-googlefonts-cached', esc_url( add_query_arg( array(
+		'family' => implode( '|', $fonts ) ,
+		'subset' => implode( ',', $unique_subsets ),
+	), "$protocol://fonts.googleapis.com/css" ) ) );
+}
+add_action( 'wp_enqueue_scripts', 'et_builder_preprint_font' );
 
 if ( ! function_exists( 'et_pb_get_page_custom_css' ) ) :
 function et_pb_get_page_custom_css() {
@@ -2151,9 +2315,9 @@ function et_pb_metabox_settings_save_details( $post_id, $post ){
 
 
 
-	// Only run split testing-related update sequence if split testing is allowed
+	// Only run AB Testing-related update sequence if AB Testing is allowed
 	if ( et_pb_is_allowed( 'ab_testing' ) ) {
-		// Delete split test settings' autosave
+		// Delete AB Testing settings' autosave
 		delete_post_meta( $post_id, '_et_pb_use_ab_testing_draft' );
 		delete_post_meta( $post_id, '_et_pb_ab_subjects_draft' );
 
@@ -2314,7 +2478,7 @@ function et_pb_before_main_editor( $post ) {
 		<input type="hidden" id="et_pb_use_builder" name="et_pb_use_builder" value="<?php echo esc_attr( $_et_builder_use_builder ); ?>" />
 		<input type="hidden" id="et_builder_version" name="et_builder_version" value="<?php echo esc_attr( $last_builder_version_used ); ?>" />
 		<input type="hidden" autocomplete="off" id="et_pb_use_ab_testing" name="et_pb_use_ab_testing" value="<?php echo esc_attr( $_et_builder_use_ab_testing ); ?>">
-		<input type="hidden" autocomplete="off" id="et_pb_ab_stats_refresh_interval" name="et_pb_ab_stats_refresh_interval" value="<?php echo esc_attr( $_et_builder_ab_stats_refresh_interval ); ?>">
+		<input type="hidden" autocomplete="off" id="_et_pb_ab_stats_refresh_interval" name="et_pb_ab_stats_refresh_interval" value="<?php echo esc_attr( $_et_builder_ab_stats_refresh_interval ); ?>">
 		<input type="hidden" autocomplete="off" id="et_pb_ab_subjects" name="et_pb_ab_subjects" value="<?php echo esc_attr( $_et_builder_ab_subjects ); ?>">
 		<input type="hidden" autocomplete="off" id="et_pb_ab_goal_module" name="et_pb_ab_goal_module" value="<?php echo esc_attr( $_et_builder_ab_goal_module ); ?>">
 		<?php et_pb_builder_settings_hidden_inputs( $post->ID ); ?>
@@ -2606,7 +2770,10 @@ endif;
 
 if ( ! function_exists( 'et_pb_add_builder_page_js_css' ) ) :
 function et_pb_add_builder_page_js_css(){
-	global $typenow, $post;
+	global $typenow, $post, $wp_version;
+
+	// Get WP major version
+	$wp_major_version = substr( $wp_version, 0, 3 );
 
 	// Avoid serving any data from object cache
 	if ( ! defined( 'DONOTCACHEPAGE' ) ) {
@@ -2711,7 +2878,17 @@ function et_pb_add_builder_page_js_css(){
 
 	wp_enqueue_script( 'wp-color-picker' );
 	wp_enqueue_style( 'wp-color-picker' );
-	wp_enqueue_script( 'wp-color-picker-alpha', ET_BUILDER_URI . '/scripts/ext/wp-color-picker-alpha.min.js', array( 'jquery', 'wp-color-picker' ), ET_BUILDER_VERSION, true );
+
+	if ( version_compare( $wp_major_version, '4.9', '>=' ) ) {
+		wp_enqueue_script( 'wp-color-picker-alpha', ET_BUILDER_URI . '/scripts/ext/wp-color-picker-alpha.min.js', array( 'jquery', 'wp-color-picker' ), ET_BUILDER_VERSION, true );
+		wp_localize_script( 'wp-color-picker-alpha', 'et_pb_color_picker_strings', apply_filters( 'et_pb_color_picker_strings_builder', array(
+			'legacy_pick'    => esc_html__( 'Select', 'et_builder' ),
+			'legacy_current' => esc_html__( 'Current Color', 'et_builder' ),
+		) ) );
+	} else {
+		wp_enqueue_script( 'wp-color-picker-alpha', ET_BUILDER_URI . '/scripts/ext/wp-color-picker-alpha-48.min.js', array( 'jquery', 'wp-color-picker' ), ET_BUILDER_VERSION, true );
+	}
+
 	wp_register_script( 'chart', ET_BUILDER_URI . '/scripts/ext/chart.min.js', array(), ET_BUILDER_VERSION, true );
 	wp_register_script( 'jquery-tablesorter', ET_BUILDER_URI . '/scripts/ext/jquery.tablesorter.min.js', array( 'jquery' ), ET_BUILDER_VERSION, true );
 
@@ -2824,193 +3001,77 @@ function et_pb_add_builder_page_js_css(){
 		'all_svg_icons'                            => et_pb_get_svg_icons_list(),
 	), et_pb_history_localization() ) ) );
 
+	$ab_settings = et_builder_ab_labels();
+
 	wp_localize_script( 'et_pb_admin_js', 'et_pb_ab_js_options', apply_filters( 'et_pb_ab_js_options', array(
-		'test_id'                    => $post->ID,
-		'has_report'                 => et_pb_ab_has_report( $post->ID ),
-		'has_permission'             => et_pb_is_allowed( 'ab_testing' ),
-		'refresh_interval_duration'  => et_pb_ab_get_refresh_interval_duration( $post->ID ),
-		'refresh_interval_durations' => et_pb_ab_refresh_interval_durations(),
-		'analysis_formula'           => et_pb_ab_get_analysis_formulas(),
-		'have_conversions'           => et_pb_ab_get_modules_have_conversions(),
-		'sales_title'                => esc_html__( 'Sales', 'et_builder' ),
-		'force_cache_purge'          => $force_cache_update,
-		'total_title'                => esc_html__( 'Total', 'et_builder' ),
+		'test_id'                                       => $post->ID,
+		'has_report'                                    => et_pb_ab_has_report( $post->ID ),
+		'has_permission'                                => et_pb_is_allowed( 'ab_testing' ),
+		'refresh_interval_duration'                     => et_pb_ab_get_refresh_interval_duration( $post->ID ),
+		'refresh_interval_durations'                    => et_pb_ab_refresh_interval_durations(),
+		'analysis_formula'                              => et_pb_ab_get_analysis_formulas(),
+		'have_conversions'                              => et_pb_ab_get_modules_have_conversions(),
+		'sales_title'                                   => esc_html__( 'Sales', 'et_builder' ),
+		'force_cache_purge'                             => $force_cache_update,
+		'total_title'                                   => esc_html__( 'Total', 'et_builder' ),
 
 		// Saved data
-		'subjects_rank' => ( 'on' === get_post_meta( $post->ID, '_et_pb_use_builder', true ) ) ? et_pb_ab_get_saved_subjects_ranks( $post->ID ) : false,
+		'subjects_rank'                                 => ( 'on' === get_post_meta( $post->ID, '_et_pb_use_builder', true ) ) ? et_pb_ab_get_saved_subjects_ranks( $post->ID ) : false,
 
 		// Rank color
-		'subjects_rank_color' => et_pb_ab_get_subject_rank_colors(),
+		'subjects_rank_color'                           => et_pb_ab_get_subject_rank_colors(),
 
 		// Configuration
 		'has_no_permission' => array(
-			'title' => esc_html__( 'Unauthorized Action', 'et_builder' ),
-			'desc' => esc_html__( 'You do not have permission to edit the module, row or section in this split test.', 'et_builder' ),
+			'title'                                     => esc_html__( 'Unauthorized Action', 'et_builder' ),
+			'desc'                                      => esc_html__( 'You do not have permission to edit the module, row or section in this split test.', 'et_builder' ),
 		),
-		'select_ab_testing_subject' => array(
-			'title' => esc_html__( 'Select Split Testing Subject', 'et_builder' ),
-			'desc' => esc_html__( 'You have activated the Divi Leads Split Testing System. Using split testing, you can create different element variations on your page to find out which variation most positively affects the conversion rate of your desired goal. After closing this window, please click on the section, row or module that you would like to split test.', 'et_builder' ),
-		),
-		'select_ab_testing_goal' => array(
-			'title' => esc_html__( 'Select Your Goal', 'et_builder' ),
-			'desc'  => esc_html__( 'Congratulations, you have selected a split testing subject! Next you need to select your goal. After closing this window, please click the section, row or module that you want to use as your goal. Depending on the element you choose, Divi will track relevant conversion rates for clicks, reads or sales. For example, if you select a Call To Action module as your goal, then Divi will track how variations in your test subjects affect how often visitors read and click the button in your Call To Action module. The test subject itself can also be selected as your goal.', 'et_builder' ),
-		),
-		'configure_ab_testing_alternative' => array(
-			'title' => esc_html__( 'Configure Subject Variations', 'et_builder' ),
-			'desc'  => esc_html__( 'Congratulations, your split test is ready to go! You will notice that your split testing subject has been duplicated. Each split testing variation will be displayed to your visitors and statistics will be collected to figure out which variation results in the highest goal conversion rate. Your test will begin when you save this page.', 'et_builder' ),
-		),
-		'select_ab_testing_winner_first' => array(
-			'title' => esc_html__( 'Select Split Testing Winner', 'et_builder' ),
-			'desc'  => esc_html__( 'Before ending your split test, you must choose which split testing variation to keep. Please select your favorite or highest converting subject. Alternative split testing subjects will be removed.', 'et_builder' ),
-		),
-		'select_ab_testing_subject_first' => array(
-			'title' => esc_html__( 'Select Split Testing Subject', 'et_builder' ),
-			'desc'  => esc_html__( 'You need to select a split testing subject first.', 'et_builder' ),
-		),
-		'select_ab_testing_goal_first' => array(
-			'title' => esc_html__( 'Select Split Testing Goal', 'et_builder' ),
-			'desc'  => esc_html__( 'You need to select a split testing goal first. ', 'et_builder' ),
-		),
-		'cannot_select_subject_parent_as_goal' => array(
-			'title' => esc_html__( 'Select A Different Goal', 'et_builder' ),
-			'desc'  => esc_html__( 'This element cannot be used as a your split testing goal. Please select a different module, or section.', 'et_builder' ),
-		),
+
+		// AB Testing
+		'select_ab_testing_subject'                     => $ab_settings['select_subject'],
+		'select_ab_testing_goal'                        => $ab_settings['select_goal'],
+		'configure_ab_testing_alternative'              => $ab_settings['configure_alternative'],
+		'select_ab_testing_winner_first'                => $ab_settings['select_winner_first'],
+		'select_ab_testing_subject_first'               => $ab_settings['select_subject_first'],
+		'select_ab_testing_goal_first'                  => $ab_settings['select_goal_first'],
+		'cannot_select_subject_parent_as_goal'          => $ab_settings['cannot_select_subject_parent_as_goal'],
+		'cannot_select_global_children_as_subject'      => $ab_settings['cannot_select_global_children_as_subject'],
+		'cannot_select_global_children_as_goal'         => $ab_settings['cannot_select_global_children_as_goal'],
 
 		// Save to Library
-		'cannot_save_app_layout_has_ab_testing' => array(
-			'title' => esc_html__( 'Can\'t Save Layout', 'et_builder' ),
-			'desc'  => esc_html__( 'You cannot save layout while a split test is running. Please end your split test and then try again.', 'et_builder' ),
-		),
-
-		'cannot_save_section_layout_has_ab_testing' => array(
-			'title' => esc_html__( 'Can\'t Save Section', 'et_builder' ),
-			'desc'  => esc_html__( 'You cannot save this section while a split test is running. Please end your split test and then try again.', 'et_builder' ),
-		),
-
-		'cannot_save_row_layout_has_ab_testing' => array(
-			'title' => esc_html__( 'Can\'t Save Row', 'et_builder' ),
-			'desc'  => esc_html__( 'You cannot save this row while a split test is running. Please end your split test and then try again.', 'et_builder' ),
-		),
-
-		'cannot_save_row_inner_layout_has_ab_testing' => array(
-			'title' => esc_html__( 'Can\'t Save Row', 'et_builder' ),
-			'desc'  => esc_html__( 'You cannot save this row while a split test is running. Please end your split test and then try again.', 'et_builder' ),
-		),
-
-		'cannot_save_module_layout_has_ab_testing' => array(
-			'title' => esc_html__( 'Can\'t Save Module', 'et_builder' ),
-			'desc'  => esc_html__( 'You cannot save this module while a split test is running. Please end your split test and then try again.', 'et_builder' ),
-		),
+		'cannot_save_app_layout_has_ab_testing'         => $ab_settings['cannot_save_app_layout_has_ab_testing'],
+		'cannot_save_section_layout_has_ab_testing'     => $ab_settings['cannot_save_section_layout_has_ab_testing'],
+		'cannot_save_row_layout_has_ab_testing'         => $ab_settings['cannot_save_row_layout_has_ab_testing'],
+		'cannot_save_row_inner_layout_has_ab_testing'   => $ab_settings['cannot_save_row_inner_layout_has_ab_testing'],
+		'cannot_save_module_layout_has_ab_testing'      => $ab_settings['cannot_save_module_layout_has_ab_testing'],
 
 		// Load / Clear Layout
-		'cannot_load_layout_has_ab_testing' => array(
-			'title' => esc_html__( 'Can\'t Load Layout', 'et_builder' ),
-			'desc'  => esc_html__( 'You cannot load a new layout while a split test is running. Please end your split test and then try again.', 'et_builder' ),
-		),
-		'cannot_clear_layout_has_ab_testing' => array(
-			'title' => esc_html__( 'Can\'t Clear Layout', 'et_builder' ),
-			'desc'  => esc_html__( 'You cannot clear your layout while a split testing is running. Please end your split test before clearing your layout.', 'et_builder' ),
-		),
+		'cannot_load_layout_has_ab_testing'             => $ab_settings['cannot_load_layout_has_ab_testing'],
+		'cannot_clear_layout_has_ab_testing'            => $ab_settings['cannot_clear_layout_has_ab_testing'],
 
 		// Cannot Import / Export Layout (Portability)
-		'cannot_import_export_layout_has_ab_testing' => array(
-			'title' => esc_html__( "Can't Import/Export Layout", 'et_builder' ),
-			'desc'  => esc_html__( 'You cannot import or export a layout while a split test is running. Please end your split test and then try again.', 'et_builder' ),
-		),
+		'cannot_import_export_layout_has_ab_testing'    => $ab_settings['cannot_import_export_layout_has_ab_testing'],
 
 		// Moving Goal / Subject
-		'cannot_move_module_goal_out_from_subject' => array(
-			'title' => esc_html__( 'Can\'t Move Goal', 'et_builder' ),
-			'desc'  => esc_html__( 'Once set, a goal that has been placed inside a split testing subject cannot be moved outside the split testing subject. You can end your split test and start a new one if you would like to make this change.', 'et_builder' ),
-		),
-		'cannot_move_row_goal_out_from_subject' => array(
-			'title' => esc_html__( 'Can\'t Move Goal', 'et_builder' ),
-			'desc'  => esc_html__( 'Once set, a goal that has been placed inside a split testing subject cannot be moved outside the split testing subject. You can end your split test and start a new one if you would like to make this change.', 'et_builder' ),
-		),
-		'cannot_move_goal_into_subject' => array(
-			'title' => esc_html__( 'Can\'t Move Goal', 'et_builder' ),
-			'desc'  => esc_html__( 'A split testing goal cannot be moved inside of a split testing subject. To perform this action you must first end your split test.', 'et_builder' ),
-		),
-		'cannot_move_subject_into_goal' => array(
-			'title' => esc_html__( 'Can\'t Move Subject', 'et_builder' ),
-			'desc'  => esc_html__( 'A split testing subject cannot be moved inside of a split testing goal. To perform this action you must first end your split test.', 'et_builder' ),
-		),
+		'cannot_move_module_goal_out_from_subject'      => $ab_settings['cannot_move_module_goal_out_from_subject'],
+		'cannot_move_row_goal_out_from_subject'         => $ab_settings['cannot_move_row_goal_out_from_subject'],
+		'cannot_move_goal_into_subject'                 => $ab_settings['cannot_move_goal_into_subject'],
+		'cannot_move_subject_into_goal'                 => $ab_settings['cannot_move_subject_into_goal'],
 
 		// Cloning + Has Goal
-		'cannot_clone_section_has_goal' => array(
-			'title' => esc_html__( 'Can\'t Clone Section', 'et_builder' ),
-			'desc'  => esc_html__( 'This section cannot be duplicated because it contains a split testing goal. Goals cannot be duplicated. You must first end your split test before performing this action.', 'et_builder' ),
-		),
-		'cannot_clone_row_has_goal' => array(
-			'title' => esc_html__( 'Can\'t Clone Row', 'et_builder' ),
-			'desc'  => esc_html__( 'This row cannot be duplicated because it contains a split testing goal. Goals cannot be duplicated. You must first end your split test before performing this action.', 'et_builder' ),
-		),
+		'cannot_clone_section_has_goal'                 => $ab_settings['cannot_clone_section_has_goal'],
+		'cannot_clone_row_has_goal'                     => $ab_settings['cannot_clone_row_has_goal'],
 
 		// Removing + Has Goal
-		'cannot_remove_section_has_goal' => array(
-			'title' => esc_html__( 'Can\'t Remove Section', 'et_builder' ),
-			'desc'  => esc_html__( 'This section cannot be removed because it contains a split testing goal. Goals cannot be deleted. You must first end your split test before performing this action.', 'et_builder' ),
-		),
-		'cannot_remove_row_has_goal' => array(
-			'title' => esc_html__( 'Can\'t Remove Row', 'et_builder' ),
-			'desc'  => esc_html__( 'This row cannot be removed because it contains a split testing goal. Goals cannot be deleted. You must first end your split test before performing this action.', 'et_builder' ),
-		),
+		'cannot_remove_section_has_goal'                => $ab_settings['cannot_remove_section_has_goal'],
+		'cannot_remove_row_has_goal'                    => $ab_settings['cannot_remove_row_has_goal'],
 
 		// Removing + Has Unremovable Subjects
-		'cannot_remove_section_has_unremovable_subject' => array(
-			'title' => esc_html__( 'Can\'t Remove Section', 'et_builder' ),
-			'desc'  => esc_html__( 'Split testing requires at least 2 subject variations. This variation cannot be removed until additional variations have been added.', 'et_builder' ),
-		),
-		'cannot_remove_row_has_unremovable_subject' => array(
-			'title' => esc_html__( 'Can\'t Remove Row', 'et_builder' ),
-			'desc'  => esc_html__( 'Split testing requires at least 2 subject variations. This variation cannot be removed until additional variations have been added', 'et_builder' ),
-		),
+		'cannot_remove_section_has_unremovable_subject' => $ab_settings['cannot_remove_section_has_unremovable_subject'],
+		'cannot_remove_row_has_unremovable_subject'     => $ab_settings['cannot_remove_row_has_unremovable_subject'],
 
 		// View stats summary table heading
-		'view_stats_thead_titles' => array(
-			'clicks' => array(
-				esc_html__( 'ID', 'et_builder' ),
-				esc_html__( 'Subject', 'et_builder' ),
-				esc_html__( 'Impressions', 'et_builder' ),
-				esc_html__( 'Clicks', 'et_builder' ),
-				esc_html__( 'Clickthrough Rate', 'et_builder' ),
-			),
-			'reads' => array(
-				esc_html__( 'ID', 'et_builder' ),
-				esc_html__( 'Subject', 'et_builder' ),
-				esc_html__( 'Impressions', 'et_builder' ),
-				esc_html__( 'Reads', 'et_builder' ),
-				esc_html__( 'Reading Rate', 'et_builder' ),
-			),
-			'bounces' => array(
-				esc_html__( 'ID', 'et_builder' ),
-				esc_html__( 'Subject', 'et_builder' ),
-				esc_html__( 'Impressions', 'et_builder' ),
-				esc_html__( 'Stays', 'et_builder' ),
-				esc_html__( 'Bounce Rate', 'et_builder' ),
-			),
-			'engagements' => array(
-				esc_html__( 'ID', 'et_builder' ),
-				esc_html__( 'Subject', 'et_builder' ),
-				esc_html__( 'Goal Views', 'et_builder' ),
-				esc_html__( 'Goal Reads', 'et_builder' ),
-				esc_html__( 'Engagement Rate', 'et_builder' ),
-			),
-			'conversions' => array(
-				esc_html__( 'ID', 'et_builder' ),
-				esc_html__( 'Subject', 'et_builder' ),
-				esc_html__( 'Impressions', 'et_builder' ),
-				esc_html__( 'Conversion Goals', 'et_builder' ),
-				esc_html__( 'Conversion Rate', 'et_builder' ),
-			),
-			'shortcode_conversions' => array(
-				esc_html__( 'ID', 'et_builder' ),
-				esc_html__( 'Subject', 'et_builder' ),
-				esc_html__( 'Impressions', 'et_builder' ),
-				esc_html__( 'Shortcode Conversions', 'et_builder' ),
-				esc_html__( 'Conversion Rate', 'et_builder' ),
-			),
-		),
+		'view_stats_thead_titles'                       => $ab_settings['view_stats_thead_titles'],
 	) ) );
 
 	wp_localize_script( 'et_pb_admin_js', 'et_pb_help_options', apply_filters( 'et_pb_help_options', array(
@@ -3045,28 +3106,29 @@ add_action('admin_init', 'et_pb_set_editor_available_cookie');
 function et_pb_history_localization() {
 	return array(
 		'verb' => array(
-			'did'       => esc_html__( 'Did', 'et_builder' ),
-			'added'     => esc_html__( 'Added', 'et_builder' ),
-			'edited'    => esc_html__( 'Edited', 'et_builder' ),
-			'removed'   => esc_html__( 'Removed', 'et_builder' ),
-			'moved'     => esc_html__( 'Moved', 'et_builder' ),
-			'expanded'  => esc_html__( 'Expanded', 'et_builder' ),
-			'collapsed' => esc_html__( 'Collapsed', 'et_builder' ),
-			'locked'    => esc_html__( 'Locked', 'et_builder' ),
-			'unlocked'  => esc_html__( 'Unlocked', 'et_builder' ),
-			'cloned'    => esc_html__( 'Cloned', 'et_builder' ),
-			'cleared'   => esc_html__( 'Cleared', 'et_builder' ),
-			'enabled'   => esc_html__( 'Enabled', 'et_builder' ),
-			'disabled'  => esc_html__( 'Disabled', 'et_builder' ),
-			'copied'    => esc_html__( 'Copied', 'et_builder' ),
-			'cut'       => esc_html__( 'Cut', 'et_builder' ),
-			'pasted'    => esc_html__( 'Pasted', 'et_builder' ),
-			'renamed'   => esc_html__( 'Renamed', 'et_builder' ),
-			'loaded'    => esc_html__( 'Loaded', 'et_builder' ),
-			'turnon'    => esc_html__( 'Turned On', 'et_builder' ),
-			'turnoff'   => esc_html__( 'Turned Off', 'et_builder' ),
-			'globalon'  => esc_html__( 'Made Global', 'et_builder' ),
-			'globaloff' => esc_html__( 'Disabled Global', 'et_builder' ),
+			'did'        => esc_html__( 'Did', 'et_builder' ),
+			'added'      => esc_html__( 'Added', 'et_builder' ),
+			'edited'     => esc_html__( 'Edited', 'et_builder' ),
+			'removed'    => esc_html__( 'Removed', 'et_builder' ),
+			'moved'      => esc_html__( 'Moved', 'et_builder' ),
+			'expanded'   => esc_html__( 'Expanded', 'et_builder' ),
+			'collapsed'  => esc_html__( 'Collapsed', 'et_builder' ),
+			'locked'     => esc_html__( 'Locked', 'et_builder' ),
+			'unlocked'   => esc_html__( 'Unlocked', 'et_builder' ),
+			'cloned'     => esc_html__( 'Cloned', 'et_builder' ),
+			'cleared'    => esc_html__( 'Cleared', 'et_builder' ),
+			'enabled'    => esc_html__( 'Enabled', 'et_builder' ),
+			'disabled'   => esc_html__( 'Disabled', 'et_builder' ),
+			'copied'     => esc_html__( 'Copied', 'et_builder' ),
+			'cut'        => esc_html__( 'Cut', 'et_builder' ),
+			'pasted'     => esc_html__( 'Pasted', 'et_builder' ),
+			'renamed'    => esc_html__( 'Renamed', 'et_builder' ),
+			'loaded'     => esc_html__( 'Loaded', 'et_builder' ),
+			'turnon'     => esc_html__( 'Turned On', 'et_builder' ),
+			'turnoff'    => esc_html__( 'Turned Off', 'et_builder' ),
+			'globalon'   => esc_html__( 'Made Global', 'et_builder' ),
+			'globaloff'  => esc_html__( 'Disabled Global', 'et_builder' ),
+			'configured' => esc_html__( 'Configured', 'et_builder' ),
 		),
 		'noun' => array(
 			'section'           => esc_html__( 'Section', 'et_builder' ),
@@ -4680,9 +4742,10 @@ function et_pb_pagebuilder_meta_box() {
 		et_pb_get_builder_settings_fields( ET_Builder_Settings::get_fields() )
 	);
 
-	/**
-	 * "Turn off Split Testing" Modal Window Template
-	 */
+	// AB Testing
+	$ab_testing = et_builder_ab_labels();
+
+	// "Turn off AB Testing" Modal Window Template
 	printf(
 		'<script type="text/template" id="et-builder-prompt-modal-turn_off_ab_testing">
 			<div class="et_pb_prompt_modal">
@@ -4699,7 +4762,7 @@ function et_pb_pagebuilder_meta_box() {
 		esc_html__( 'Yes', 'et_builder' )
 	);
 
-	// "Turn off Split Testing" Modal Content Template
+	// "Turn off AB Testing" Modal Content Template
 	printf(
 		'<script type="text/template" id="et-builder-prompt-modal-turn_off_ab_testing-text">
 			<h3>%1$s</h3>
@@ -4711,9 +4774,7 @@ function et_pb_pagebuilder_meta_box() {
 		esc_html__( 'Note: this process cannot be undone.', 'et_builder' )
 	);
 
-	/**
-	 * Split Testing Alert :: Modal Window Template
-	 */
+	// AB Testing Alert :: Modal Window Template
 	printf(
 		'<script type="text/template" id="et-builder-prompt-modal-ab_testing_alert">
 			<div class="et_pb_prompt_modal">
@@ -4726,7 +4787,7 @@ function et_pb_pagebuilder_meta_box() {
 		esc_html__( 'Ok', 'et_builder' )
 	);
 
-	// Split Testing Alert :: Modal Content Template
+	// AB Testing Alert :: Modal Content Template
 	printf(
 		'<script type="text/template" id="et-builder-prompt-modal-ab_testing_alert-text">
 			<%% if ( ! _.isUndefined( et_pb_ab_js_options[id] ) ) { %%>
@@ -4741,9 +4802,7 @@ function et_pb_pagebuilder_meta_box() {
 		esc_html__( 'For some reason, you cannot perform this task.', 'et_builder' )
 	);
 
-	/**
-	 * Split Testing Alert Yes/No :: Modal Window Template
-	 */
+	// AB Testing Alert Yes/No :: Modal Window Template
 	printf(
 		'<script type="text/template" id="et-builder-prompt-modal-ab_testing_alert_yes_no">
 			<div class="et_pb_prompt_modal">
@@ -4758,7 +4817,7 @@ function et_pb_pagebuilder_meta_box() {
 		esc_html__( 'Proceed', 'et_builder' )
 	);
 
-	// Split Testing Alert Yes/No :: Modal Content Template
+	// AB Testing Alert Yes/No :: Modal Content Template
 	printf(
 		'<script type="text/template" id="et-builder-prompt-modal-ab_testing_alert_yes_no-text">
 			<%% if ( ! _.isUndefined( et_pb_ab_js_options[id] ) ) { %%>
@@ -4786,11 +4845,11 @@ function et_pb_pagebuilder_meta_box() {
 				</div>
 			</div>
 		</script>',
-		esc_html__( 'Save as Global Item', 'et_builder' ),
-		esc_html__( 'Save', 'et_builder' )
+		et_esc_previously( $ab_testing['set_global_winner_status']['cancel'] ),
+		et_esc_previously( $ab_testing['set_global_winner_status']['proceed'] )
 	);
 
-	// Split Testing :: Set global item winner status template
+	// AB Testing :: Set global item winner status template
 	printf(
 		'<script type="text/template" id="et-builder-prompt-modal-set_global_subject_winner-text">
 			<h3>%1$s</h3>
@@ -4800,14 +4859,14 @@ function et_pb_pagebuilder_meta_box() {
 				<li>%4$s</li>
 			</ol>
 		</script>',
-		esc_html__( 'Set Winner Status', 'et_builder' ),
-		esc_html__( 'You were using global item as split testing winner. Consequently, you have to choose between:', 'et_builder' ),
-		esc_html__( 'Save winner as global item (selected subject will be synced and your global item will be updated in the Divi Library)', 'et_builder' ),
-		esc_html__( 'Save winner as non-global item (selected subject will no longer be a global item and your changes will not modify the global item)', 'et_builder' )
+		et_esc_previously( $ab_testing['set_global_winner_status']['title'] ),
+		et_esc_previously( $ab_testing['set_global_winner_status']['desc'] ),
+		et_esc_previously( $ab_testing['set_global_winner_status']['option_1'] ),
+		et_esc_previously( $ab_testing['set_global_winner_status']['option_2'] )
 	);
 
 	/**
-	 * Split Testing :: View Stats Template
+	 * AB Testing :: View Stats Template
 	 */
 	printf(
 		'<script type="text/template" id="et-builder-prompt-modal-view_ab_stats">
@@ -4872,7 +4931,7 @@ function et_pb_pagebuilder_meta_box() {
 		);
 	}
 
-	// Split Testing :: View Stats content
+	// AB Testing :: View Stats content
 	printf(
 		'<script type="text/template" id="et-builder-prompt-modal-view_ab_stats-text">
 			<h3>%1$s</h3>
@@ -5221,6 +5280,7 @@ function et_pb_pagebuilder_meta_box() {
 			<%% _.each(this.et_builder_template_options.text_align_buttons.options, function(text_align_button) { %%>
 				<%%
 					var text_align_button_classname = text_align_button === "justified" ? "justify" : text_align_button;
+					text_align_button_classname = text_align_button === "force_left" ? "left" : text_align_button_classname;
 					var text_align_button_type = this.et_builder_template_options.text_align_buttons.type;
 				%%>
 				<div class="et_builder_<%%= text_align_button %%>_text_align et_builder_text_align mce-widget mce-btn" data-value="<%%= text_align_button %%>">
@@ -5579,7 +5639,7 @@ function et_builder_update_settings( $settings, $post_id = 'global' ) {
 		// check whether or not the defined value === default value
 		$is_default = isset( $fields[ $setting_key ]['default'] ) && $setting_value === $fields[ $setting_key ]['default'];
 
-		// Auto-formatting split test status' meta key
+		// Auto-formatting AB Testing status' meta key
 		if ( 'et_pb_enable_ab_testing' === $setting_key ) {
 			$setting_key = 'et_pb_use_ab_testing';
 		}
@@ -5721,6 +5781,12 @@ function et_divi_post_format_content() {
 	$text_color_class = et_divi_get_post_text_color();
 
 	$inline_style = et_divi_get_post_bg_inline_style();
+
+	global $post;
+
+	if ( post_password_required( $post ) ) {
+		return;
+	}
 
 	switch ( $post_format ) {
 		case 'audio' :
@@ -6847,6 +6913,17 @@ function et_is_yoast_seo_plugin_active() {
 endif;
 
 /**
+ * Is WP Job Manager plugin active?
+ *
+ * @return bool  True - if the plugin is active
+ */
+if ( ! function_exists( 'et_is_wp_job_manager_plugin_active' ) ) :
+	function et_is_wp_job_manager_plugin_active() {
+		return class_exists( 'WP_Job_Manager' );
+	}
+endif;
+
+/**
  * Modify comment count for preview screen. Somehow WordPress' get_comments_number() doesn't get correct $post_id
  * param and doesn't have proper fallback to global $post if $post_id variable isn't found. This causes incorrect
  * comment count in preview screen
@@ -6881,6 +6958,11 @@ function et_pb_admin_excluded_shortcodes() {
 	// WPL real estate prints unwanted on-page JS that caused an issue on BB
 	if ( class_exists( 'wpl_extensions' ) ) {
 		$shortcodes[] = 'WPL';
+	}
+
+	// [submit_job_form] shortcode prints wp_editor this creating problems post edit page render
+	if ( et_is_wp_job_manager_plugin_active() ) {
+		$shortcodes[] = 'submit_job_form';
 	}
 
 	return apply_filters( 'et_pb_admin_excluded_shortcodes', $shortcodes );
@@ -6993,13 +7075,16 @@ function et_fb_get_saved_layouts() {
 		die( -1 );
 	}
 
+	// Reduce number of results per page if we're hosted on wpengine to avoid 500 error due to memory allocation.
+	// This is caused by one of their custom mu-plugins doing additional stuff but we have no control over there.
+	$page_size = function_exists( 'is_wpe' ) || function_exists( 'is_wpe_snapshot' ) ? 25 : 50;
 	$post_type = ! empty( $_POST['et_post_type'] ) ? sanitize_text_field( $_POST['et_post_type'] ) : 'post';
 	$layouts_type = ! empty( $_POST['et_load_layouts_type'] ) ? sanitize_text_field( $_POST['et_load_layouts_type'] ) : 'all';
 	$start_from = ! empty( $_POST['et_templates_start_page'] ) ? sanitize_text_field( $_POST['et_templates_start_page'] ) : 0;
 
 	$post_type = apply_filters( 'et_pb_show_all_layouts_built_for_post_type', $post_type, $layouts_type );
 
-	$all_layouts_data = et_pb_retrieve_templates( 'layout', '', 'false', '0', $post_type, $layouts_type, array( $start_from, 50 ) );
+	$all_layouts_data = et_pb_retrieve_templates( 'layout', '', 'false', '0', $post_type, $layouts_type, array( $start_from, $page_size ) );
 	$all_layouts_data_processed = $all_layouts_data;
 	$next_page = 'none';
 
@@ -7012,7 +7097,7 @@ function et_fb_get_saved_layouts() {
 			foreach( $all_layouts_data as $index => $data ) {
 				$all_layouts_data_processed[ $index ]['shortcode'] = et_fb_process_shortcode( $data['shortcode'] );
 			}
-			$next_page = $start_from + 50;
+			$next_page = $start_from + $page_size;
 		}
 	}
 
@@ -7999,7 +8084,7 @@ function et_sanitize_input_unit( $value = '', $auto_important = false, $default_
 	}
 
 	if ( in_array( substr( $value, -1, 1 ), $valid_one_char_units ) ) {
-		$unit_value = floatval( $value ) . '%';
+		$unit_value = floatval( $value ) . substr( $value, -1, 1 );
 
 		// Re-add !important tag
 		if ( $has_important && ! $auto_important ) {
@@ -8050,8 +8135,28 @@ function et_sanitize_input_unit( $value = '', $auto_important = false, $default_
 }
 endif;
 
+/**
+ * Get taxonomies for modules
+ *
+ * @return array Array of WP taxonomies splitted into the taxonomy types
+ */
+if ( ! function_exists( 'et_builder_get_taxonomies' ) ) :
+function et_builder_get_shop_categories( $args = array() ) {
+	$defaults = apply_filters( 'et_builder_include_categories_shop_defaults', array (
+		'use_terms' => true,
+		'term_name' => 'product_cat',
+	) );
+
+	$term_args = apply_filters( 'et_builder_include_categories_shop_args', array( 'hide_empty' => false, ) );
+	$args = wp_parse_args( $args, $defaults );
+	$product_categories = $args['use_terms'] ? get_terms( $args['term_name'], $term_args ) : get_categories( apply_filters( 'et_builder_get_categories_shop_args', 'hide_empty=0' ) );
+
+	return $product_categories;
+}
+endif;
+
 if ( ! function_exists( 'et_pb_get_spacing' ) ) :
-function et_pb_get_spacing( $spacing, $corner, $default = '' ) {
+function et_pb_get_spacing( $spacing, $corner, $default = '0px' ) {
 	$corners       = array( 'top', 'right', 'bottom', 'left' );
 	$corner_index  = array_search( $corner, $corners );
 	$spacing_array = explode( '|', $spacing );

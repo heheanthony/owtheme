@@ -65,7 +65,8 @@ class ET_Builder_Module_Sidebar extends ET_Builder_Module {
 				),
 			),
 			'max_width' => array(),
-			'text' => array()
+			'text' => array(),
+			'filters' => array(),
 		);
 		$this->custom_css_options = array(
 			'widget' => array(

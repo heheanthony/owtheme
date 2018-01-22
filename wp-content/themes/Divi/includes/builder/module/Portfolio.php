@@ -51,11 +51,13 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 				'toggles' => array(
 					'layout'  => esc_html__( 'Layout', 'et_builder' ),
 					'overlay' => esc_html__( 'Overlay', 'et_builder' ),
+					'image' => array(
+						'title' => esc_html__( 'Image', 'et_builder' ),
+					),
 					'text'    => array(
 						'title'    => esc_html__( 'Text', 'et_builder' ),
 						'priority' => 49,
 					),
-					'image'   => esc_html__( 'Image', 'et_builder' ),
 				),
 			),
 		);
@@ -104,6 +106,20 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 			),
 			'max_width' => array(),
 			'text'      => array(),
+			'filters' => array(
+				'css' => array(
+					'main' => '%%order_class%%',
+				),
+				'child_filters_target' => array(
+					'tab_slug' => 'advanced',
+					'toggle_slug' => 'image',
+				),
+			),
+			'image' => array(
+				'css' => array(
+					'main' => '%%order_class%% .et_portfolio_image',
+				),
+			),
 		);
 		$this->custom_css_options = array(
 			'portfolio_image' => array(
@@ -624,6 +640,15 @@ class ET_Builder_Module_Portfolio extends ET_Builder_Module_Type_PostBased {
 
 		$class = " et_pb_module et_pb_bg_layout_{$background_layout}";
 		$fullwidth = 'on' === $fullwidth;
+
+		// Images: Add CSS Filters and Mix Blend Mode rules (if set)
+		if ( array_key_exists( 'image', $this->advanced_options ) && array_key_exists( 'css', $this->advanced_options['image'] ) ) {
+			$module_class .= $this->generate_css_filters(
+				$function_name,
+				'child_',
+				self::$data_utils->array_get( $this->advanced_options['image']['css'], 'main', '%%order_class%%' )
+			);
+		}
 
 		$output = sprintf(
 			'<div%5$s class="%1$s%3$s%6$s%7$s%9$s%14$s">

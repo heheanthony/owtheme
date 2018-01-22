@@ -81,6 +81,7 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 					),
 				),
 			),
+			'filters' => array(),
 		);
 	}
 
@@ -129,13 +130,13 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 				'type'              => 'yes_no_button',
 				'option_category'   => 'configuration',
 				'options'           => array(
-					'off' => esc_html__( "No", 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
 					'on'  => esc_html__( 'Yes', 'et_builder' ),
 				),
 				'affects'           => array(
 					'url',
 					'url_new_window',
-					'use_overlay'
+					'use_overlay',
 				),
 				'toggle_slug'       => 'link',
 				'description'       => esc_html__( 'Here you can choose whether or not the image should open in Lightbox. Note: if you select to open the image in Lightbox, url options below will be ignored.', 'et_builder' ),
@@ -238,7 +239,7 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 				'type'              => 'yes_no_button',
 				'option_category'   => 'layout',
 				'options'           => array(
-					'off' => esc_html__( "No", 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
 					'on'  => esc_html__( 'Yes', 'et_builder' ),
 				),
 				'tab_slug'    => 'advanced',
@@ -253,7 +254,7 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 				'option_category'   => 'layout',
 				'options'           => array(
 					'on'  => esc_html__( 'Yes', 'et_builder' ),
-					'off' => esc_html__( "No", 'et_builder' ),
+					'off' => esc_html__( 'No', 'et_builder' ),
 				),
 				'tab_slug'          => 'advanced',
 				'toggle_slug'       => 'alignment',
@@ -299,6 +300,12 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 		return $fields;
 	}
 
+	public function get_alignment() {
+		$alignment = isset( $this->shortcode_atts['align'] ) ? $this->shortcode_atts['align'] : '';
+
+		return et_pb_get_alignment( $alignment );
+	}
+
 	function shortcode_callback( $atts, $content = null, $function_name ) {
 		$module_id               = $this->shortcode_atts['module_id'];
 		$module_class            = $this->shortcode_atts['module_class'];
@@ -309,7 +316,7 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 		$url_new_window          = $this->shortcode_atts['url_new_window'];
 		$show_in_lightbox        = $this->shortcode_atts['show_in_lightbox'];
 		$show_bottom_space       = $this->shortcode_atts['show_bottom_space'];
-		$align                   = $this->shortcode_atts['align'];
+		$align                   = $this->get_alignment();
 		$force_fullwidth         = $this->shortcode_atts['force_fullwidth'];
 		$always_center_on_mobile = $this->shortcode_atts['always_center_on_mobile'];
 		$overlay_icon_color      = $this->shortcode_atts['overlay_icon_color'];
@@ -409,8 +416,7 @@ class ET_Builder_Module_Image extends ET_Builder_Module {
 		}
 
 		$output = sprintf(
-			'<span class="et_pb_image_wrap"><img src="%1$s" alt="%2$s"%3$s /></span>
-			%4$s',
+			'<span class="et_pb_image_wrap"><img src="%1$s" alt="%2$s"%3$s />%4$s</span>',
 			esc_url( $src ),
 			esc_attr( $alt ),
 			( '' !== $title_text ? sprintf( ' title="%1$s"', esc_attr( $title_text ) ) : '' ),

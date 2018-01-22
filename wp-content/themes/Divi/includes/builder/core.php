@@ -192,7 +192,9 @@ function et_pb_video_oembed_data_parse( $return, $data, $url ) {
 endif;
 
 function et_pb_add_widget_area(){
-	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) die(-1);
+	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) {
+		die( -1 );
+	}
 
 	if ( ! current_user_can( 'manage_options' ) ) {
 		die( -1 );
@@ -219,7 +221,9 @@ function et_pb_add_widget_area(){
 add_action( 'wp_ajax_et_pb_add_widget_area', 'et_pb_add_widget_area' );
 
 function et_pb_remove_widget_area(){
-	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) die(-1);
+	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) {
+		die( -1 );
+	}
 
 	if ( ! current_user_can( 'manage_options' ) ) {
 		die( -1 );
@@ -239,7 +243,9 @@ function et_pb_remove_widget_area(){
 add_action( 'wp_ajax_et_pb_remove_widget_area', 'et_pb_remove_widget_area' );
 
 function et_pb_current_user_can_lock() {
-	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) die( -1 );
+	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) {
+		die( -1 );
+	}
 
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		die( -1 );
@@ -385,7 +391,9 @@ function et_pb_show_all_layouts_built_for_post_type( $post_type ) {
 add_filter( 'et_pb_show_all_layouts_built_for_post_type', 'et_pb_show_all_layouts_built_for_post_type' );
 
 function et_pb_show_all_layouts() {
-	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) die(-1);
+	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) {
+		die( -1 );
+	}
 
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		die( -1 );
@@ -470,7 +478,9 @@ function et_pb_show_all_layouts() {
 add_action( 'wp_ajax_et_pb_show_all_layouts', 'et_pb_show_all_layouts' );
 
 function et_pb_get_saved_templates() {
-	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) die(-1);
+	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) {
+		die( -1 );
+	}
 
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		die( -1 );
@@ -654,7 +664,9 @@ function et_pb_retrieve_templates( $layout_type = 'layout', $module_width = '', 
 
 
 function et_pb_add_template_meta() {
-	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) die(-1);
+	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) {
+		die( -1 );
+	}
 
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		die( -1 );
@@ -672,7 +684,9 @@ add_action( 'wp_ajax_et_pb_add_template_meta', 'et_pb_add_template_meta' );
 
 if ( ! function_exists( 'et_pb_add_new_layout' ) ) {
 	function et_pb_add_new_layout() {
-		if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) die( -1 );
+		if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) {
+			die( -1 );
+		}
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
 			die( -1 );
@@ -826,7 +840,9 @@ function et_pb_create_layout( $name, $content, $meta = array(), $tax_input = arr
 endif;
 
 function et_pb_save_layout() {
-	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) die( -1 );
+	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) {
+		die( -1 );
+	}
 
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		die( -1 );
@@ -855,13 +871,16 @@ function et_pb_save_layout() {
 add_action( 'wp_ajax_et_pb_save_layout', 'et_pb_save_layout' );
 
 function et_pb_get_global_module() {
-	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) die( -1 );
+	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) {
+		die( -1 );
+	}
 
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		die( -1 );
 	}
 
 	$post_id = isset( $_POST['et_global_id'] ) ? $_POST['et_global_id'] : '';
+	$global_autop = isset( $_POST['et_global_autop'] ) ? sanitize_text_field( $_POST['et_global_autop'] ) : 'apply';
 
 	if ( '' !== $post_id ) {
 		$query = new WP_Query( array(
@@ -872,7 +891,7 @@ function et_pb_get_global_module() {
 		wp_reset_postdata();
 
 		if ( !empty( $query->post ) ) {
-			$global_shortcode['shortcode'] = wpautop( $query->post->post_content );
+			$global_shortcode['shortcode'] = 'skip' === $global_autop ? $query->post->post_content : wpautop( $query->post->post_content );
 			$excluded_global_options = get_post_meta( $post_id, '_et_pb_excluded_global_options' );
 			$selective_sync_status = empty( $excluded_global_options ) ? '' : 'updated';
 
@@ -892,7 +911,9 @@ function et_pb_get_global_module() {
 add_action( 'wp_ajax_et_pb_get_global_module', 'et_pb_get_global_module' );
 
 function et_pb_update_layout() {
-	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) die( -1 );
+	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) {
+		die( -1 );
+	}
 
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		die( -1 );
@@ -944,7 +965,9 @@ function et_pb_builder_post_content_capability_check( $content) {
 add_filter( 'content_save_pre', 'et_pb_builder_post_content_capability_check' );
 
 function et_pb_load_layout() {
-	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) die( -1 );
+	if ( ! wp_verify_nonce( $_POST['et_admin_load_nonce'], 'et_admin_load_nonce' ) ) {
+		die( -1 );
+	}
 
 	if ( ! current_user_can( 'edit_posts' ) ) {
 		die( -1 );
@@ -991,7 +1014,7 @@ add_action( 'wp_ajax_et_pb_delete_layout', 'et_pb_delete_layout' );
  */
 function et_builder_enable_zlib_compression() {
 	// If compression is already enabled, do nothing
-	if ( 1 === intval( ini_get( 'zlib.output_compression' ) ) ) {
+	if ( 1 === intval( @ini_get( 'zlib.output_compression' ) ) ) {
 		return;
 	}
 
@@ -1306,23 +1329,23 @@ function et_pb_autosave_builder_settings( $post_id, $builder_settings ) {
 	// Builder settings autosave
 	if ( !empty( $builder_settings ) ) {
 
-		// Pseudo activate split test for VB draft/builder-sync interface
+		// Pseudo activate AB Testing for VB draft/builder-sync interface
 		if ( isset( $builder_settings['et_pb_use_ab_testing'] ) ) {
-			// Save autosave/draft split test status
+			// Save autosave/draft AB Testing status
 			update_post_meta(
 				$post_id,
 				'_et_pb_use_ab_testing_draft',
 				sanitize_text_field( $builder_settings['et_pb_use_ab_testing'] )
 			);
 
-			// Format split test data, since BB has UI and actual input IDs. FB uses BB's UI ID
+			// Format AB Testing data, since BB has UI and actual input IDs. FB uses BB's UI ID
 			$builder_settings['et_pb_enable_ab_testing'] = $builder_settings['et_pb_use_ab_testing'];
 
 			// Unset BB's actual input data
 			unset( $builder_settings['et_pb_use_ab_testing'] );
 		}
 
-		// Pseudo save split test subjects for VB draft/builder-sync interface
+		// Pseudo save AB Testing subjects for VB draft/builder-sync interface
 		if ( isset( $builder_settings['et_pb_ab_subjects'] ) ) {
 			// Save autosave/draft subjects
 			update_post_meta(
@@ -1513,6 +1536,7 @@ function et_fb_get_nonces() {
 		'moduleEmailOptinAddAccount'    => wp_create_nonce( 'et_builder_email_add_account_nonce' ),
 		'moduleEmailOptinRemoveAccount' => wp_create_nonce( 'et_builder_email_remove_account_nonce' ),
 		'uploadFontNonce'               => wp_create_nonce( 'et_fb_upload_font_nonce' ),
+		'abTestingReport'               => wp_create_nonce( 'ab_testing_builder_nonce' ),
 	);
 
 	return array_merge( $nonces, $fb_nonces );
@@ -1886,6 +1910,17 @@ if ( ! function_exists( 'et_is_builder_plugin_active' ) ):
 function et_is_builder_plugin_active() {
 	return (bool) defined( 'ET_BUILDER_PLUGIN_ACTIVE' );
 }
+endif;
+
+if ( ! function_exists( 'et_is_shortcodes_plugin_active' ) ):
+	/**
+	 * Is ET Shortcodes plugin active?
+	 *
+	 * @return bool  True - if the plugin is active
+	 */
+	function et_is_shortcodes_plugin_active() {
+		return (bool) defined( 'ET_SHORTCODES_PLUGIN_VERSION' );
+	}
 endif;
 
 /**
@@ -2403,13 +2438,9 @@ function et_builder_get_warnings() {
 	if ( ! empty( $et_current_memory_limit ) && intval( $et_current_memory_limit ) < 128 ) {
 		$class = ' et_builder_increase_memory';
 
-		if ( true === strpos( ini_get( 'disable_functions' ), 'ini_set' ) ) {
-			$class = '';
-		}
-
 		$warnings[] = sprintf(
 			'%1$s. <a href="http://codex.wordpress.org/Editing_wp-config.php#Increasing_memory_allocated_to_PHP" class="et_builder_modal_action_button%3$s" target="_blank">%2$s</a>',
-			esc_html__( 'Please increase your PHP Memory Limit to 128M. You can return the value to default via the Divi Theme Options in the future', 'et_builder' ),
+			esc_html__( 'Please increase your PHP Memory Limit. You can return the value to default via the Divi Theme Options in the future', 'et_builder' ),
 			esc_html__( 'Increase Your Memory Limit Now', 'et_builder' ),
 			esc_attr( $class )
 		);
@@ -2453,27 +2484,21 @@ endif;
 if ( ! function_exists( 'et_increase_memory_limit' ) ) :
 function et_increase_memory_limit() {
 	if ( ! is_admin() ) {
-		return;
+		return false;
 	}
 
 	if ( ! current_user_can( 'edit_posts' ) ) {
-		return;
-	}
-
-	// proceed only if current memory limit < 128
-	if ( intval( @ini_get( 'memory_limit' ) ) >= 128 ) {
 		return false;
 	}
 
-	if ( true === strpos( ini_get( 'disable_functions' ), 'ini_set' ) ) {
-		return false;
-	}
-
-	if ( @ini_set( 'memory_limit', '128M' ) ) {
+	// proceed only if current memory limit < 256
+	if ( et_core_get_memory_limit() >= 256 ) {
 		return true;
 	}
 
-	return false;
+	$result = @ini_set( 'memory_limit', '256M' );
+
+	return ! empty( $result );
 }
 endif;
 
@@ -2632,6 +2657,10 @@ add_action( 'created_term', 'et_pb_force_regenerate_templates' );
 add_action( 'edited_term', 'et_pb_force_regenerate_templates' );
 add_action( 'delete_term', 'et_pb_force_regenerate_templates' );
 
+//@Todo we should remove this hook after BB is retired
+//purge BB microtemplates cache after Theme Customizer changes
+add_action( 'customize_save_after', 'et_pb_force_regenerate_templates' );
+
 function et_pb_ab_get_current_ab_module_id( $test_id, $subject_index = false ) {
 	$all_subjects = false !== ( $all_subjects_raw = get_post_meta( $test_id, '_et_pb_ab_subjects' , true ) ) ? explode( ',', $all_subjects_raw ) : array();
 
@@ -2716,7 +2745,7 @@ function et_pb_ab_increment_current_ab_module_id( $test_id, $user_unique_id ) {
 }
 
 /**
- * Add the record into Split testing log table
+ * Add the record into AB Testing log table
  *
  * @return void
  */
@@ -2769,7 +2798,7 @@ function et_pb_add_stats_record( $stats_data_array ) {
 
 
 function et_pb_ab_get_subject_id() {
-	if ( isset( $_POST['et_frontend_nonce'] ) && ! wp_verify_nonce( $_POST['et_frontend_nonce'], 'et_frontend_nonce' ) ) {
+	if ( ! isset( $_POST['et_frontend_nonce'] ) || ! wp_verify_nonce( $_POST['et_frontend_nonce'], 'et_frontend_nonce' ) ) {
 		die( -1 );
 	}
 
@@ -2838,11 +2867,9 @@ function et_pb_get_visitor_id() {
 }
 
 /**
- * Register Builder portabilities.
+ * Register Builder Portability.
  *
- * @since To define
- *
- * @return bool Always return true.
+ * @since 2.7.0
  */
 function et_pb_register_builder_portabilities() {
 	global $shortname;
@@ -2853,28 +2880,32 @@ function et_pb_register_builder_portabilities() {
 	// Make sure the Portability is loaded.
 	et_core_load_component( 'portability' );
 
-	// Register the Roles Editor portability.
-	et_core_portability_register( 'et_pb_roles', array(
-		'name'   => esc_html__( 'Divi Role Editor Settings', 'et_builder' ),
-		'type'   => 'options',
-		'target' => 'et_pb_role_settings',
-		'view'   => ( isset( $_GET['page'] ) && $_GET['page'] === "et_{$_shortname}_role_editor" ),
-	) );
+	if ( current_user_can( 'edit_theme_options' ) ) {
+		// Register the Roles Editor portability.
+		et_core_portability_register( 'et_pb_roles', array(
+			'name'   => esc_html__( 'Divi Role Editor Settings', 'et_builder' ),
+			'type'   => 'options',
+			'target' => 'et_pb_role_settings',
+			'view'   => ( isset( $_GET['page'] ) && $_GET['page'] === "et_{$_shortname}_role_editor" ),
+		) );
 
-	// Register the Builder individual layouts portability.
-	et_core_portability_register( 'et_builder', array(
-		'name' =>  esc_html__( 'Divi Builder Layout', 'et_builder' ),
-		'type' => 'post',
-		'view' => ( function_exists( 'et_builder_should_load_framework' ) && et_builder_should_load_framework() ),
-	) );
+		// Register the Builder Layouts Post Type portability.
+		et_core_portability_register( 'et_builder_layouts', array(
+			'name'   => esc_html__( 'Divi Builder Layouts', 'et_builder' ),
+			'type'   => 'post_type',
+			'target' => ET_BUILDER_LAYOUT_POST_TYPE,
+			'view'   => ( isset( $_GET['post_type'] ) && $_GET['post_type'] === ET_BUILDER_LAYOUT_POST_TYPE ),
+		) );
+	}
 
-	// Register the Builder Layouts Post Type portability.
-	et_core_portability_register( 'et_builder_layouts', array(
-		'name' => esc_html__( 'Divi Builder Layouts', 'et_builder' ),
-		'type'   => 'post_type',
-		'target' => ET_BUILDER_LAYOUT_POST_TYPE,
-		'view'   => ( isset( $_GET['post_type'] ) && $_GET['post_type'] === ET_BUILDER_LAYOUT_POST_TYPE ),
-	) );
+	if ( current_user_can( 'edit_posts' ) ) {
+		// Register the Builder individual layouts portability.
+		et_core_portability_register( 'et_builder', array(
+			'name' => esc_html__( 'Divi Builder Layout', 'et_builder' ),
+			'type' => 'post',
+			'view' => ( function_exists( 'et_builder_should_load_framework' ) && et_builder_should_load_framework() ),
+		) );
+	}
 }
 add_action( 'admin_init', 'et_pb_register_builder_portabilities' );
 
@@ -3200,51 +3231,65 @@ function et_builder_old_fonts_mapping() {
 	);
 }
 
+if ( ! function_exists( 'et_builder_google_fonts_sync' ) ) :
+function et_builder_google_fonts_sync() {
+	$google_api_key = et_pb_get_google_api_key();
+
+	if ( '' === $google_api_key ) {
+		return;
+	}
+
+	$google_fonts_api_url = sprintf( 'https://www.googleapis.com/webfonts/v1/webfonts?key=%1$s', $google_api_key );
+	$google_fonts_response = wp_remote_get( esc_url_raw( $google_fonts_api_url ) );
+
+	$all_google_fonts = is_array( $google_fonts_response ) ? json_decode( wp_remote_retrieve_body( $google_fonts_response ), true ) : array();
+
+	if ( empty( $all_google_fonts ) || empty( $all_google_fonts['items'] ) ) {
+		return;
+	}
+
+	$google_fonts = array();
+
+	foreach ( $all_google_fonts['items'] as $font_data ) {
+		$google_fonts[ sanitize_text_field( $font_data['family'] ) ] = array(
+			'styles'        => sanitize_text_field( implode( ',', $font_data['variants'] ) ),
+			'character_set' => sanitize_text_field( implode( ',', $font_data['subsets'] ) ),
+			'type'          => sanitize_text_field( $font_data['category'] ),
+		);
+	}
+
+	if ( ! empty( $google_fonts ) ) {
+		// save google fonts
+		update_option( 'et_google_fonts_cache', $google_fonts );
+	}
+}
+endif;
+add_action( 'et_builder_fonts_cron', 'et_builder_google_fonts_sync' );
+
+if ( ! function_exists( 'et_builder_schedule_fonts_sync' ) ) :
+function et_builder_schedule_fonts_sync() {
+	// schedule daily event to sync google fonts
+	if ( ! wp_next_scheduled( 'et_builder_fonts_cron', array( 'interval' => 'daily' ) ) ) {
+		wp_schedule_event( time(), 'daily', 'et_builder_fonts_cron', array( 'interval' => 'daily' ) );
+	}
+}
+endif;
+
 if ( ! function_exists( 'et_builder_get_google_fonts' ) ) :
 function et_builder_get_google_fonts() {
-	// get hardcoded google fonts
-	require_once( ET_BUILDER_DIR . 'google-fonts-data.php' );
-	return et_pb_get_saved_google_fonts();
-
 	$google_fonts_cache = get_option( 'et_google_fonts_cache', array() );
 
-	if ( 'valid' === get_transient( 'et_google_fonts_cache_status' ) && ! empty( $google_fonts_cache ) ) {
+	if ( ! empty( $google_fonts_cache ) ) {
+		// Use cache if it's not empty
 		return apply_filters( 'et_builder_google_fonts', $google_fonts_cache );
 	}
+	require_once( ET_BUILDER_DIR . 'google-fonts-data.php' );
 
-	$google_api_key = et_pb_get_google_api_key();
-	$all_google_fonts = array();
+	// schedule Google fonts sync
+	et_builder_schedule_fonts_sync();
 
-	if ( '' !== $google_api_key ) {
-		$google_fonts_api_url = sprintf( 'https://www.googleapis.com/webfonts/v1/webfonts?key=%1$s', $google_api_key );
-		$google_fonts_response = wp_remote_get( esc_url_raw( $google_fonts_api_url ) );
-
-		$all_google_fonts = is_array( $google_fonts_response ) ? json_decode( wp_remote_retrieve_body( $google_fonts_response ), true ) : array();
-	}
-
-	if ( ! empty( $all_google_fonts ) && ! empty( $all_google_fonts['items'] ) ) {
-		$google_fonts = array();
-
-		foreach ( $all_google_fonts['items'] as $font_data ) {
-			$google_fonts[ $font_data['family'] ] = array(
-				'styles'        => sanitize_text_field( implode( ',', $font_data['variants'] ) ),
-				'character_set' => sanitize_text_field( implode( ',', $font_data['subsets'] ) ),
-				'type'          => sanitize_text_field( $font_data['category'] ),
-			);
-		}
-		// save google fonts and set the cache status to be valid for next 24 hours
-		update_option( 'et_google_fonts_cache', $google_fonts );
-		set_transient( 'et_google_fonts_cache_status', 'valid', 24 * HOUR_IN_SECONDS );
-	} else if ( ! empty( $google_fonts_cache ) ) {
-		// still use cache if it's not empty and fonts update failed
-		return apply_filters( 'et_builder_google_fonts', $google_fonts_cache );
-	} else {
-		// get hardcoded google fonts
-		require_once( ET_BUILDER_DIR . 'google-fonts-data.php' );
-		$google_fonts = et_pb_get_saved_google_fonts();
-	}
-
-	return apply_filters( 'et_builder_google_fonts', $google_fonts );
+	// use hardcoded google fonts as fallback if no cache exists
+	return apply_filters( 'et_builder_google_fonts', et_pb_get_saved_google_fonts() );
 }
 endif;
 

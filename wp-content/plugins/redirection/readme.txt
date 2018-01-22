@@ -3,8 +3,8 @@ Contributors: johnny5
 Donate link: https://redirection.me/donation/
 Tags: redirect, htaccess, 301, 404, seo, permalink, apache, nginx, post, admin
 Requires at least: 4.4
-Tested up to: 4.9
-Stable tag: 2.10.1
+Tested up to: 4.9.2
+Stable tag: 3.0
 Requires PHP: 5.4
 License: GPLv3
 
@@ -61,6 +61,7 @@ The plugin has a fully-featured import and export system and you can:
 - Copy redirects between sites using JSON
 - Import and export to CSV for viewing in a spreadsheet
 - Use WP CLI to automate import and export
+- Powered by WordPress REST API
 
 You can also import from the following plugins:
 
@@ -124,7 +125,32 @@ The plugin works in a similar manner to how WordPress handles permalinks and sho
 = 2.4 =
 * Another database change. Please backup your data
 
+= 3.0 =
+* Upgrades the database to support IPv6. Please backup your data and visit the Redirection settings to perform the upgrade
+* Permissions changed from 'administrator' role to 'manage_options' capability
+
 == Changelog ==
+
+= 3.0 - 20th Jan 2018 =
+* Add support for IPv6
+* Add support for disabling or anonymising IP collection
+* Add support for monitoring custom post types
+* Add support for monitoring from quick edit mode
+* Default to last group used when editing
+* Permissions changed from 'administrator' role to 'manage_options' capability
+* Swap to WP REST API
+* Add new IP map service
+* Add new useragent service
+* Add 'add new' button to redirect page
+* Increase 'title' length
+* Fix position not saving on creation
+* Fix log pages not remembering table settings
+* Fix incorrect column used for HTTP code when importing CSV
+* Add support links from inside the plugin
+
+= 2.10.1 - 26th November 2017 =
+* Fix incorrect HTTP code reported in errors
+* Improve management page hook usage
 
 = 2.10 - 18th November 2017 =
 * Add support for WordPress multisite

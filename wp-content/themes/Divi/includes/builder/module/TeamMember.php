@@ -100,7 +100,22 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 				),
 			),
 			'text'      => array(),
+			'filters' => array(
+				'css' => array(
+					'main' => '%%order_class%%',
+				),
+				'child_filters_target' => array(
+					'tab_slug' => 'advanced',
+					'toggle_slug' => 'image',
+				),
+			),
+			'image' => array(
+				'css' => array(
+					'main' => '%%order_class%% .et_pb_team_member_image',
+				),
+			),
 		);
+
 		$this->custom_css_options = array(
 			'member_image' => array(
 				'label'    => esc_html__( 'Member Image', 'et_builder' ),
@@ -343,13 +358,27 @@ class ET_Builder_Module_Team_Member extends ET_Builder_Module {
 		}
 
 		if ( '' !== $image_url ) {
+			// Images: Add CSS Filters and Mix Blend Mode rules (if set)
+			if ( array_key_exists( 'image', $this->advanced_options ) && array_key_exists( 'css', $this->advanced_options['image'] ) ) {
+				$generate_css_filters_image = $this->generate_css_filters(
+					$function_name,
+					'child_',
+					self::$data_utils->array_get( $this->advanced_options['image']['css'], 'main', '%%order_class%%' )
+				);
+			}
+
+			$image_pathinfo = pathinfo( $image_url );
+			$is_image_svg   = isset( $image_pathinfo['extension'] ) ? 'svg' === $image_pathinfo['extension'] : false;
+
 			$image = sprintf(
-				'<div class="et_pb_team_member_image et-waypoint%3$s">
+				'<div class="et_pb_team_member_image et-waypoint%3$s%4$s%5$s">
 					<img src="%1$s" alt="%2$s" />
 				</div>',
 				esc_url( $image_url ),
 				esc_attr( $name ),
-				esc_attr( " et_pb_animation_{$animation}" )
+				esc_attr( " et_pb_animation_{$animation}" ),
+				$generate_css_filters_image,
+				$is_image_svg ? esc_attr( " et-svg" ) : ''
 			);
 		}
 

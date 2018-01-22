@@ -112,6 +112,7 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 					'text_shadow'      => '%%order_class%%, %%order_class%% input, %%order_class%% textarea, %%order_class%% label, %%order_class%% select',
 				),
 			),
+			'filters' => array(),
 		);
 		$this->custom_css_options = array(
 			'contact_title' => array(
@@ -407,11 +408,13 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 			$contact_name = isset( $processed_fields_values['name'] ) ? stripslashes( sanitize_text_field( $processed_fields_values['name']['value'] ) ) : '';
 
 			if ( '' !== $custom_message ) {
-				$message_pattern = et_builder_convert_line_breaks( $custom_message, "\r\n" );
+				// decode html entites to make sure HTML from the message pattern is rendered properly
+				$message_pattern = et_builder_convert_line_breaks( html_entity_decode( $custom_message ), "\r\n" );
 
 				// insert the data from contact form into the message pattern
 				foreach ( $processed_fields_values as $key => $value ) {
-					$message_pattern = str_ireplace( "%%{$key}%%", $value['value'], $message_pattern );
+					// strip all tags from each field. Don't strip tags from the entire message to allow using HTML in the pattern.
+					$message_pattern = str_ireplace( "%%{$key}%%", wp_strip_all_tags( $value['value'] ), $message_pattern );
 				}
 
 				if ( false !== $hidden_form_fields ) {
@@ -439,6 +442,9 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 						);
 					}
 				}
+
+				// strip all tags from the message content
+				$message_pattern = wp_strip_all_tags( $message_pattern );
 			}
 
 			$http_host = str_replace( 'www.', '', $_SERVER['HTTP_HOST'] );
@@ -446,9 +452,10 @@ class ET_Builder_Module_Contact_Form extends ET_Builder_Module {
 			$headers[] = "From: \"{$contact_name}\" <mail@{$http_host}>";
 			$headers[] = "Reply-To: \"{$contact_name}\" <{$contact_email}>";
 
-			add_filter( 'et_get_safe_localization', 'et_allow_ampersand' );
-
-			$email_message = trim( stripslashes( wp_strip_all_tags( $message_pattern ) ) );
+			add_filter( 'et_get_safe_localization', 'et_allow_ampersand' );			
+			
+			// don't strip tags at this point to properly send the HTML from pattern. All the unwanted HTML stripped at this point.
+			$email_message = trim( stripslashes( $message_pattern ) );
 
 			wp_mail( apply_filters( 'et_contact_page_email_to', $et_email_to ),
 				et_get_safe_localization( sprintf(
